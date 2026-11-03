@@ -350,9 +350,12 @@ function notify(n){beep();if("Notification"in window&&Notification.permission===
 navigator.serviceWorker?.ready.then(r=>r.showNotification("Expedito",o)).catch(()=>{try{new Notification("Expedito",o)}catch(e){}})}}
 
 // ---- Sesión ----
-$("#fLogin").onsubmit=e=>{e.preventDefault();const u=$("#u").value.trim().toLowerCase(),p=$("#p").value.trim();
-if(p==="bdalerta"&&(u==="lilliam"||u==="asistente")){role=u==="lilliam"?"dra":"asis";localStorage.setItem("ms_role",role);start()}else toast("Usuario o contraseña incorrectos","err")};
-$("#bOut").onclick=()=>{localStorage.removeItem("ms_role");location.reload()};
+$("#fLogin").onsubmit=async e=>{e.preventDefault();const b=$("#fLogin button");b.disabled=true;b.textContent="Verificando…";
+let d=null;try{d=await(await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"login",user:$("#u").value.trim().toLowerCase(),pass:$("#p").value})})).json()}catch(x){}
+b.disabled=false;b.textContent="Ingresar";
+if(d&&d.ok){TOK=d.token;ME={user:d.user,name:d.name,role:d.role};localStorage.setItem("ms_tok",TOK);localStorage.setItem("ms_me",JSON.stringify(ME));role=d.role==="investigadora"?"dra":"asis";localStorage.setItem("ms_role",role);$("#p").value="";start();if(d.mustChange){window.openSet?.();toast("Por seguridad, cambia tu contraseña temporal ahora","err")}}
+else toast(d?.error||"No se pudo conectar. Revisa tu internet","err")};
+$("#bOut").onclick=()=>logout();
 $("#bSwitch").onclick=()=>{role=role==="dra"?"asis":"dra";localStorage.setItem("ms_role",role);view()};
 function start(){$("#login").hidden=true;$("#app").hidden=false;bell();view();load();if(!timer)timer=setInterval(load,30000)}
 function view(){{const vf=document.getElementById("vForm");if(vf)vf.hidden=true}$("#bCfg").hidden=true;$("#bSheet").hidden=role!=="asis";$("#bSheet").href=SHEET;$("#vDra").hidden=role!=="dra";$("#vAsis").hidden=role!=="asis";$("#vAlertas").hidden=true;$("#navDra").hidden=role!=="dra";$("#nav").hidden=role!=="asis";$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";
@@ -372,11 +375,14 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.onclick=()=>{draTab=b.da
 function mailUI(){const m=localStorage.getItem("ms_mail")||"";$("#mailIn").value=m;$("#calOpt").checked=localStorage.getItem("ms_cal")==="1";$("#assistantMailOpt").checked=localStorage.getItem("ms_mail_enabled")!=="0";$("#mailStatus").textContent=m?"Correo guardado: "+m:"Agrega tu correo para recibir avisos y usarlo en invitaciones de calendario."}
 $("#mailAdd").onclick=async()=>{const m=$("#mailIn").value.trim().toLowerCase(),cal=$("#calOpt").checked,mailOn=$("#assistantMailOpt").checked;if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))return toast("Escribe un correo válido","err");if(mailOn){const ok=await post({action:"subscribe",email:m,calendar:cal,notifications:mailOn});if(!ok)return toast("No se pudo guardar. Revisa la conexión","err")}else{const ok=await post({action:"subscribe",email:m,calendar:cal,notifications:false});if(!ok)return toast("No se pudo guardar. Revisa la conexión","err")}localStorage.setItem("ms_mail",m);localStorage.setItem("ms_cal",cal?"1":"0");localStorage.setItem("ms_mail_enabled",mailOn?"1":"0");mailUI();toast("Preferencias guardadas")};
 $("#saveDraPrefs").onclick=async()=>{const email=$("#draEmail").value.trim().toLowerCase(),enabled=$("#draNotify").checked;if(enabled&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido","err");const ok=await post({action:"setAlertPrefs",enabled,email});if(!ok)return toast("No se pudo guardar. Revisa la conexión","err");localStorage.setItem("ms_dra_email",email);if(email)$("#calMail").value=email;ALERT_PREFS={enabled,email};toast("Preferencias guardadas")};
-async function loadAlertPrefs(){try{const d=await fetch(API+"?tipo=preferencias&t="+Date.now()).then(r=>r.json());if(d&&typeof d==="object"){ALERT_PREFS=d;$("#draNotify").checked=!!d.enabled;$("#draEmail").value=d.email||localStorage.getItem("ms_dra_email")||""}}catch(e){$("#draEmail").value=localStorage.getItem("ms_dra_email")||""}}
+async function loadAlertPrefs(){try{const d=await api({action:"read",tipo:"preferencias"});if(d&&typeof d==="object"){ALERT_PREFS=d;$("#draNotify").checked=!!d.enabled;$("#draEmail").value=d.email||localStorage.getItem("ms_dra_email")||""}}catch(e){$("#draEmail").value=localStorage.getItem("ms_dra_email")||""}}
 // ---- Datos ----
-async function post(o){try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)});return true}catch(e){return false}}
+let TOK=localStorage.getItem("ms_tok")||"",ME=null;try{ME=JSON.parse(localStorage.getItem("ms_me")||"null")}catch(e){}
+async function api(o){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...o,token:TOK})}),d=await r.json();if(d&&d.error==="auth"){logout(true);return null}return d}catch(e){return null}}
+async function post(o){const d=await api(o);return !!(d&&d.ok)}
+function logout(exp){if(!TOK&&!exp)return;try{if(!exp)api({action:"logout"})}catch(e){}["ms_tok","ms_me","ms_role"].forEach(k=>localStorage.removeItem(k));if(exp)toast("Tu sesión terminó. Inicia sesión de nuevo","err");setTimeout(()=>location.reload(),exp?900:300)}
 async function load(){let ok=true;
-try{const r=await fetch(API+"?t="+Date.now()),d=await r.json();if(!Array.isArray(d))throw 0;
+try{const d=await api({action:"read",tipo:""});if(!Array.isArray(d))throw 0;
 const prev=new Set(DB.map(x=>x.id));
 DB=d.map(w=>({id:w.ID,timestamp:w["Fecha Registro"],expediente:w.Expediente,esNuevo:w["Es Nuevo"]==="SÍ",estadoParticipante:w["Estado Participante"]||"Activo",fechaVisita:w["Fecha Visita"]||"",fechaLlegada:w["Fecha Llegada"]||"",formularios:(w.Formularios||"").split(", ").filter(Boolean),notas:w.Notas||"",estado:w.Estado||"Pendiente",horaVisita:w["Hora Visita"]||"",completos:w["Formularios Completos"]!=="NO",bdE:w["BD Estado"]||"Sin iniciar",bdR:w["BD Responsable"]||"",rcE:w["RedCap Estado"]||"Sin iniciar",rcR:w["RedCap Responsable"]||"",obs:String(w.Observaciones||"").split("\n").filter(Boolean)}));
 const n=DB.filter(r=>r.estado==="Pendiente"&&!prev.has(r.id)).length;
@@ -480,7 +486,7 @@ $("#alertForms").innerHTML=G.map(g=>`<details class="card grp af"><summary><b>${
 $("#alertForms").onchange=()=>document.querySelectorAll("#alertForms details").forEach(d=>{const n=d.querySelectorAll("[name=af]:checked").length,e=d.querySelector("[data-af]");e.textContent=n+"/"+d.querySelectorAll("[name=af]").length;e.classList.toggle("on",n>0)});
 $("#alertForm").addEventListener("reset",()=>setTimeout(()=>$("#alertForms").onchange()));
 async function getJson(url){try{const r=await fetch(url+"&t="+Date.now());return await r.json()}catch(e){return null}}
-async function loadAlerts(){try{const d=await fetch(API+"?tipo=alertas&t="+Date.now()).then(r=>r.json());if(Array.isArray(d))ALERTS=d;renderAlerts()}catch(e){}}
+async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"});if(Array.isArray(d))ALERTS=d;renderAlerts()}catch(e){}}
 
 function renderAlerts(){if(role!=="dra"&&role!=="asis")return;const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;let list=ALERTS.slice().reverse();if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';}
 $("#saveDraPrefs").onclick=async()=>{const email=$("#draEmail").value.trim().toLowerCase(),enabled=$("#draNotify").checked;if(enabled&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido","err");await post({action:"setAlertPrefs",enabled,email});ALERT_PREFS={enabled,email};toast("Preferencias guardadas")};
@@ -491,7 +497,7 @@ $("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve
 document.querySelectorAll("[data-ic]").forEach(e=>e.insertAdjacentHTML("afterbegin",ic(e.dataset.ic)));
 $("#bMenu").onclick=e=>{e.stopPropagation();$("#menu").hidden=!$("#menu").hidden};
 addEventListener("click",()=>{$("#menu").hidden=true});
-if(role)start();
+if(role&&TOK)start();
 </script>
 <script>
 // ===== Formularios (PILOTO): se guardan en este dispositivo y se exportan a PDF =====
@@ -583,6 +589,42 @@ vf.addEventListener("input",auto);vf.addEventListener("change",auto);
 $("#vDra .hero").insertAdjacentHTML("afterend",`<button type="button" class="card fcard" id="openForms"><div><b>Llenar formulario</b> <span class="tag co">Piloto</span><p class="mu">Elige la visita y llena el cuestionario en pantalla. Guarda borradores y genera el PDF.</p></div><span class="sp"></span><span class="chev" style="transform:rotate(-90deg)">${ic("chev")}</span></button>`);
 $("#openForms").onclick=()=>{$("#vDra").hidden=true;vf.hidden=false;cur=null;menu();scrollTo({top:0,behavior:"smooth"})};
 document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click",()=>{vf.hidden=true}));
+})();
+</script>
+<script>
+// ===== Ajustes (página propia): cuenta, notificaciones, temas, Excel, instalar y salir =====
+(()=>{
+const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
+vs.innerHTML=`<button type="button" class="ghost" id="setBack" style="margin-bottom:12px">‹ Volver</button>
+<div class="card hero"><h2>Ajustes</h2><p id="meTxt"></p></div>
+<div class="card"><b>Cuenta</b>
+<label class="f" style="margin-top:12px">Cambiar contraseña</label>
+<input type="password" id="pw0" placeholder="Contraseña actual" autocomplete="current-password">
+<input type="password" id="pw1" placeholder="Nueva (mínimo 10, con letras y números)" autocomplete="new-password" style="margin-top:8px">
+<input type="password" id="pw2" placeholder="Repite la nueva" autocomplete="new-password" style="margin-top:8px">
+<button type="button" class="btn" id="pwBtn" style="margin-top:10px">Guardar contraseña</button>
+<label class="f" style="margin-top:18px">Cambiar nombre de usuario</label>
+<input type="text" id="nu1" placeholder="Nuevo usuario (ej. nombre.rol)" autocapitalize="none">
+<input type="password" id="nu2" placeholder="Tu contraseña, para confirmar" autocomplete="current-password" style="margin-top:8px">
+<button type="button" class="ghost" id="nuBtn" style="margin-top:10px">Cambiar usuario</button>
+<p class="mu s">Los cambios de contraseña y de usuario quedan registrados para el administrador.</p></div>
+<div id="setMid"></div><div class="card" id="setActs"></div>`;
+$("#setMid").append($("#cfg"),$("#themeBox"));$("#setActs").append($("#bSheet"),$("#bInst"),$("#bOut"));
+window.openSet=()=>{document.querySelectorAll("#app section").forEach(x=>x.hidden=true);$("#nav").hidden=true;$("#navDra").hidden=true;vs.hidden=false;
+$("#cfg").hidden=false;$("#themeBox").hidden=false;$("#cfgAsis").hidden=role!=="asis";$("#cfgDra").hidden=role!=="dra";$("#bSheet").hidden=role!=="asis";
+$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";if(typeof thUI==="function")thUI();scrollTo(0,0)};
+const close=()=>{vs.hidden=true;view();if(role==="dra")applyDraTab();else render()};
+$("#setBack").onclick=close;
+$("#bMenu").innerHTML=ic("sliders");$("#bMenu").title="Ajustes";$("#bMenu").onclick=e=>{e.stopPropagation();openSet()};
+$("#bSwitch")?.remove();
+$("#pwBtn").onclick=async()=>{const a=$("#pw0").value,b=$("#pw1").value;
+if(b!==$("#pw2").value)return toast("Las contraseñas nuevas no coinciden","err");
+if(b.length<10||!/[A-Za-z]/.test(b)||!/[0-9]/.test(b))return toast("Mínimo 10 caracteres, con letras y números","err");
+const d=await api({action:"changePass",old:a,new:b});
+if(d?.ok){["pw0","pw1","pw2"].forEach(i=>$("#"+i).value="");toast("Contraseña actualizada")}else toast(d?.error||"No se pudo cambiar","err")};
+$("#nuBtn").onclick=async()=>{const u=$("#nu1").value.trim().toLowerCase();if(!u)return toast("Escribe el nuevo usuario","err");
+const d=await api({action:"changeUser",newUser:u,pass:$("#nu2").value});
+if(d?.ok){ME={...ME,user:d.user};localStorage.setItem("ms_me",JSON.stringify(ME));$("#meTxt").textContent=`${ME.name} · ${ME.user}`;$("#nu1").value=$("#nu2").value="";toast("Usuario actualizado")}else toast(d?.error||"No se pudo cambiar","err")};
 })();
 </script>
 </body>
