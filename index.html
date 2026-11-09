@@ -275,20 +275,31 @@ body:has(#alertForm:not([hidden]))::after{background:#0005;backdrop-filter:blur(
 section:not([hidden]){animation:fadeIn .3s}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
 
-/* ===== Barra lateral unificada (igual en pantallas grandes y celular) + ventana Crear sin animación de traslado ===== */
-body nav{position:fixed;left:auto;right:22px;top:50%;bottom:auto;transform:translateY(-50%);width:78px;max-width:none;flex-direction:column;border-radius:30px;padding:7px 6px;gap:2px;border:1px solid color-mix(in srgb,#fff 28%,var(--bd));background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur(30px) saturate(1.9);-webkit-backdrop-filter:blur(30px) saturate(1.9);box-shadow:0 18px 48px -12px #1d0f2450,inset 0 1px 0 #ffffff30}
-body nav button{flex:none;min-height:58px;padding:12px 2px;border-radius:22px;background:none;position:relative}
+
+/* ===== Barra móvil con la misma apariencia que la de escritorio (la colocación no cambia) ===== */
+@media(max-width:819px){
+body nav{border-radius:30px;padding:7px 6px}
+body nav button{min-height:58px;padding:10px 2px 9px;border-radius:22px}
 body nav button.on{background:linear-gradient(135deg,color-mix(in srgb,var(--pr) 15%,transparent),color-mix(in srgb,var(--fu) 12%,transparent))}
 body nav button.on::after{display:block}
-body nav button b{width:auto;height:24px;margin:0 0 2px;border-radius:0;background:none}
+body nav button b{width:auto;height:24px;margin:0 0 2px;border-radius:0}
 body nav button.on b{background:none}
-body nav button.fab b{width:44px;height:44px;margin:0 0 2px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff}
+body nav button.fab b{width:44px;height:44px;margin:0 0 2px;border-radius:50%;box-shadow:0 8px 20px color-mix(in srgb,var(--pr) 33%,transparent)}
 body nav button.fab.on{background:none}body nav button.fab.on::after{display:none}
-body nav button.fab.on b svg{transform:none}
-body .wrap{padding-right:112px}
-@media(max-width:819px){body nav{right:8px;width:72px;padding:6px 4px}body nav button{font-size:10.5px}body .wrap{padding-left:16px;padding-right:90px}body header{margin:0 -16px 0 -16px;padding-left:16px;padding-right:16px}}
-body #alertForm:not([hidden]){animation:fadeIn .18s ease-out}
-body:has(#alertForm:not([hidden]))::after{animation:fadeIn .18s ease-out}
+}
+/* ===== Panel Crear: entra y sale deslizándose desde abajo, suave ===== */
+@keyframes frmUp{from{transform:translateY(100%);opacity:.4}}
+@keyframes frmDown{to{transform:translateY(100%);opacity:0}}
+@keyframes frmUpD{from{transform:translateY(calc(-50% + 110px)) scale(.97);opacity:0}}
+@keyframes frmDownD{to{transform:translateY(calc(-50% + 110px)) scale(.97);opacity:0}}
+body #alertForm:not([hidden]){animation:frmUp .6s cubic-bezier(.22,1,.36,1) both}
+body #alertForm.out{animation:frmDown .34s cubic-bezier(.4,0,1,1) forwards;pointer-events:none}
+body:has(#alertForm:not([hidden]))::after{animation:fadeIn .45s ease-out both}
+body:has(#alertForm.out)::after{animation:fadeOut .34s ease-in forwards}
+@media(min-width:820px){
+body #alertForm:not([hidden]){animation:frmUpD .6s cubic-bezier(.22,1,.36,1) both}
+body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
+}
 </style>
 </head>
 <body>
@@ -626,7 +637,7 @@ const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};
 o.onclick=e=>{if(e.target===o||e.target.dataset.x!==undefined)end(null);else if(e.target.dataset.ok!==undefined)end(t.value.trim())};
 t.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!ro)end(t.value.trim())}if(e.key==="Escape")end(null)};
 document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
-function closeForm(){$("#alertForm").hidden=true}
+window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(!f||f.hidden||f.classList.contains("out"))return;f.classList.add("out");setTimeout(()=>{f.classList.remove("out");f.hidden=true},340)};function closeForm(){hideAlertForm()}
 {const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
 addEventListener("online",flushQ);
@@ -690,7 +701,7 @@ ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVi
 ${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
 :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
 $("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;render()}};
-$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="nueva"){const f=$("#alertForm");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";$("#alertForm").hidden=true;render();loadAlerts()}};
+$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
 const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
 $("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
 if(a==="c")return dl(r);
@@ -717,8 +728,8 @@ async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"}
 
 function renderAlerts(){if(role!=="dra"&&role!=="asis")return;const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;let list=ALERTS.slice().reverse();if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';}
 $("#saveDraPrefs").onclick=async()=>{const email=$("#draEmail").value.trim().toLowerCase(),enabled=$("#draNotify").checked;if(enabled&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido","err");await post({action:"setAlertPrefs",enabled,email});ALERT_PREFS={enabled,email};toast("Preferencias guardadas")};
-$("#cancelAlert").onclick=()=>{$("#alertForm").hidden=true};
-$("#alertForm").onsubmit=async e=>{e.preventDefault();const forms=[...document.querySelectorAll("[name=af]:checked")].map(x=>x.value),email=$("#aCreatorEmail").value.trim().toLowerCase()||(role==="dra"?(localStorage.getItem("ms_dra_email")||$("#draEmail").value.trim().toLowerCase()):localStorage.getItem("ms_mail"))||"";if(!forms.length)return toast("Selecciona un formulario","err");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido para recibir la notificación","err");$("#aCreatorEmail").value=email;const data={action:"createAlert",id:"ALT-"+Date.now(),expediente:$("#aExp").value.trim().toUpperCase(),formularios:forms,pregunta:$("#aQuestion").value.trim(),observaciones:$("#aNotes").value.trim(),creador:$("#aCreator").value.trim(),email:email};if(!data.expediente||!data.pregunta||!data.observaciones||!data.creador)return toast("Complete todos los campos","err");const b=$("#sendAlert");b.disabled=true;b.textContent="Enviando…";await post(data);await new Promise(r=>setTimeout(r,800));await loadAlerts();const ok=ALERTS.some(a=>a.id===data.id);toast(ok?"Alerta enviada a la Dra. Lilliam":"No se pudo confirmar. Revise la conexión",ok?"":"err");if(ok){$("#alertForm").reset();$("#alertForm").hidden=true}b.disabled=false;b.textContent="Enviar alerta"};
+$("#cancelAlert").onclick=()=>hideAlertForm();
+$("#alertForm").onsubmit=async e=>{e.preventDefault();const forms=[...document.querySelectorAll("[name=af]:checked")].map(x=>x.value),email=$("#aCreatorEmail").value.trim().toLowerCase()||(role==="dra"?(localStorage.getItem("ms_dra_email")||$("#draEmail").value.trim().toLowerCase()):localStorage.getItem("ms_mail"))||"";if(!forms.length)return toast("Selecciona un formulario","err");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido para recibir la notificación","err");$("#aCreatorEmail").value=email;const data={action:"createAlert",id:"ALT-"+Date.now(),expediente:$("#aExp").value.trim().toUpperCase(),formularios:forms,pregunta:$("#aQuestion").value.trim(),observaciones:$("#aNotes").value.trim(),creador:$("#aCreator").value.trim(),email:email};if(!data.expediente||!data.pregunta||!data.observaciones||!data.creador)return toast("Complete todos los campos","err");const b=$("#sendAlert");b.disabled=true;b.textContent="Enviando…";await post(data);await new Promise(r=>setTimeout(r,800));await loadAlerts();const ok=ALERTS.some(a=>a.id===data.id);toast(ok?"Alerta enviada a la Dra. Lilliam":"No se pudo confirmar. Revise la conexión",ok?"":"err");if(ok){$("#alertForm").reset();hideAlertForm()}b.disabled=false;b.textContent="Enviar alerta"};
 $("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve],[data-alert-delete]");if(!r)return;const id=r.dataset.alertResolve||r.dataset.alertDelete;if(r.dataset.alertResolve){const respuesta=prompt("Anote brevemente qué se corrigió (opcional):")||"La Dra. Lilliam marcó la alerta como corregida.";await post({action:"resolveAlert",id,respuesta});toast("Alerta marcada como corregida; se notificará al asistente")}else{if(!confirm("¿Eliminar esta alerta del historial? Esta acción no se puede deshacer."))return;await post({action:"deleteAlert",id});toast("Alerta eliminada del historial")}await new Promise(r=>setTimeout(r,500));await loadAlerts()};
 
 document.querySelectorAll("[data-ic]").forEach(e=>e.insertAdjacentHTML("afterbegin",ic(e.dataset.ic)));
