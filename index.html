@@ -276,17 +276,36 @@ section:not([hidden]){animation:fadeIn .3s}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
 
 
-/* ===== Barra móvil con la misma apariencia que la de escritorio (la colocación no cambia) ===== */
-@media(max-width:819px){
-body nav{border-radius:30px;padding:7px 6px}
-body nav button{min-height:58px;padding:10px 2px 9px;border-radius:22px}
-body nav button.on{background:linear-gradient(135deg,color-mix(in srgb,var(--pr) 15%,transparent),color-mix(in srgb,var(--fu) 12%,transparent))}
-body nav button.on::after{display:block}
-body nav button b{width:auto;height:24px;margin:0 0 2px;border-radius:0}
-body nav button.on b{background:none}
-body nav button.fab b{width:44px;height:44px;margin:0 0 2px;border-radius:50%;box-shadow:0 8px 20px color-mix(in srgb,var(--pr) 33%,transparent)}
+/* ===== Barra más baja y elegante (misma apariencia en móvil y escritorio; la colocación no cambia) ===== */
+body nav{padding:5px;gap:2px;border-radius:24px}
+body nav button{min-height:48px;padding:6px 2px 5px;border-radius:19px;font-size:10.5px;font-weight:600;gap:0;justify-content:center;background:none;box-shadow:none}
+body nav button b{width:auto;height:22px;margin:0 0 2px;border-radius:0;background:none}
+body nav button svg{width:21px;height:21px}
+body nav button.on{background:color-mix(in srgb,var(--pr) 16%,transparent);color:var(--pr);box-shadow:none}
+body nav button.on::after{display:none}
+body nav button.on b{background:none;transform:none}
+body nav button.fab b{width:30px;height:30px;margin:-2px 0 2px;border-radius:50%;box-shadow:0 5px 14px color-mix(in srgb,var(--pr) 30%,transparent)}
+body nav button.fab svg{width:18px;height:18px}
 body nav button.fab.on{background:none}body nav button.fab.on::after{display:none}
-}
+@media(min-width:820px){body nav{width:66px;padding:6px 5px}}
+@media(max-width:819px){body nav{padding:5px 4px}}
+
+/* ===== Ajustes por secciones ===== */
+#vSet{max-width:640px}
+#vSet .slab{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin:20px 6px 8px}
+#vSet .sgrp{padding:4px 8px}
+.srow{display:flex;align-items:center;gap:12px;width:100%;padding:11px 6px;background:none;border:0;color:var(--tx);text-align:left;cursor:pointer;text-decoration:none;font:inherit;border-radius:14px}
+.srow+.srow{border-top:1px solid color-mix(in srgb,var(--bd) 70%,transparent);border-radius:0}
+.srow .sico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--pr) 13%,transparent);color:var(--pr)}
+.srow .sico svg{width:20px;height:20px}
+.srow .stx{flex:1;display:grid;gap:2px;min-width:0}.srow .stx b{font-size:15px;font-weight:700}.srow .stx small{font-size:12px;color:var(--mu)}
+.srow .chev{transform:rotate(-90deg);opacity:.55;flex:none}
+.srow.danger .sico{background:#e5484d1f;color:#e5484d}.srow.danger b{color:#e5484d}
+.srow:active{background:color-mix(in srgb,var(--pr) 8%,transparent)}
+.sback{margin-bottom:12px}
+@keyframes sIn{from{opacity:0;transform:translateX(16px)}}
+#setHub:not([hidden]),.spg:not([hidden]){animation:sIn .32s cubic-bezier(.22,1,.36,1)}
+
 /* ===== Panel Crear: entra y sale deslizándose desde abajo, suave ===== */
 @keyframes frmUp{from{transform:translateY(100%);opacity:.4}}
 @keyframes frmDown{to{transform:translateY(100%);opacity:0}}
@@ -436,12 +455,14 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
   <button data-tab="nueva" class="fab"><b data-ic="plus"></b>Crear</button>
   <button data-tab="avance"><b data-ic="chart"></b>Avance</button>
   <button data-tab="historial"><b data-ic="check"></b>Historial</button>
+  <button data-tab="ajustes" data-act="settings"><b data-ic="gear"></b>Ajustes</button>
 </nav>
 <nav id="navDra" hidden>
   <button data-dratab="alertas"><b data-ic="bell"></b>Alertas</button>
   <button data-dratab="reportes" class="on"><b data-ic="plus"></b>Reportes</button>
   <button data-dratab="avance"><b data-ic="chart"></b>Avance</button>
   <button data-dratab="historial"><b data-ic="check"></b>Historial</button>
+  <button data-act="settings"><b data-ic="gear"></b>Ajustes</button>
 </nav>
 </div>
 
@@ -461,7 +482,7 @@ let role=localStorage.getItem("ms_role"),DB=[],ALERTS=[],ALERT_PREFS={enabled:fa
 
 function toast(m,t){const d=document.createElement("div");if(t==="err")d.className="err";d.textContent=m;$("#toast").appendChild(d);setTimeout(()=>d.remove(),4000)}
 
-const IC={bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
+const IC={gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
 belloff:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0M3 3l18 18"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',
@@ -701,7 +722,7 @@ ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVi
 ${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
 :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
 $("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;render()}};
-$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
+$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
 const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
 $("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
 if(a==="c")return dl(r);
@@ -830,31 +851,63 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click"
 })();
 </script>
 <script>
-// ===== Ajustes (página propia): cuenta, notificaciones, temas, Excel, instalar y salir =====
+// ===== Ajustes por secciones + gesto de deslizar entre pestañas =====
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
-vs.innerHTML=`<button type="button" class="ghost" id="setBack" style="margin-bottom:12px">‹ Volver</button>
+const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
+const back='<button type="button" class="ghost sback">‹ Ajustes</button>';
+vs.innerHTML=`<div id="setHub">
 <div class="card hero"><h2>Ajustes</h2><p id="meTxt"></p></div>
-<div class="card"><b>Cuenta</b>
-<label class="f" style="margin-top:12px">Cambiar contraseña</label>
-<input type="password" id="pw0" placeholder="Contraseña actual" autocomplete="current-password">
-<input type="password" id="pw1" placeholder="Nueva (mínimo 10, con letras y números)" autocomplete="new-password" style="margin-top:8px">
+<div class="slab">Cuenta</div>
+<div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
+<div class="slab">Preferencias</div>
+<div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos del dispositivo")}${row("theme","palette","Apariencia","Modo día o noche y temas de color")}</div>
+<div class="slab">Aplicación</div>
+<div class="card sgrp" id="setApp"></div>
+</div>
+<div class="spg" id="pg-pass" hidden>${back}
+<div class="card"><b>Contraseña</b><p class="mu">Mínimo 10 caracteres, con letras y números.</p>
+<input type="password" id="pw0" placeholder="Contraseña actual" autocomplete="current-password" style="margin-top:12px">
+<input type="password" id="pw1" placeholder="Nueva contraseña" autocomplete="new-password" style="margin-top:8px">
 <input type="password" id="pw2" placeholder="Repite la nueva" autocomplete="new-password" style="margin-top:8px">
-<button type="button" class="btn" id="pwBtn" style="margin-top:10px">Guardar contraseña</button>
-<label class="f" style="margin-top:18px">Cambiar nombre de usuario</label>
-<input type="text" id="nu1" placeholder="Nuevo usuario (ej. nombre.rol)" autocapitalize="none">
+<button type="button" class="btn" id="pwBtn" style="margin-top:12px">Guardar contraseña</button>
+<p class="mu s">Los cambios de contraseña quedan registrados para el administrador.</p></div></div>
+<div class="spg" id="pg-user" hidden>${back}
+<div class="card"><b>Nombre de usuario</b><p class="mu">Escribe el nuevo usuario y confirma con tu contraseña.</p>
+<input type="text" id="nu1" placeholder="Nuevo usuario (ej. nombre.rol)" autocapitalize="none" style="margin-top:12px">
 <input type="password" id="nu2" placeholder="Tu contraseña, para confirmar" autocomplete="current-password" style="margin-top:8px">
-<button type="button" class="ghost" id="nuBtn" style="margin-top:10px">Cambiar usuario</button>
-<p class="mu s">Los cambios de contraseña y de usuario quedan registrados para el administrador.</p></div>
-<div id="setMid"></div><div class="card" id="setActs"></div>`;
-$("#setMid").append($("#cfg"),$("#themeBox"));$("#setActs").append($("#bSheet"),$("#bInst"),$("#bOut"));
-window.openSet=()=>{document.querySelectorAll("#app section").forEach(x=>x.hidden=true);$("#nav").hidden=true;$("#navDra").hidden=true;vs.hidden=false;
-$("#cfg").hidden=false;$("#themeBox").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";$("#bSheet").hidden=role!=="asis";
-$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";if(typeof thUI==="function")thUI();scrollTo(0,0)};
-const close=()=>{vs.hidden=true;view();if(role==="dra")applyDraTab();else render()};
-$("#setBack").onclick=close;
-$("#bMenu").innerHTML=ic("sliders");$("#bMenu").title="Ajustes";$("#bMenu").onclick=e=>{e.stopPropagation();openSet()};
-$("#bSwitch")?.remove();
+<button type="button" class="btn" id="nuBtn" style="margin-top:12px">Cambiar usuario</button>
+<p class="mu s">Los cambios de usuario quedan registrados para el administrador.</p></div></div>
+<div class="spg" id="pg-notif" hidden>${back}</div>
+<div class="spg" id="pg-theme" hidden>${back}<div class="card" id="modeCard"><b>Modo</b><p class="mu">Elige cómo se ve la app: automático, de día o de noche.</p></div></div>`;
+$("#pg-notif").append($("#cfg"));
+$("#modeCard").append($("#modeTabs"));$("#pg-theme").append($("#themeBox"));
+// filas de la sección Aplicación (reutilizan los botones existentes)
+const mk=(el,ico,t,sub,cls)=>{el.className="srow"+(cls?" "+cls:"");el.innerHTML=`<span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span>`;$("#setApp").append(el)};
+mk($("#bSheet"),"sheet","Ver Excel en Drive","Abre la hoja de cálculo");
+mk($("#bInst"),"down","Instalar app","Agrégala a tu pantalla de inicio");
+mk($("#bOut"),"out","Cerrar sesión","Salir de tu cuenta","danger");
+$("#bCfg")?.remove();$("#bSwitch")?.remove();
+// el encabezado queda limpio: modo día/noche y ajustes viven en Ajustes
+$("#bTheme").style.display="none";$("#bMenu").style.display="none";
+
+const pages=["pass","user","notif","theme"];
+const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
+function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p!==id);
+if(id==="notif"){$("#cfg").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";if(typeof mailUI==="function")mailUI();if(role==="dra"&&typeof loadAlertPrefs==="function")loadAlertPrefs()}
+if(id==="theme"){$("#themeBox").hidden=false;if(typeof thUI==="function")thUI()}
+scrollTo(0,0)}
+window.openSet=page=>{if(window.hideAlertForm)hideAlertForm();
+document.querySelectorAll("#app section").forEach(x=>x.hidden=true);vs.hidden=false;marks(true);
+$("#bSheet").hidden=role!=="asis";$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";show(page||null)};
+window.closeSet=()=>{if(vs.hidden)return;vs.hidden=true;marks(false);if(role==="asis")$("#vAsis").hidden=false};
+vs.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)return show(g.dataset.go);if(e.target.closest(".sback"))show(null)});
+document.querySelectorAll("nav [data-act=settings]").forEach(b=>b.addEventListener("click",()=>openSet()));
+$("#navDra").addEventListener("click",e=>{if(e.target.closest("[data-dratab]"))closeSet()},true);
+$("#bBell").onclick=()=>openSet("notif");
+// mientras Ajustes está abierto, las actualizaciones automáticas no deben mostrar otra vista debajo
+{const r=render;render=function(){if(!vs.hidden)return;return r.apply(this,arguments)};const a=applyDraTab;applyDraTab=function(){if(!vs.hidden)return;return a.apply(this,arguments)}}
+
 $("#pwBtn").onclick=async()=>{const a=$("#pw0").value,b=$("#pw1").value;
 if(b!==$("#pw2").value)return toast("Las contraseñas nuevas no coinciden","err");
 if(b.length<10||!/[A-Za-z]/.test(b)||!/[0-9]/.test(b))return toast("Mínimo 10 caracteres, con letras y números","err");
@@ -863,6 +916,17 @@ if(d?.ok){["pw0","pw1","pw2"].forEach(i=>$("#"+i).value="");toast("Contraseña a
 $("#nuBtn").onclick=async()=>{const u=$("#nu1").value.trim().toLowerCase();if(!u)return toast("Escribe el nuevo usuario","err");
 const d=await api({action:"changeUser",newUser:u,pass:$("#nu2").value});
 if(d?.ok){ME={...ME,user:d.user};localStorage.setItem("ms_me",JSON.stringify(ME));$("#meTxt").textContent=`${ME.name} · ${ME.user}`;$("#nu1").value=$("#nu2").value="";toast("Usuario actualizado")}else toast(d?.error||"No se pudo cambiar","err")};
+
+// ===== Deslizar entre pestañas (izquierda/derecha), asistentes y Dra. =====
+{let sx=0,sy=0,st=0,on=false;
+const blocked=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){if(e.matches&&e.matches("input,textarea,select,[contenteditable],[data-noswipe],#alertForm,.dlg,#toast"))return true;const o=getComputedStyle(e).overflowX;if((o==="auto"||o==="scroll")&&e.scrollWidth>e.clientWidth+2)return true}return false};
+const free=()=>{const vf=document.getElementById("vForm");return vs.hidden&&$("#alertForm").hidden&&!$(".dlg")&&$("#app")&&!$("#app").hidden&&(!vf||vf.hidden)};
+addEventListener("touchstart",e=>{on=false;if(e.touches.length!==1||!free()||blocked(e.target))return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();on=true},{passive:true});
+addEventListener("touchend",e=>{if(!on)return;on=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.5||Date.now()-st>700||!free())return;
+const L=role==="dra"?["alertas","reportes","avance","historial"]:["alertas","visitas","avance","historial"],cur=role==="dra"?draTab:tab,i=L.indexOf(cur),n=i+(dx<0?1:-1);
+if(i<0||n<0||n>=L.length)return;
+const b=document.querySelector(role==="dra"?`#navDra [data-dratab="${L[n]}"]`:`#nav [data-tab="${L[n]}"]`);if(b)b.click()},{passive:true})}
 })();
 </script>
 </body>
