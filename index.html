@@ -276,19 +276,20 @@ section:not([hidden]){animation:fadeIn .3s}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
 
 
-/* ===== Barra más baja y elegante (misma apariencia en móvil y escritorio; la colocación no cambia) ===== */
-body nav{padding:5px;gap:2px;border-radius:24px}
-body nav button{min-height:48px;padding:6px 2px 5px;border-radius:19px;font-size:10.5px;font-weight:600;gap:0;justify-content:center;background:none;box-shadow:none}
+/* ===== Barra tipo cápsula (forma y estado activo como el ejemplo); Crear es un + flotante fuera de la barra ===== */
+body nav{padding:4px;gap:2px;border-radius:999px}
+body nav button{min-height:54px;padding:7px 2px 6px;border-radius:999px;font-size:10.5px;font-weight:700;gap:0;justify-content:center;background:none;box-shadow:none}
 body nav button b{width:auto;height:22px;margin:0 0 2px;border-radius:0;background:none}
-body nav button svg{width:21px;height:21px}
-body nav button.on{background:color-mix(in srgb,var(--pr) 16%,transparent);color:var(--pr);box-shadow:none}
+body nav button svg{width:22px;height:22px}
+body nav button.on{background:color-mix(in srgb,var(--pr) 15%,transparent);color:var(--pr);font-weight:800;box-shadow:none}
 body nav button.on::after{display:none}
 body nav button.on b{background:none;transform:none}
-body nav button.fab b{width:30px;height:30px;margin:-2px 0 2px;border-radius:50%;box-shadow:0 5px 14px color-mix(in srgb,var(--pr) 30%,transparent)}
-body nav button.fab svg{width:18px;height:18px}
-body nav button.fab.on{background:none}body nav button.fab.on::after{display:none}
-@media(min-width:820px){body nav{width:66px;padding:6px 5px}}
-@media(max-width:819px){body nav{padding:5px 4px}}
+#fabNew{display:none;position:fixed;z-index:7;width:54px;height:54px;border-radius:50%;border:0;padding:0;place-items:center;color:#fff;background:linear-gradient(135deg,var(--pr),var(--fu));box-shadow:0 10px 26px -6px color-mix(in srgb,var(--pr) 55%,transparent),0 2px 6px #0003;cursor:pointer;transition:transform .5s var(--spring)}
+#fabNew svg{width:26px;height:26px;stroke-width:2.4}
+#fabNew:active{transform:scale(.92)}
+#nav:not([hidden])+#fabNew{display:grid}
+@media(max-width:819px){body nav{padding:4px 5px}#fabNew{right:max(4vw,calc((100vw - 440px)/2));bottom:calc(12px + env(safe-area-inset-bottom) + var(--navH,62px) + 12px)}}
+@media(min-width:820px){body nav{width:68px;padding:5px 4px}#fabNew{right:30px;top:calc(50% - var(--navH,300px)/2 - 12px - 54px)}}
 
 /* ===== Ajustes por secciones ===== */
 #vSet{max-width:640px}
@@ -452,11 +453,11 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 <nav id="nav" hidden>
   <button data-tab="alertas"><b data-ic="bell"></b>Alertas <span id="cnt"></span></button>
   <button data-tab="visitas"><b data-ic="cal"></b>Visitas</button>
-  <button data-tab="nueva" class="fab"><b data-ic="plus"></b>Crear</button>
   <button data-tab="avance"><b data-ic="chart"></b>Avance</button>
   <button data-tab="historial"><b data-ic="check"></b>Historial</button>
   <button data-tab="ajustes" data-act="settings"><b data-ic="gear"></b>Ajustes</button>
 </nav>
+<button type="button" id="fabNew" aria-label="Crear alerta" title="Crear alerta"><span data-ic="plus"></span></button>
 <nav id="navDra" hidden>
   <button data-dratab="alertas"><b data-ic="bell"></b>Alertas</button>
   <button data-dratab="reportes" class="on"><b data-ic="plus"></b>Reportes</button>
@@ -917,6 +918,9 @@ $("#nuBtn").onclick=async()=>{const u=$("#nu1").value.trim().toLowerCase();if(!u
 const d=await api({action:"changeUser",newUser:u,pass:$("#nu2").value});
 if(d?.ok){ME={...ME,user:d.user};localStorage.setItem("ms_me",JSON.stringify(ME));$("#meTxt").textContent=`${ME.name} · ${ME.user}`;$("#nu1").value=$("#nu2").value="";toast("Usuario actualizado")}else toast(d?.error||"No se pudo cambiar","err")};
 
+// botón + (Crear) fuera de la barra: abre el panel sin cambiar de pestaña; --navH ubica el + junto a la barra
+$("#fabNew").onclick=()=>{const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0};
+{const nv=$("#nav"),set=()=>document.documentElement.style.setProperty("--navH",nv.offsetHeight+"px");if(window.ResizeObserver)new ResizeObserver(set).observe(nv);set()}
 // ===== Deslizar entre pestañas (izquierda/derecha), asistentes y Dra. =====
 {let sx=0,sy=0,st=0,on=false;
 const blocked=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){if(e.matches&&e.matches("input,textarea,select,[contenteditable],[data-noswipe],#alertForm,.dlg,#toast"))return true;const o=getComputedStyle(e).overflowX;if((o==="auto"||o==="scroll")&&e.scrollWidth>e.clientWidth+2)return true}return false};
