@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Expedito</title>
+<title>Nexo</title>
 <meta name="theme-color" content="#92228C">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -274,6 +274,21 @@ nav{background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur
 body:has(#alertForm:not([hidden]))::after{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 section:not([hidden]){animation:fadeIn .3s}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
+
+/* ===== Barra lateral unificada (igual en pantallas grandes y celular) + ventana Crear sin animación de traslado ===== */
+body nav{position:fixed;left:auto;right:22px;top:50%;bottom:auto;transform:translateY(-50%);width:78px;max-width:none;flex-direction:column;border-radius:30px;padding:7px 6px;gap:2px;border:1px solid color-mix(in srgb,#fff 28%,var(--bd));background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur(30px) saturate(1.9);-webkit-backdrop-filter:blur(30px) saturate(1.9);box-shadow:0 18px 48px -12px #1d0f2450,inset 0 1px 0 #ffffff30}
+body nav button{flex:none;min-height:58px;padding:12px 2px;border-radius:22px;background:none;position:relative}
+body nav button.on{background:linear-gradient(135deg,color-mix(in srgb,var(--pr) 15%,transparent),color-mix(in srgb,var(--fu) 12%,transparent))}
+body nav button.on::after{display:block}
+body nav button b{width:auto;height:24px;margin:0 0 2px;border-radius:0;background:none}
+body nav button.on b{background:none}
+body nav button.fab b{width:44px;height:44px;margin:0 0 2px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff}
+body nav button.fab.on{background:none}body nav button.fab.on::after{display:none}
+body nav button.fab.on b svg{transform:none}
+body .wrap{padding-right:112px}
+@media(max-width:819px){body nav{right:8px;width:72px;padding:6px 4px}body nav button{font-size:10.5px}body .wrap{padding-left:16px;padding-right:90px}body header{margin:0 -16px 0 -16px;padding-left:16px;padding-right:16px}}
+body #alertForm:not([hidden]){animation:fadeIn .18s ease-out}
+body:has(#alertForm:not([hidden]))::after{animation:fadeIn .18s ease-out}
 </style>
 </head>
 <body>
@@ -282,7 +297,7 @@ section:not([hidden]){animation:fadeIn .3s}
 <section id="login">
   <form class="card" id="fLogin">
     <img src="icons/icon-192.png" alt="">
-    <h2 style="margin:12px 0 2px">Expedito</h2>
+    <h2 style="margin:12px 0 2px">Nexo</h2>
     <p class="mu" style="margin:0 0 18px">Control de expedientes</p>
     <input type="text" id="u" placeholder="Usuario" autocapitalize="none" required style="margin-bottom:10px">
     <input type="password" id="p" placeholder="Contraseña" required style="margin-bottom:14px">
@@ -294,7 +309,7 @@ section:not([hidden]){animation:fadeIn .3s}
 <div class="wrap">
   <header>
     <img src="icons/icon-192.png" alt="">
-    <div><h1>Expedito</h1><small><span class="dot" id="dot"></span><span id="who"></span></small></div>
+    <div><h1>Nexo</h1><small><span class="dot" id="dot"></span><span id="who"></span></small></div>
     <span class="sp"></span>
     <button class="ib" id="bBell" title="Avisos"></button>
     <button class="ib" id="bTheme" title="Tema"></button>
@@ -312,7 +327,7 @@ section:not([hidden]){animation:fadeIn .3s}
 
   <div class="card" id="cfg" hidden>
     <div class="settings-title"><span data-ic="bell"></span><b>Notificaciones y preferencias</b></div>
-    <p class="mu">Configura aquí el correo que Expedito utilizará para avisos y eventos de calendario.</p>
+    <p class="mu">Configura aquí el correo que Nexo utilizará para avisos y eventos de calendario.</p>
     <div id="assistantNotifySettings">
       <label class="f" style="margin-top:12px">Tu correo</label>
       <input type="text" id="mailIn" inputmode="email" autocapitalize="none" placeholder="tu.correo@ucr.ac.cr">
@@ -468,7 +483,7 @@ function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(
 [660,880].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f;o.connect(g);g.connect(c.destination);
 g.gain.setValueAtTime(.2,t+i*.18);g.gain.exponentialRampToValueAtTime(.001,t+i*.18+.16);o.start(t+i*.18);o.stop(t+i*.18+.17)})}catch(e){}}
 function notify(n){beep();if("Notification"in window&&Notification.permission==="granted"){const m=n+(n>1?" expedientes nuevos":" expediente nuevo"),o={body:m,icon:"icons/icon-192.png"};
-navigator.serviceWorker?.ready.then(r=>r.showNotification("Expedito",o)).catch(()=>{try{new Notification("Expedito",o)}catch(e){}})}}
+navigator.serviceWorker?.ready.then(r=>r.showNotification("Nexo",o)).catch(()=>{try{new Notification("Nexo",o)}catch(e){}})}}
 
 // ---- Sesión ----
 $("#fLogin").onsubmit=async e=>{e.preventDefault();const b=$("#fLogin button");b.disabled=true;b.textContent="Verificando…";
@@ -642,7 +657,7 @@ function obsH(r){return r.obs.map(o=>`<p class="mu s">💬 ${esc(o)}</p>`).join(
 function cd(r){const z=n=>String(n).padStart(2,"0"),y=d=>""+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate()),[a,b,c]=r.fechaVisita.split("-").map(Number);
 if(!r.horaVisita)return[y(new Date(a,b-1,c)),y(new Date(a,b-1,c+1))];const[H,M]=r.horaVisita.split(":").map(Number),t=d=>y(d)+"T"+z(d.getHours())+z(d.getMinutes())+"00";return[t(new Date(a,b-1,c,H,M)),t(new Date(a,b-1,c,H+1,M))]}
 function gcal(r){const[s,e]=cd(r);return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Visita · Exp. "+r.expediente)+"&dates="+s+"/"+e+"&details="+encodeURIComponent("Expediente "+r.expediente)}
-function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Expedito//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@expedito\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nBEGIN:VALARM\r\nTRIGGER:"+(r.horaVisita?"-PT1H":"-PT15H")+"\r\nACTION:DISPLAY\r\nDESCRIPTION:Visita\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
+function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Nexo//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@nexo\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nBEGIN:VALARM\r\nTRIGGER:"+(r.horaVisita?"-PT1H":"-PT15H")+"\r\nACTION:DISPLAY\r\nDESCRIPTION:Visita\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
 a.href=URL.createObjectURL(new Blob([c],{type:"text/calendar"}));a.download="visita-"+r.expediente+".ics";a.click()}
 function ec(e){return e==="Activo"?"st-a":e==="Finalizó"?"st-f":"st-r"}
 function forms(r){const used=new Set();let h="";
@@ -660,7 +675,7 @@ $("#vAlertas").hidden=tab!=="nueva";if(tab==="nueva"){$("#alH").textContent="Cre
 const HD={alertas:["Expedientes por localizar","Pendientes que registró la Dra. Lilliam."],visitas:["Próximas visitas","Participantes con visita programada."],historial:["Historial","Expedientes ya procesados."],avance:["Avance de trabajo","Marca en qué etapa va cada expediente."]}[tab];if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}$("#vAsis").hidden=tab==="nueva";$("#avTabs").hidden=tab!=="avance";$("#stats").hidden=tab==="avance";$("#hsTabs").hidden=tab!=="historial";{const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
 document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
 if(tab==="nueva"){renderAlerts();return}
-const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"Expedito";
+const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"Nexo";
 const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB;if(s===sig)return;if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;sig=s;
 document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
 const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
