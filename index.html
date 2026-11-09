@@ -253,6 +253,27 @@ body:has(#alertForm:not([hidden]))::after{content:"";position:fixed;inset:0;z-in
 .sk{height:96px;border-radius:24px;margin-bottom:16px;background:linear-gradient(90deg,var(--soft) 25%,color-mix(in srgb,var(--soft) 45%,var(--sf)) 50%,var(--soft) 75%);background-size:200% 100%;animation:shim 1.3s linear infinite}
 @keyframes sheetIn{from{transform:translateY(100%)}}@keyframes sheetOut{to{transform:translateY(100%)}}@keyframes fadeIn{from{opacity:0}}@keyframes fadeOut{to{opacity:0}}
 @keyframes dlgIn{from{opacity:0;transform:translateY(-50%) scale(.96)}}@keyframes shim{to{background-position:-200% 0}}
+
+/* ===== Cristal: transparencias y desenfoque de alta calidad (restaura el vidrio y la isla) ===== */
+:root{--gb:blur(26px) saturate(1.7)}
+body::before{display:block;content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 40% at 0% 0%,color-mix(in srgb,var(--pr) 28%,transparent),transparent),radial-gradient(50% 35% at 100% 22%,color-mix(in srgb,var(--co) 20%,transparent),transparent),radial-gradient(60% 40% at 50% 100%,color-mix(in srgb,var(--li) 18%,transparent),transparent)}
+.card,header,#menu,nav,.stats button,.dlg-p{backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb)}
+.card{background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent);box-shadow:0 1px 1px #1d0f2408,0 16px 36px -16px #1d0f2438,inset 0 1px 0 #ffffff22}
+.card.hero{background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 14px 34px -14px color-mix(in srgb,var(--pr) 60%,transparent)}
+.card.hero h2,.card.hero p{color:#fff}
+header{background:color-mix(in srgb,var(--bg) 52%,transparent);border-bottom:1px solid color-mix(in srgb,var(--bd) 45%,transparent)}
+.stats button{background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+input[type=text],input[type=password],input[type=date],input[type=time],input[type=search],textarea,select{background:color-mix(in srgb,var(--sf) 52%,transparent);border:1.5px solid color-mix(in srgb,var(--bd) 75%,transparent)}
+input:focus,textarea:focus,select:focus{background:color-mix(in srgb,var(--sf) 85%,transparent);border-color:var(--pr)}
+#menu{background:color-mix(in srgb,var(--sf) 78%,transparent)}
+nav{background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur(30px) saturate(1.9);-webkit-backdrop-filter:blur(30px) saturate(1.9);border:1px solid color-mix(in srgb,#fff 28%,var(--bd));box-shadow:0 18px 48px -12px #1d0f2450,inset 0 1px 0 #ffffff30}
+@media(max-width:819px){nav{left:50%;right:auto;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(92%,440px);border-radius:34px;padding:7px 6px}}
+.dlg{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.dlg-p{background:color-mix(in srgb,var(--sf) 80%,transparent)}
+#alertForm:not([hidden]){background:color-mix(in srgb,var(--sf) 84%,transparent)}
+body:has(#alertForm:not([hidden]))::after{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+section:not([hidden]){animation:fadeIn .3s both}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
 </style>
 </head>
 <body>
@@ -802,7 +823,7 @@ vs.innerHTML=`<button type="button" class="ghost" id="setBack" style="margin-bot
 <div id="setMid"></div><div class="card" id="setActs"></div>`;
 $("#setMid").append($("#cfg"),$("#themeBox"));$("#setActs").append($("#bSheet"),$("#bInst"),$("#bOut"));
 window.openSet=()=>{document.querySelectorAll("#app section").forEach(x=>x.hidden=true);$("#nav").hidden=true;$("#navDra").hidden=true;vs.hidden=false;
-$("#cfg").hidden=false;$("#themeBox").hidden=false;$("#cfgAsis").hidden=role!=="asis";$("#cfgDra").hidden=role!=="dra";$("#bSheet").hidden=role!=="asis";
+$("#cfg").hidden=false;$("#themeBox").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";$("#bSheet").hidden=role!=="asis";
 $("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";if(typeof thUI==="function")thUI();scrollTo(0,0)};
 const close=()=>{vs.hidden=true;view();if(role==="dra")applyDraTab();else render()};
 $("#setBack").onclick=close;
