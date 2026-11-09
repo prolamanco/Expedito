@@ -611,7 +611,7 @@ const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};
 o.onclick=e=>{if(e.target===o||e.target.dataset.x!==undefined)end(null);else if(e.target.dataset.ok!==undefined)end(t.value.trim())};
 t.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!ro)end(t.value.trim())}if(e.key==="Escape")end(null)};
 document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
-function closeForm(){$("#alertForm").hidden=true;if(tab==="nueva")tab="alertas";sig="";render();loadAlerts()}
+function closeForm(){$("#alertForm").hidden=true}
 {const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
 addEventListener("online",flushQ);
@@ -675,7 +675,7 @@ ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVi
 ${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
 :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
 $("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;render()}};
-$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";if(t==="nueva"){$("#alertForm").hidden=false;$("#alertForm").scrollIntoView({behavior:"smooth",block:"start"})}else $("#alertForm").hidden=true;render();loadAlerts()}};
+$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="nueva"){const f=$("#alertForm");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";$("#alertForm").hidden=true;render();loadAlerts()}};
 const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
 $("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
 if(a==="c")return dl(r);
