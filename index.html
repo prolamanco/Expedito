@@ -272,7 +272,7 @@ nav{background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur
 .dlg-p{background:color-mix(in srgb,var(--sf) 80%,transparent)}
 #alertForm:not([hidden]){background:color-mix(in srgb,var(--sf) 84%,transparent)}
 body:has(#alertForm:not([hidden]))::after{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-section:not([hidden]){animation:fadeIn .3s both}
+section:not([hidden]){animation:fadeIn .3s}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
 </style>
 </head>
@@ -612,7 +612,7 @@ o.onclick=e=>{if(e.target===o||e.target.dataset.x!==undefined)end(null);else if(
 t.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!ro)end(t.value.trim())}if(e.key==="Escape")end(null)};
 document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
 function closeForm(){$("#alertForm").hidden=true;if(tab==="nueva")tab="alertas";sig="";render();loadAlerts()}
-{const f=$("#alertForm");f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
+{const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
 addEventListener("online",flushQ);
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add]");if(!t)return;const ed=role==="asis",d=t.dataset;
