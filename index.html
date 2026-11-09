@@ -453,6 +453,9 @@ rb:{t:"RedCap · Bebés",pre:"RB",ids:avIds("",19),notes:1,st:RC,cols:[["Identif
 HN={bd:"Base de datos",rm:"RedCap · Madres",rb:"RedCap · Bebés",gn:"General"},
 PR=[["Cuest. 1 · 1ª vis.",0,"rm",1],["Antrop. 1ª vis.",1,"rm",2],["Antrop. 2ª vis.",2,"rm",3],["Antrop. 3ª vis.",3,"rm",4],["Agua 3ª vis.",4,"rm",6],["Cuest. 2 · 4ª vis.",6,"rb",2],["Antrop. 4ª bebé",7,"rb",3],["Antrop. 4ª madre",8,"rm",5],["Agua 4ª madre",9,"rm",7],["Agua 4ª bebé",11,"rb",4]];
 const myR=()=>role==="dra"?"investigadora":"asistente",cSeen=()=>JSON.parse(localStorage.getItem("ms_cseen")||"{}");
+const pad2=n=>String(n).padStart(2,"0");
+function avNums(){const s=new Set(Array.from({length:26},(_,i)=>i+1));DB.forEach(r=>{const x=/^CRM[-\s]?0*(\d{1,3})$/i.exec(String(r.expediente).trim());if(x)s.add(+x[1])});Object.keys(AVD).forEach(k=>{const x=/^(?:BD\|CRM|RM\|CR-M-)(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b)}
+function avRows(m){if(m.pre==="RB"){const s=new Set(Array.from({length:19},(_,i)=>i+1));Object.keys(AVD).forEach(k=>{const x=/^RB\|(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b).map(pad2)}return avNums().map(n=>(m.pre==="BD"?"CRM":"CR-M-")+pad2(n))}
 function avRec(m,id){const k=m.pre+"|"+id,o=AVD[k];if(o)return o;const s=SEED[k];return s?{v:s[0].split(","),n:s[1]}:null}
 function avV(m,id){const o=avRec(m,id),a=o?o.v.slice():m.cols.map(c=>c[2]?"A":"");while(a.length<m.cols.length)a.push("");return a.slice(0,m.cols.length)}
 function avPut(m,id,v,n){const k=m.pre+"|"+id,o=avRec(m,id)||{n:""};AVD[k]={v,n:n===null?o.n:n};clearTimeout(AVT[k]);AVT[k]=setTimeout(async()=>{delete AVT[k];if(!await post({action:"setAvance",clave:k,valores:AVD[k].v.join(","),notas:AVD[k].n}))toast("No se pudo guardar "+id,"err")},500)}
@@ -467,21 +470,21 @@ setTimeout(()=>document.querySelectorAll(".msgs").forEach(e=>e.scrollTop=e.scrol
 return `<div class="card chat"><b>💬 Comentarios · ${HN[k]}</b><div class="msgs">${L.length?L.map(c=>`<div class="msg ${c.r==="investigadora"?"dr":""}"><small>${esc(c.a)} · ${esc(c.f)}</small>${esc(c.t)}</div>`).join(""):'<p class="mu s">Aún no hay comentarios.</p>'}</div><div class="row"><input type="text" maxlength="500" placeholder="Escribe un comentario…"><button class="btn" type="button" data-cs="${k}">Enviar</button></div></div>`}
 async function chSend(box,k){const i=box.querySelector("input"),t=i.value.trim();if(!t)return;i.value="";i.blur();COM.push({h:k,ts:Date.now(),t,r:myR(),f:"ahora",a:"Tú"});sig="";render();renderAvDra(1);if(!await post({action:"setAvance",clave:"CM",hilo:k,texto:t}))toast("No se pudo enviar el comentario","err")}
 function genH(){const T={ok:0,fa:0,so:0,pe:0},per=PR.map(()=>({b:0,r:0})),gap={},rev={};
-for(let n=1;n<=26;n++){const e="CRM"+String(n).padStart(2,"0"),p2=String(n).padStart(2,"0"),bv=avV(AVS.bd,e),mv=avV(AVS.rm,"CR-M-"+p2),kv=n<=19?avV(AVS.rb,p2):[];
+const NS=avNums(),RBS=new Set(avRows(AVS.rb));for(const n of NS){const e="CRM"+pad2(n),p2=pad2(n),bv=avV(AVS.bd,e),mv=avV(AVS.rm,"CR-M-"+p2),kv=RBS.has(p2)?avV(AVS.rb,p2):[];
 PR.forEach((p,i)=>{const b=bv[p[1]],r=(p[2]==="rm"?mv:kv)[p[3]];if(b==="G"||b==="P")return;const bd=b==="V",rc=r==="V";per[i].b+=bd;per[i].r+=rc;
 if(bd&&rc)T.ok++;else if(bd){T.fa++;(gap[e]=gap[e]||[]).push(p[0])}else if(rc){T.so++;(rev[e]=rev[e]||[]).push(p[0])}else T.pe++})}
 const tot=T.ok+T.fa+T.so+T.pe,bdn=T.ok+T.fa,pc=bdn?Math.round(T.ok/bdn*100):0,seg=(x,c)=>`<i style="width:${tot?x/tot*100:0}%;background:${c}"></i>`,
 lg=(x,c,t)=>`<button type="button" style="background:${c};color:#222">${t} · ${x}</button>`,ls=o=>Object.keys(o).sort().map(e=>`<p class="mu s"><b>${e}</b> · ${o[e].join(", ")}</p>`).join("");
 return `<div class="gn"><div class="card sum"><div class="row"><b>Igualdad Base de datos ↔ RedCap</b><span class="sp"></span><span class="mu">${pc}%</span></div><p class="mu s" style="margin-top:6px">RedCap lleva ${T.ok} de los ${bdn} formularios que ya están en la Base de datos (lo que está en físico).</p><div class="bar stk">${seg(T.ok,"#a9d18e")}${seg(T.fa,"#ffd966")}${seg(T.so,"#ff7a7a")}${seg(T.pe,"#d9d2dd")}</div><div class="lg">${lg(T.ok,"#a9d18e","En ambos")}${lg(T.fa,"#ffd966","Falta pasar a RedCap")}${lg(T.so,"#ff7a7a","Solo en RedCap")}${lg(T.pe,"#d9d2dd","Pendiente en ambos")}</div></div>`
-+`<div class="card"><b>Por formulario</b><p class="mu s"><span style="color:var(--pr)">■</span> Base de datos · <span style="color:#2f9e8f">■</span> RedCap</p>${PR.map((p,i)=>`<div class="pf"><span>${p[0]}</span><div><div class="bar" style="height:6px;margin:0"><i style="width:${per[i].b/26*100}%"></i></div><div class="bar" style="height:6px;margin:3px 0 0"><i style="width:${per[i].r/26*100}%;background:#2f9e8f"></i></div></div><small>${per[i].b} · ${per[i].r}</small></div>`).join("")}</div>`
++`<div class="card"><b>Por formulario</b><p class="mu s"><span style="color:var(--pr)">■</span> Base de datos · <span style="color:#2f9e8f">■</span> RedCap</p>${PR.map((p,i)=>`<div class="pf"><span>${p[0]}</span><div><div class="bar" style="height:6px;margin:0"><i style="width:${per[i].b/NS.length*100}%"></i></div><div class="bar" style="height:6px;margin:3px 0 0"><i style="width:${per[i].r/NS.length*100}%;background:#2f9e8f"></i></div></div><small>${per[i].b} · ${per[i].r}</small></div>`).join("")}</div>`
 +`<div class="card"><b>Falta pasar a RedCap</b><div class="gl">${ls(gap)||'<p class="mu s">Todo lo que está en la Base de datos ya está en RedCap.</p>'}</div>${Object.keys(rev).length?`<b style="display:block;margin-top:12px">Está en RedCap pero no en la Base de datos</b><div class="gl">${ls(rev)}</div>`:""}</div></div>`}
-function agH(k,ed){const m=AVS[k],ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),rows=m.ids.map(id=>({id,v:avV(m,id),n:(avRec(m,id)||{}).n||""})),
+function agH(k,ed){const m=AVS[k],ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),rows=avRows(m).map(id=>({id,v:avV(m,id),n:(avRec(m,id)||{}).n||""})),
 sOf=v=>v.every((x,i)=>!req[i]||x==="V")?"f":v.some(x=>x==="R"||x==="S")?"i":"p",t={f:0,i:0,p:0},cnt={};
 rows.forEach(r=>{t[sOf(r.v)]++;r.v.forEach(x=>cnt[x]=(cnt[x]||0)+1)});
 const pct=Math.round(t.f/rows.length*100),col=x=>(m.st.find(s=>s[0]===x)||[])[2]||"transparent";
 setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>a.scrollLeft=AGX[0]),0);
 return `<div class="card sum"><div class="row"><b>${m.t}</b><span class="sp"></span><span class="mu">${t.f} de ${rows.length} completos · ${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div><p class="mu s" style="margin-top:8px">Con incompletos: ${t.i} · En proceso: ${t.p}</p></div>`
-+`<div class="lg">${m.st.map(s=>`<button type="button" data-ab="${s[0]}" class="${ed&&AB===s[0]?"on":""}" style="background:${s[2]};color:#222">${s[1]} · ${cnt[s[0]]||0}</button>`).join("")}${ed?`<button type="button" data-ab="-" class="${AB==="-"?"on":""}" style="background:var(--soft);color:var(--tx)">Borrar</button>`:""}</div>`
++`<div class="lg">${m.st.map(s=>`<button type="button" data-ab="${s[0]}" class="${ed&&AB===s[0]?"on":""}" style="background:${s[2]};color:#222">${s[1]} · ${cnt[s[0]]||0}</button>`).join("")}${ed?`<button type="button" data-ab="-" class="${AB==="-"?"on":""}" style="background:var(--soft);color:var(--tx)">Borrar</button><button type="button" data-add="1" style="background:var(--soft);color:var(--pr)">＋ Agregar expediente</button>`:""}</div>`
 +(ed?'<p class="mu s" style="margin-top:8px">Elige un color y toca las celdas para pintarlas.'+(m.notes?" Toca el expediente para ver u escribir observaciones.":"")+"</p>":"")
 +`<div class="ag${ed?" ed":""}"><table><tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}</table></div>`}
 function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
@@ -491,12 +494,13 @@ function renderAvDra(f){if(role!=="dra"||draTab!=="avance")return;if(!f&&documen
 document.body.appendChild($("#toast"));
 document.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("ag"))AGX[0]=e.target.scrollLeft},true);
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.closest&&e.target.closest(".chat")){const b=e.target.closest(".chat");chSend(b,b.querySelector("[data-cs]").dataset.cs)}});
-document.addEventListener("click",e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs]");if(!t)return;const ed=role==="asis",d=t.dataset;
+document.addEventListener("click",e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add]");if(!t)return;const ed=role==="asis",d=t.dataset;
 if(d.cs){chSend(t.closest(".chat"),d.cs);return}
 if(d.avd){avMode=d.avd;renderAvDra(1);return}
 if(d.rs){rcSub=d.rs;sig="";render();renderAvDra(1);return}
 const m=AVS[avMode==="bd"?"bd":rcSub];
 if(d.ab!==undefined){if(ed){AB=d.ab;sig="";render()}return}
+if(d.add){if(!ed)return;const x=parseInt(prompt(m.pre==="RB"?"Número del bebé (ej. 20):":"Número del expediente (ej. 27 para CRM27):"),10);if(!x||x<1||x>999)return;const bm=m.pre==="RB"?m:AVS.bd,id=m.pre==="RB"?pad2(x):"CRM"+pad2(x);avPut(bm,id,avV(bm,id),null);sig="";render();toast("Fila "+id+" agregada");return}
 const id=t.closest("tr").firstChild.dataset.an;
 if(d.an!==undefined){if(!m.notes)return;const cur=(avRec(m,id)||{}).n||"";if(!ed){alert(cur||"Sin observaciones");return}const n=prompt("Observaciones de "+id,cur);if(n===null)return;avPut(m,id,avV(m,id),n.trim().slice(0,300));sig="";render();return}
 if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
@@ -534,7 +538,7 @@ it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((
 ${forms(r)}
 ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
 <p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
-${chk(r)}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
+${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
 :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
 $("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;render()}};
 $("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";if(t==="nueva"){$("#alertForm").hidden=false;$("#alertForm").scrollIntoView({behavior:"smooth",block:"start"})}else $("#alertForm").hidden=true;render();loadAlerts()}};
@@ -550,7 +554,7 @@ if(a==="d"){if(!i.value)return;r.fechaVisita=i.value;i.blur();return up(r,{fecha
 if(a==="t"){r.horaVisita=i.value;i.blur();return up(r,{horaVisita:i.value},i.value?"Hora actualizada":"Hora quitada")}
 const k=i.dataset.k;
 if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
-if(a==="s"){const n=r[k+"R"]||"Equipo asistente";
+if(a==="s"){const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
 r[k+"E"]=i.value;r[k+"R"]=n;if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";i.blur();
 up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado")}};
 
