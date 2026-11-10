@@ -618,8 +618,8 @@ let d=null;try{d=await(await fetch(API,{method:"POST",headers:{"Content-Type":"t
 b.disabled=false;b.textContent="Ingresar";
 if(d&&d.ok){TOK=d.token;ME={user:d.user,name:d.name,role:d.role};localStorage.setItem("ms_tok",TOK);localStorage.setItem("ms_me",JSON.stringify(ME));role=d.role==="investigadora"?"dra":"asis";localStorage.setItem("ms_role",role);$("#p").value="";await start();if(d.mustChange){window.openSet?.("pass");toast("Por seguridad, cambia tu contraseña temporal ahora","err")}}
 else toast(d?.error||"No se pudo conectar. Revisa tu internet","err")};
-$("#bOut").onclick=()=>logout();
-$("#bSwitch").onclick=()=>{role=role==="dra"?"asis":"dra";localStorage.setItem("ms_role",role);view()};
+if($("#bOut"))$("#bOut").onclick=()=>logout();
+if($("#bSwitch"))$("#bSwitch").onclick=()=>{role=role==="dra"?"asis":"dra";localStorage.setItem("ms_role",role);view()};
 
 async function start(){
   syncRole();
@@ -635,14 +635,18 @@ function view(){
   syncRole();
   {const vf=document.getElementById("vForm");if(vf)vf.hidden=true}
   {const vs=document.getElementById("vSet");if(vs)vs.hidden=true}
-  $("#bCfg").hidden=true;
-  $("#bSheet").hidden=role!=="asis";$("#bSheet").href=SHEET;
-  $("#vDra").hidden=role!=="dra";
-  $("#vAsis").hidden=role!=="asis";
-  $("#vAlertas").hidden=true;$("#vHist").hidden=true;$("#vAvance").hidden=true;
-  $("#navDra").hidden=role!=="dra";$("#nav").hidden=role!=="asis";
-  $("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";
-  $("#who").textContent=role==="dra"?"Dra. Lilliam":(ME&&ME.name?ME.name:"Equipo asistente");
+  if($("#bCfg"))$("#bCfg").hidden=true;
+  if($("#bSheet")){$("#bSheet").hidden=role!=="asis";$("#bSheet").href=SHEET}
+  if($("#vDra"))$("#vDra").hidden=role!=="dra";
+  if($("#vAsis"))$("#vAsis").hidden=role!=="asis";
+  if($("#vAlertas"))$("#vAlertas").hidden=true;
+  if($("#vHist"))$("#vHist").hidden=true;
+  if($("#vAvance"))$("#vAvance").hidden=true;
+  if($("#navDra"))$("#navDra").hidden=role!=="dra";
+  if($("#nav"))$("#nav").hidden=role!=="asis";
+  if($("#assistantNotifySettings"))$("#assistantNotifySettings").hidden=role!=="asis";
+  if($("#draNotifySettings"))$("#draNotifySettings").hidden=role!=="dra";
+  if($("#who"))$("#who").textContent=role==="dra"?"Dra. Lilliam":(ME&&ME.name?ME.name:"Equipo asistente");
   sig="";render();renderRecent();loadAlerts();
   if(role==="dra"){loadAlertPrefs();applyDraTab()}
 } 
