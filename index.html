@@ -336,6 +336,107 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 .l-link{background:none;border:0;color:var(--pr);font-size:13px;font-weight:700;cursor:pointer;margin-top:14px;padding:6px 10px;border-radius:10px;display:inline-block}
 .l-link:hover{background:var(--soft)}
 body:has(#vSet:not([hidden])) #fabNew{display:none!important}
+
+/* ===== Calendario Interactivo Glassmorphism (Estilo iOS / One UI Video) ===== */
+#list:has(.cal-shell){display:block!important}
+.cal-shell{position:relative;user-select:none;padding-bottom:66px;animation:up .42s var(--ios) both}
+.cal-top{display:flex;align-items:center;gap:8px;padding:12px 16px;margin-bottom:12px;border-radius:26px;background:color-mix(in srgb,var(--sf) 66%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);border:1px solid color-mix(in srgb,var(--bd) 65%,transparent);box-shadow:0 12px 32px -14px #1d0f2428,inset 0 1px 0 #ffffff38}
+.cal-mtitle{font-size:23px;font-weight:800;letter-spacing:-.03em;text-transform:lowercase;margin:0;cursor:pointer;display:flex;align-items:center;gap:6px}
+.cal-mtitle small{font-size:13px;font-weight:700;color:var(--mu);letter-spacing:0}
+.cal-navb{width:36px;height:36px;border-radius:50%;border:1px solid color-mix(in srgb,var(--bd) 65%,transparent);background:color-mix(in srgb,var(--sf) 65%,transparent);color:var(--tx);display:grid;place-items:center;cursor:pointer;padding:0;transition:transform .35s var(--spring),background .2s}
+.cal-navb:active{transform:scale(.88)}
+.cal-today-b{width:36px;height:36px;border-radius:11px;border:1.8px solid var(--tx);background:color-mix(in srgb,var(--sf) 75%,transparent);color:var(--tx);font-weight:800;font-size:12px;display:grid;place-items:center;cursor:pointer;padding:0;transition:transform .35s var(--spring)}
+.cal-today-b:active{transform:scale(.88)}
+.cal-vmode{display:flex;background:color-mix(in srgb,var(--soft) 85%,transparent);padding:3px;border-radius:99px;border:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+.cal-vmode button{border:0;background:none;padding:5px 11px;border-radius:99px;font-size:11px;font-weight:700;color:var(--mu);cursor:pointer;transition:all .28s var(--ios)}
+.cal-vmode button.on{background:var(--pr);color:#fff;box-shadow:0 3px 10px color-mix(in srgb,var(--pr) 35%,transparent)}
+
+.cal-board{border-radius:28px;padding:12px 8px 10px;background:color-mix(in srgb,var(--sf) 62%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 18px 42px -16px #1d0f2432,inset 0 1px 0 #ffffff40;overflow:hidden;transition:all .45s var(--ios)}
+.cal-dow{display:grid;grid-template-columns:22px repeat(7,1fr);text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.05em;color:var(--mu);padding-bottom:8px;border-bottom:1px solid color-mix(in srgb,var(--bd) 45%,transparent)}
+.cal-dow span:last-child{color:#e5484d}
+.cal-weeks{display:grid;transition:transform .38s var(--ios),opacity .3s var(--ios)}
+.cal-weeks.anim-l{animation:calSlideL .36s var(--ios) both}
+.cal-weeks.anim-r{animation:calSlideR .36s var(--ios) both}
+@keyframes calSlideL{from{opacity:0;transform:translateX(28px)}}
+@keyframes calSlideR{from{opacity:0;transform:translateX(-28px)}}
+
+.cal-wrow{display:grid;grid-template-columns:22px repeat(7,minmax(0,1fr));border-bottom:1px solid color-mix(in srgb,var(--bd) 35%,transparent);min-height:84px;transition:min-height .42s var(--ios)}
+.cal-board.compact .cal-wrow{min-height:54px}
+.cal-wrow:last-child{border-bottom:0}
+.cal-wnum{font-size:9.5px;font-weight:700;color:color-mix(in srgb,var(--mu) 65%,transparent);display:flex;align-items:flex-start;justify-content:center;padding-top:8px}
+.cal-cell{position:relative;padding:4px 2.5px 5px;border-left:1px solid color-mix(in srgb,var(--bd) 28%,transparent);cursor:pointer;display:flex;flex-direction:column;gap:2.5px;border-radius:12px;transition:background .22s,transform .22s var(--spring),box-shadow .22s}
+.cal-cell:hover{background:color-mix(in srgb,var(--pr) 6%,transparent)}
+.cal-cell:active{transform:scale(.93)}
+.cal-cell.out{opacity:.34}
+.cal-cell.sun .cal-dnum{color:#e5484d}
+.cal-cell.sel{background:color-mix(in srgb,var(--pr) 11%,transparent);box-shadow:inset 0 0 0 1.8px var(--pr)}
+.cal-dhead{display:flex;align-items:center;justify-content:center;height:24px}
+.cal-dnum{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:700;transition:transform .3s var(--spring),background .25s,color .25s}
+.cal-cell.today .cal-dnum{background:var(--tx);color:var(--bg);font-weight:800;box-shadow:0 3px 9px #0003}
+.cal-cell.sel.today .cal-dnum{background:var(--pr);color:#fff}
+
+/* Píldoras de eventos en modo expandido y barritas en modo dividido */
+.cal-ev-list{display:flex;flex-direction:column;gap:2.5px;overflow:hidden}
+.cal-pill{font-size:9.5px;font-weight:700;line-height:1.15;padding:2.5px 4px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;box-shadow:0 1px 3px #0002;animation:pop .25s var(--spring) both}
+.cal-pill.c-vis{background:linear-gradient(135deg,var(--pr),var(--fu))}
+.cal-pill.c-lleg{background:linear-gradient(135deg,#2e9e5b,#24824a)}
+.cal-pill.c-new{background:linear-gradient(135deg,#d97706,#ea580c)}
+.cal-pill.c-done{background:linear-gradient(135deg,#4a6fa5,#64748b)}
+.cal-more{font-size:9px;font-weight:800;color:var(--mu);text-align:center;line-height:1}
+
+.cal-bars{display:none;flex-direction:column;gap:2.5px;padding:2px 4px 0}
+.cal-board.compact .cal-ev-list{display:none}
+.cal-board.compact .cal-bars{display:flex}
+.cal-bar{height:3.5px;border-radius:99px;width:100%}
+.cal-bar.c-vis{background:var(--pr)}
+.cal-bar.c-lleg{background:#2e9e5b}
+.cal-bar.c-new{background:var(--co)}
+.cal-bar.c-done{background:#4a6fa5}
+
+/* Panel inferior de agenda del día (Split View) */
+.cal-split{margin-top:12px;border-radius:26px;padding:18px;background:color-mix(in srgb,var(--sf) 68%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 14px 36px -14px #1d0f2430,inset 0 1px 0 #ffffff38;animation:up .36s var(--ios) both}
+.cal-shdr{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+.cal-shdr b{font-size:24px;font-weight:800;letter-spacing:-.03em;color:var(--tx)}
+.cal-shdr span{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mu)}
+.cal-shdr .sp{flex:1}
+.cal-tline{display:grid;gap:10px}
+.cal-titem{display:flex;align-items:stretch;gap:12px;padding:12px 14px;border-radius:18px;background:color-mix(in srgb,var(--sf) 74%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent);cursor:pointer;transition:transform .35s var(--spring),box-shadow .25s,background .25s;animation:up .3s var(--ios) both}
+.cal-titem:hover{transform:translateY(-1px);box-shadow:0 8px 22px -10px #1d0f2430}
+.cal-titem:active{transform:scale(.97)}
+.cal-ttime{min-width:52px;font-size:12.5px;font-weight:800;color:var(--tx);padding-top:2px;text-align:right}
+.cal-tbar{width:4px;border-radius:99px;flex:none;background:var(--pr)}
+.cal-tbar.c-lleg{background:#2e9e5b}
+.cal-tbar.c-new{background:var(--co)}
+.cal-tbar.c-done{background:#4a6fa5}
+.cal-tbody{flex:1;min-width:0}
+.cal-tbody b{display:block;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-tbody p{margin:3px 0 0;font-size:12px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Tarjeta flotante tipo carrusel de día (como el video 00:09 - 00:13) */
+.cal-day-ov{position:fixed;inset:0;z-index:8500;background:#0004;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeIn .26s var(--ios)}
+.cal-day-ov.out{animation:fadeOut .22s forwards}
+.cal-day-card{width:min(100%,430px);min-height:420px;max-height:82dvh;display:flex;flex-direction:column;border-radius:32px;padding:22px 20px 18px;background:color-mix(in srgb,var(--sf) 86%,transparent);backdrop-filter:blur(32px) saturate(1.9);-webkit-backdrop-filter:blur(32px) saturate(1.9);border:1px solid color-mix(in srgb,#fff 40%,var(--bd));box-shadow:0 28px 68px -12px #0006,inset 0 1px 0 #ffffff50;animation:cardPop .42s var(--spring) both}
+.cal-day-ov.out .cal-day-card{animation:cardOut .22s var(--ios) forwards}
+@keyframes cardPop{from{opacity:0;transform:scale(.9) translateY(20px)}}
+@keyframes cardOut{to{opacity:0;transform:scale(.92) translateY(14px)}}
+
+/* Píldora inferior "Añadir el 10 nov +" */
+.cal-add-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(82px + env(safe-area-inset-bottom));z-index:6;width:min(88%,360px);display:flex;align-items:center;justify-content:space-between;padding:11px 16px 11px 20px;border-radius:999px;border:1px solid color-mix(in srgb,#fff 38%,var(--bd));background:color-mix(in srgb,var(--sf) 78%,transparent);backdrop-filter:blur(28px) saturate(1.9);-webkit-backdrop-filter:blur(28px) saturate(1.9);box-shadow:0 14px 36px -8px #1d0f2445,inset 0 1px 0 #ffffff45;color:var(--tx);font-size:14px;font-weight:700;cursor:pointer;transition:transform .4s var(--spring),box-shadow .25s}
+.cal-add-bar:hover{transform:translateX(-50%) translateY(-2px);box-shadow:0 18px 40px -8px color-mix(in srgb,var(--pr) 35%,transparent)}
+.cal-add-bar:active{transform:translateX(-50%) scale(.95)}
+.cal-add-bar span{color:var(--mu)}
+.cal-add-bar b{color:var(--tx)}
+.cal-add-bar i{width:30px;height:30px;border-radius:50%;background:var(--pr);color:#fff;display:grid;place-items:center;font-style:normal;font-size:18px;line-height:1}
+@media(min-width:820px){.cal-add-bar{bottom:26px}}
+
+/* Hoja de detalle de visita con barra de acciones inferior estilo iOS (video 00:04) */
+.ev-detail-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent);font-size:13.5px}
+.ev-detail-row:last-of-type{border-bottom:0}
+.ev-detail-ico{width:36px;height:36px;border-radius:11px;background:var(--soft);color:var(--pr);display:grid;place-items:center;flex:none}
+.ev-dock{display:flex;justify-content:space-around;gap:4px;margin-top:8px;padding:8px 6px;border-radius:999px;background:color-mix(in srgb,var(--soft) 85%,transparent);border:1px solid color-mix(in srgb,var(--bd) 65%,transparent)}
+.ev-dock button,.ev-dock a{flex:1;border:0;background:none;padding:7px 4px;border-radius:99px;color:var(--tx);font-size:10.5px;font-weight:700; display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;text-decoration:none;transition:transform .25s var(--spring),background .2s}
+.ev-dock button:active,.ev-dock a:active{transform:scale(.9);background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.ev-dock .danger{color:#e5484d}
 </style>
 </head>
 <body>
@@ -481,6 +582,7 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
     </form>
     <h3 id="alT" style="margin:18px 0 10px">Historial de alertas</h3><div id="alertsList"></div>
   </section>
+  <section id="vCalDra" hidden></section>
 </div>
 <nav id="nav" hidden>
   <button data-tab="alertas"><b data-ic="bell"></b>Alertas <span id="cnt"></span></button>
@@ -493,6 +595,7 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 <nav id="navDra" hidden>
   <button data-dratab="alertas"><b data-ic="bell"></b>Alertas</button>
   <button data-dratab="reportes" class="on"><b data-ic="plus"></b>Reportes</button>
+  <button data-dratab="visitas"><b data-ic="cal"></b>Visitas</button>
   <button data-dratab="avance"><b data-ic="chart"></b>Avance</button>
   <button data-dratab="historial"><b data-ic="check"></b>Historial</button>
   <button data-act="settings"><b data-ic="gear"></b>Ajustes</button>
@@ -642,6 +745,7 @@ function view(){
   if($("#vAlertas"))$("#vAlertas").hidden=true;
   if($("#vHist"))$("#vHist").hidden=true;
   if($("#vAvance"))$("#vAvance").hidden=true;
+  if($("#vCalDra"))$("#vCalDra").hidden=true;
   if($("#navDra"))$("#navDra").hidden=role!=="dra";
   if($("#nav"))$("#nav").hidden=role!=="asis";
   if($("#assistantNotifySettings"))$("#assistantNotifySettings").hidden=role!=="asis";
@@ -653,9 +757,9 @@ function view(){
 let histMode="alertas";
 function histUI(){document.querySelectorAll("[data-hm]").forEach(b=>b.classList.toggle("on",b.dataset.hm===histMode));$("#histAlerts").hidden=histMode!=="alertas";$("#recent").hidden=histMode!=="reportes"}
 document.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{histMode=b.dataset.hm;histUI()});
-function applyDraTab(){if(role!=="dra")return;setTimeout(renderAvDra,0);
+function applyDraTab(){if(role!=="dra")return;setTimeout(renderAvDra,0);setTimeout(renderCalDra,0);
 document.querySelectorAll("[data-dratab]").forEach(b=>b.classList.toggle("on",b.dataset.dratab===draTab));
-$("#vDra").hidden=draTab!=="reportes";$("#vAlertas").hidden=draTab!=="alertas";$("#vHist").hidden=draTab!=="historial";$("#vAvance").hidden=draTab!=="avance";$("#alertForm").hidden=true;$("#alT").hidden=false;$("#alertsList").hidden=false;
+$("#vDra").hidden=draTab!=="reportes";$("#vAlertas").hidden=draTab!=="alertas";$("#vHist").hidden=draTab!=="historial";$("#vAvance").hidden=draTab!=="avance";if($("#vCalDra"))$("#vCalDra").hidden=draTab!=="visitas";$("#alertForm").hidden=true;$("#alT").hidden=false;$("#alertsList").hidden=false;
 if(draTab==="alertas"){$("#alH").textContent="Alertas de corrección";$("#alP").textContent="Solicitudes de los asistentes por atender.";$("#alT").textContent="Pendientes de corregir"}
 histUI();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll("[data-dratab]").forEach(b=>b.onclick=()=>{draTab=b.dataset.dratab;applyDraTab();renderAlerts();loadAlerts()});
@@ -907,7 +1011,7 @@ function ring(){const n=+(($("#cnt")||{}).textContent||"").replace(/\D/g,"")||0,
 const R=render,A=applyDraTab,Ld=load;
 let skOn=true;render=function(){if(skOn&&!loaded&&role==="asis"&&!DB.length&&["alertas","visitas","historial"].includes(tab)){$("#list").innerHTML='<div class="sk"></div>'.repeat(3);return}role==="asis"?vt(R,tab):R();setTimeout(ring,0)};
 applyDraTab=function(){role==="dra"?vt(A,draTab):A()};
-load=async function(){if(busy)return;busy=true;try{await Ld()}finally{busy=false;if(skOn){skOn=false;sig="";render();renderRecent();renderAvDra(1)}if((localStorage.getItem("ms_q")||"{}")!=="{}")flushQ()}};
+load=async function(){if(busy)return;busy=true;try{await Ld()}finally{busy=false;if(skOn){skOn=false;sig="";render();renderRecent();renderAvDra(1);if(typeof renderCalDra==="function")renderCalDra()}if((localStorage.getItem("ms_q")||"{}")!=="{}")flushQ()}};
 toast=function(m,t){const d=document.createElement("div"),i=document.createElement("i"),s=document.createElement("span");if(t==="err")d.className="err";i.textContent=t==="err"?"!":"✓";s.textContent=m;d.append(i,s);$("#toast").appendChild(d);setTimeout(()=>{d.classList.add("out");setTimeout(()=>d.remove(),400)},3400)};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&TOK)load()});
 setTimeout(()=>{const t=()=>document.querySelectorAll("nav svg *").forEach(e=>e.setAttribute("pathLength","1")),mo=new MutationObserver(t);t();document.querySelectorAll("nav").forEach(n=>mo.observe(n,{childList:true,subtree:true}))},0)}
@@ -928,6 +1032,412 @@ function renderRecent(){if(role!=="dra")return;const it=DB.slice(-30).reverse();
 $("#recent").innerHTML=it.length?it.map(r=>`<div class="card"><div class="row"><b>${esc(r.expediente)}</b><span class="sp"></span><span class="tag ${r.estado==="Pendiente"?"co":""}">${r.estado==="Pendiente"?"Pendiente":"✓ "+esc(r.estado)}</span></div><p class="mu s">${esc(r.timestamp)}</p>${chk(r)}${trk(r,0)}${obsH(r)}</div>`).join(""):'<div class="empty">Aún no hay envíos</div>'}
 function dtag(f){const t=new Date();t.setHours(0,0,0,0);const n=Math.round((new Date(f+"T00:00:00")-t)/864e5);return n<0?'<span class="tag co">Vencida</span>':n===0?'<span class="tag lime">Hoy</span>':n===1?'<span class="tag">Mañana</span>':""}
 function ago(t){const m=String(t).match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/);if(!m)return"";const d=Math.round((Date.now()-new Date(m[3],m[2]-1,m[1],m[4],m[5]))/6e4);return d<1?"ahora":d<60?`hace ${d} min`:d<1440?`hace ${Math.floor(d/60)} h`:`hace ${Math.floor(d/1440)} d`}
+
+// ====== CALENDARIO INTERACTIVO (Dra. Lilliam y Asistentes) ======
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const MESES_C=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const DIAS_C=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
+const isoToday=()=>{const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}}-${z(d.getDate())}`.replace("}}","}")};
+function todayStr(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
+let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim="";
+
+function fmt12(hm){
+  if(!hm)return"Todo el día";
+  const [h,m]=String(hm).split(":").map(Number);
+  if(isNaN(h))return hm;
+  const ap=h>=12?"p.m.":"a.m.",h12=h%12||12;
+  return `${h12}:${String(m||0).padStart(2,"0")} ${ap}`;
+}
+function fmtShortDate(iso){
+  if(!iso)return"";
+  const [y,m,d]=iso.split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  return `${DIAS_C[dt.getDay()].toLowerCase()}, ${d} de ${MESES_C[m-1]}`;
+}
+function fmtAddLabel(iso){
+  if(!iso)return"Añadir visita";
+  const [,m,d]=iso.split("-").map(Number);
+  return `Añadir el ${d} ${MESES_C[m-1]}`;
+}
+function isoWeekNum(y,m,d){
+  const dt=new Date(Date.UTC(y,m,d));
+  const dayNum=dt.getUTCDay()||7;
+  dt.setUTCDate(dt.getUTCDate()+4-dayNum);
+  const yearStart=new Date(Date.UTC(dt.getUTCFullYear(),0,1));
+  return Math.ceil((((dt-yearStart)/86400000)+1)/7);
+}
+function calEventsMap(q=""){
+  const map={};
+  const add=(dateStr,ev)=>{if(!dateStr)return;(map[dateStr]=map[dateStr]||[]).push(ev)};
+  DB.forEach(r=>{
+    if(q&&!(r.expediente+" "+r.formularios.join(" ")+" "+(r.notas||"")).toLowerCase().includes(q))return;
+    if(r.fechaVisita){
+      const cls=r.estado==="Completado"?"c-done":r.esNuevo?"c-new":"c-vis";
+      add(r.fechaVisita,{kind:"visita",id:r.id,date:r.fechaVisita,time:r.horaVisita||"",title:`Exp. ${r.expediente}`,sub:r.formularios.filter(f=>!f.startsWith("[")).join(", ")||r.notas||"Próxima visita programada",cls,r});
+    }
+    if(r.fechaLlegada){
+      add(r.fechaLlegada,{kind:"llegada",id:r.id,date:r.fechaLlegada,time:"",title:`Llegada · ${r.expediente}`,sub:r.notas||"Llegada de participante",cls:"c-lleg",r});
+    }
+  });
+  Object.keys(map).forEach(k=>map[k].sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99")));
+  return map;
+}
+function buildCalHTML(q=""){
+  const evMap=calEventsMap(q);
+  const first=new Date(calY,calM,1);
+  const startOffset=(first.getDay()+6)%7; // Lunes = 0
+  const cur=new Date(calY,calM,1-startOffset);
+  const tStr=todayStr(),tDay=new Date().getDate();
+  let weeksHTML="";
+  for(let w=0;w<6;w++){
+    const wNum=isoWeekNum(cur.getFullYear(),cur.getMonth(),cur.getDate());
+    let cellsHTML=`<div class="cal-wnum">${wNum}</div>`;
+    for(let d=0;d<7;d++){
+      const y=cur.getFullYear(),m=cur.getMonth(),day=cur.getDate();
+      const iso=`${y}-${String(m+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+      const isOut=m!==calM,isToday=iso===tStr,isSel=iso===calSel,isSun=d===6;
+      const evs=evMap[iso]||[];
+      const pills=evs.slice(0,3).map(e=>`<div class="cal-pill ${e.cls}">${esc(e.time?e.time+" ":"")}${esc(e.r.expediente)}</div>`).join("")+(evs.length>3?`<div class="cal-more">+${evs.length-3} más</div>`:"");
+      const bars=evs.slice(0,4).map(e=>`<i class="cal-bar ${e.cls}"></i>`).join("");
+      cellsHTML+=`<div class="cal-cell${isOut?" out":""}${isToday?" today":""}${isSel?" sel":""}${isSun?" sun":""}" data-cdate="${iso}">
+        <div class="cal-dhead"><span class="cal-dnum">${day}</span></div>
+        <div class="cal-ev-list">${pills}</div>
+        <div class="cal-bars">${bars}</div>
+      </div>`;
+      cur.setDate(cur.getDate()+1);
+    }
+    weeksHTML+=`<div class="cal-wrow">${cellsHTML}</div>`;
+    if(cur.getMonth()!==calM&&w>=4)break;
+  }
+  const [sy,sm,sd]=calSel.split("-").map(Number);
+  const selDt=new Date(sy,sm-1,sd);
+  const selEvs=evMap[calSel]||[];
+  const splitHTML=`<div class="cal-split">
+    <div class="cal-shdr">
+      <b>${sd}</b><span>${DIAS_C[selDt.getDay()]} · ${MESES[sm-1]} ${sy}</span>
+      <span class="sp"></span>
+      <button type="button" class="ghost" data-cal-daycard="${calSel}">Ver tarjeta del día</button>
+    </div>
+    <div class="cal-tline">
+      ${selEvs.length?selEvs.map(e=>`<div class="cal-titem" data-cal-ev="${esc(e.id)}" data-cal-kind="${e.kind}">
+        <div class="cal-ttime">${esc(e.time||"Todo el día")}</div>
+        <div class="cal-tbar ${e.cls}"></div>
+        <div class="cal-tbody">
+          <b>${esc(e.title)} ${e.r.esNuevo?'<span class="tag lime" style="font-size:9.5px;padding:1px 6px">NUEVA</span>':""}</b>
+          <p>${esc(e.sub)}</p>
+        </div>
+      </div>`).join(""):`<div class="empty" style="padding:20px 10px">No hay visitas programadas para este día.<br><button type="button" class="ghost" style="margin-top:10px" data-cal-add="${calSel}">＋ Programar visita el ${sd} de ${MESES_C[sm-1]}</button></div>`}
+    </div>
+  </div>`;
+
+  return `<div class="cal-shell" data-noswipe="1">
+    <div class="cal-top">
+      <button type="button" class="cal-navb" data-cal-nav="-1" title="Mes anterior">‹</button>
+      <h3 class="cal-mtitle" data-cal-pickm="1">${MESES[calM]} ${calY!==new Date().getFullYear()?`<small>${calY}</small>`:""}</h3>
+      <button type="button" class="cal-navb" data-cal-nav="1" title="Mes siguiente">›</button>
+      <span class="sp"></span>
+      <div class="cal-vmode">
+        <button type="button" data-cal-mode="split" class="${calCompact?"on":""}">Dividido</button>
+        <button type="button" data-cal-mode="full" class="${!calCompact?"on":""}">Mes</button>
+      </div>
+      <button type="button" class="cal-today-b" data-cal-today="1" title="Ir a hoy">${tDay}</button>
+    </div>
+    <div class="cal-board${calCompact?" compact":""}">
+      <div class="cal-dow"><span></span><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
+      <div class="cal-weeks ${calAnim}">${weeksHTML}</div>
+    </div>
+    ${calCompact?splitHTML:""}
+    <button type="button" class="cal-add-bar" data-cal-add="${calSel}">
+      <span>${fmtAddLabel(calSel)}</span>
+      <i>＋</i>
+    </button>
+  </div>`;
+}
+
+function renderCalDra(){
+  const host=$("#vCalDra");
+  if(!host||role!=="dra"||draTab!=="visitas")return;
+  host.innerHTML=buildCalHTML("");
+  calAnim="";
+}
+
+function shiftDateISO(iso,deltaDays){
+  const [y,m,d]=iso.split("-").map(Number);
+  const dt=new Date(y,m-1,d+deltaDays);
+  const z=n=>String(n).padStart(2,"0");
+  return `${dt.getFullYear()}-${z(dt.getMonth()+1)}-${z(dt.getDate())}`;
+}
+
+// Tarjeta emergente interactiva del día (con swipe izquierda/derecha para cambiar de día como en el video 00:09-00:13)
+function openDayPopup(iso){
+  calSel=iso;
+  const [y,m,d]=iso.split("-").map(Number);
+  calY=y;calM=m-1;
+  sig="";render();renderCalDra();
+  let ov=document.querySelector(".cal-day-ov");
+  if(!ov){
+    ov=document.createElement("div");
+    ov.className="cal-day-ov";
+    ov.setAttribute("data-noswipe","1");
+    document.body.appendChild(ov);
+  }
+  const paint=curIso=>{
+    calSel=curIso;
+    const [cy,cm,cd]=curIso.split("-").map(Number);
+    const dt=new Date(cy,cm-1,cd);
+    const evs=(calEventsMap("")[curIso])||[];
+    ov.innerHTML=`<div class="cal-day-card">
+      <div class="row" style="margin-bottom:4px">
+        <button type="button" class="cal-navb" data-dnav="-1">‹</button>
+        <div><b style="font-size:24px;font-weight:800;letter-spacing:-.03em">${cd}</b> <span style="font-size:15px;color:var(--mu);font-weight:600">${DIAS_L[dt.getDay()]}</span></div>
+        <button type="button" class="cal-navb" data-dnav="1">›</button>
+        <span class="sp"></span>
+        <button type="button" class="ib" data-dclose="1" style="width:36px;height:36px">✕</button>
+      </div>
+      <p class="mu s" style="margin:0 0 14px">${cd} ${MESES_C[cm-1]} ${cy} · ${evs.length} ${evs.length===1?"evento programado":"eventos programados"}</p>
+      <div class="cal-tline" style="flex:1;overflow:auto;align-content:start">
+        ${evs.length?evs.map(e=>`<div class="cal-titem" data-dev="${esc(e.id)}" data-dkind="${e.kind}">
+          <div class="cal-ttime">${esc(e.time||"Todo el día")}</div>
+          <div class="cal-tbar ${e.cls}"></div>
+          <div class="cal-tbody">
+            <b>${esc(e.title)}</b>
+            <p>${esc(e.sub)}</p>
+          </div>
+        </div>`).join(""):`<div class="empty" style="padding:48px 12px">No hay visitas en esta fecha.<p class="mu s">Toca el botón de abajo para agendar una visita.</p></div>`}
+      </div>
+      <button type="button" class="btn" data-dadd="${curIso}" style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-radius:99px">
+        <span>${fmtAddLabel(curIso)}</span><b style="font-size:18px">＋</b>
+      </button>
+    </div>`;
+  };
+  paint(iso);
+  let sx=0;
+  ov.ontouchstart=e=>{if(e.touches.length===1)sx=e.touches[0].clientX};
+  ov.ontouchend=e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>60)paint(shiftDateISO(calSel,dx<0?1:-1))};
+  ov.onclick=e=>{
+    if(e.target===ov||e.target.closest("[data-dclose]")){ov.classList.add("out");setTimeout(()=>ov.remove(),220);sig="";render();renderCalDra();return}
+    const nav=e.target.closest("[data-dnav]");
+    if(nav){paint(shiftDateISO(calSel,+nav.dataset.dnav));return}
+    const add=e.target.closest("[data-dadd]");
+    if(add){const dIso=add.dataset.dadd;ov.remove();openQuickAddVisit(dIso);return}
+    const ev=e.target.closest("[data-dev]");
+    if(ev){const id=ev.dataset.dev,k=ev.dataset.dkind;ov.remove();openVisitDetailSheet(id,k)}
+  };
+}
+
+// Hoja de detalle de una visita (con barra inferior Editar, Calendario, Compartir, Quitar como el video 00:04)
+function openVisitDetailSheet(id,kind="visita"){
+  const r=DB.find(x=>x.id===id);if(!r)return;
+  const fStr=kind==="llegada"?r.fechaLlegada:r.fechaVisita;
+  const hStr=kind==="llegada"?"":r.horaVisita;
+  const o=document.createElement("div");o.className="dlg";o.setAttribute("data-noswipe","1");
+  o.innerHTML=`<div class="dlg-p" role="dialog" aria-modal="true">
+    <div class="row">
+      <button type="button" class="ib" data-x="1" style="width:36px;height:36px">‹</button>
+      <div style="flex:1"><b style="font-size:19px">${kind==="llegada"?"Llegada · ":"Visita · "}Exp. ${esc(r.expediente)}</b></div>
+      <span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span>
+    </div>
+    <div class="card" style="margin:0;padding:14px 16px;background:var(--soft)">
+      <div class="row" style="justify-content:space-between;text-align:center">
+        <div><small class="mu s">FECHA</small><b style="display:block;font-size:14px;margin-top:2px">${esc(fmtShortDate(fStr))}</b></div>
+        <span style="color:var(--mu);font-weight:800">→</span>
+        <div><small class="mu s">HORARIO</small><b style="display:block;font-size:14px;margin-top:2px">${esc(fmt12(hStr))}</b></div>
+      </div>
+    </div>
+    <div>
+      <div class="ev-detail-row"><span class="ev-detail-ico">${ic("sheet")}</span><div><small class="mu s" style="display:block">Formularios asociados</small><b>${esc(r.formularios.join(", ")||"Visita general")}</b></div></div>
+      <div class="ev-detail-row"><span class="ev-detail-ico">${ic("bell")}</span><div><small class="mu s" style="display:block">Estado y seguimiento</small><b>${esc(r.estado)} · BD: ${esc(r.bdE)} · RedCap: ${esc(r.rcE)}</b></div></div>
+      ${r.notas?`<div class="ev-detail-row"><span class="ev-detail-ico">${ic("chat")}</span><div><small class="mu s" style="display:block">Notas</small><b>${esc(r.notas)}</b></div></div>`:""}
+    </div>
+    <div id="evEditBox" hidden class="card" style="margin:0;padding:12px;background:var(--soft)">
+      <label class="f">Reprogramar fecha y hora</label>
+      <div class="row" style="flex-wrap:nowrap;margin-bottom:8px">
+        <input type="date" id="evNewDate" value="${esc(r.fechaVisita||fStr)}" style="flex:2">
+        <input type="time" id="evNewTime" value="${esc(r.horaVisita||"")}" style="flex:1">
+      </div>
+      <input type="text" id="evNewNote" placeholder="Nota de la visita (opcional)" value="${esc(r.notas||"")}" style="margin-bottom:8px">
+      <button type="button" class="btn" id="evSaveBtn" style="padding:11px">Guardar cambios</button>
+    </div>
+    <div class="ev-dock">
+      <button type="button" id="evBtnEdit">${ic("sliders")}<span>Editar</span></button>
+      ${r.fechaVisita?`<a target="_blank" rel="noopener" href="${esc(gcal(r))}">${ic("cal")}<span>Google Cal</span></a>`:""}
+      ${r.fechaVisita?`<button type="button" id="evBtnIcs">${ic("down")}<span>Apple/ICS</span></button>`:""}
+      <button type="button" class="danger" id="evBtnDel">${ic("out")}<span>Quitar fecha</span></button>
+    </div>
+  </div>`;
+  const close=()=>{o.classList.add("out");setTimeout(()=>o.remove(),280)};
+  o.onclick=async e=>{
+    if(e.target===o||e.target.closest("[data-x]"))return close();
+    if(e.target.closest("#evBtnEdit")){const b=o.querySelector("#evEditBox");b.hidden=!b.hidden;return}
+    if(e.target.closest("#evBtnIcs")){dl(r);return}
+    if(e.target.closest("#evSaveBtn")){
+      const nf=o.querySelector("#evNewDate").value,nh=o.querySelector("#evNewTime").value,nn=o.querySelector("#evNewNote").value.trim();
+      if(!nf)return toast("Selecciona una fecha","err");
+      const btn=o.querySelector("#evSaveBtn");btn.disabled=true;btn.textContent="Guardando…";
+      r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn;calSel=nf;
+      const ok=await post({action:"updateStatus",id:r.id,fechaVisita:nf,horaVisita:nh,notas:nn});
+      toast(ok?"Visita reprogramada":"Error al guardar",ok?"":"err");
+      close();sig="";render();renderCalDra();return;
+    }
+    if(e.target.closest("#evBtnDel")){
+      const okC=await confirmDlg("¿Quitar esta visita del calendario?","El expediente "+r.expediente+" seguirá registrado pero ya no tendrá esta fecha de visita asignada.","Quitar fecha");
+      if(!okC)return;
+      r.fechaVisita="";r.horaVisita="";
+      const ok=await post({action:"updateStatus",id:r.id,fechaVisita:"",horaVisita:""});
+      toast(ok?"Fecha quitada del calendario":"Error de conexión",ok?"":"err");
+      close();sig="";render();renderCalDra();
+    }
+  };
+  document.body.appendChild(o);
+}
+
+// Modal rápido para agendar una visita futura en cualquier fecha seleccionada (Dra. y Asistentes)
+function openQuickAddVisit(isoDate){
+  const dIso=isoDate||calSel||todayStr();
+  const exps=[...new Set(DB.map(r=>r.expediente).concat(avNums().map(n=>"CRM"+pad2(n))))].sort();
+  const o=document.createElement("div");o.className="dlg";o.setAttribute("data-noswipe","1");
+  o.innerHTML=`<div class="dlg-p" role="dialog" aria-modal="true">
+    <div class="row"><b>Programar visita en calendario</b><span class="sp"></span><button type="button" class="ib" data-x="1" style="width:34px;height:34px">✕</button></div>
+    <div>
+      <label class="f">Expediente</label>
+      <input type="text" id="qaExp" list="qaExpList" placeholder="Ej. CRM01" autocapitalize="characters" required>
+      <datalist id="qaExpList">${exps.map(x=>`<option value="${esc(x)}">`).join("")}</datalist>
+    </div>
+    <div class="row" style="flex-wrap:nowrap">
+      <div style="flex:2"><label class="f">Fecha de visita</label><input type="date" id="qaDate" value="${esc(dIso)}"></div>
+      <div style="flex:1.2"><label class="f">Hora (opc.)</label><input type="time" id="qaTime" value="08:00"></div>
+    </div>
+    <div>
+      <label class="f">Motivo o visita a realizar</label>
+      <select id="qaVisitType">
+        <option value="Próxima visita programada">Próxima visita programada</option>
+        <option value="1ª visita · Seguimiento">1ª visita · Seguimiento</option>
+        <option value="2ª visita · Antropometría">2ª visita · Antropometría</option>
+        <option value="3ª visita · Agua corporal">3ª visita · Agua corporal</option>
+        <option value="4ª visita (3 meses)">4ª visita (3 meses)</option>
+      </select>
+    </div>
+    <div>
+      <label class="f">Notas adicionales (opcional)</label>
+      <input type="text" id="qaNotes" placeholder="Ej. Confirmar asistencia por teléfono, traer muestras…">
+    </div>
+    <label class="opt" style="margin:0"><input type="checkbox" id="qaCal" checked><span>Enviar invitación por correo / Google Calendar a los suscritos</span></label>
+    <div class="dlg-a" style="margin-top:4px">
+      <button type="button" class="ghost" data-x="1">Cancelar</button>
+      <button type="button" class="btn" id="qaSubmit">Guardar visita</button>
+    </div>
+  </div>`;
+  const close=()=>{o.classList.add("out");setTimeout(()=>o.remove(),280)};
+  o.onclick=async e=>{
+    if(e.target===o||e.target.closest("[data-x]"))return close();
+    if(e.target.closest("#qaSubmit")){
+      const exp=o.querySelector("#qaExp").value.trim().toUpperCase();
+      const fv=o.querySelector("#qaDate").value;
+      const hv=o.querySelector("#qaTime").value;
+      const vt=o.querySelector("#qaVisitType").value;
+      const nt=o.querySelector("#qaNotes").value.trim();
+      const sendCal=o.querySelector("#qaCal").checked;
+      if(!exp||!fv)return toast("Indica el expediente y la fecha","err");
+      const btn=o.querySelector("#qaSubmit");btn.disabled=true;btn.textContent="Agendando…";
+      // Si hay un expediente pendiente existente y sin fecha, o si el usuario prefiere crear el evento
+      const existing=DB.find(r=>r.expediente===exp&&r.estado==="Pendiente"&&!r.fechaVisita);
+      let ok=false;
+      if(existing&&!sendCal){
+        existing.fechaVisita=fv;existing.horaVisita=hv;if(nt)existing.notas=nt;
+        ok=await post({action:"updateStatus",id:existing.id,fechaVisita:fv,horaVisita:hv,notas:existing.notas});
+      }else{
+        const now=new Date(),z=n=>String(n).padStart(2,"0");
+        const mail=(role==="dra"?(localStorage.getItem("ms_dra_email")||localStorage.getItem("ms_dmail")):localStorage.getItem("ms_mail"))||"";
+        const rec={
+          action:"add",
+          id:"REG-"+Date.now(),
+          timestamp:`${z(now.getDate())}/${z(now.getMonth()+1)}/${now.getFullYear()} ${z(now.getHours())}:${z(now.getMinutes())}:${z(now.getSeconds())}`,
+          expediente:exp,
+          esNuevo:false,
+          estadoParticipante:"Activo",
+          fechaVisita:fv,
+          horaVisita:hv,
+          completos:true,
+          formularios:[vt],
+          notas:nt,
+          estado:"Pendiente",
+          usuario:ME?.name||(role==="dra"?"Dra":"Asistente"),
+          fechaLlegada:"",
+          calendar:sendCal,
+          calEmail:mail
+        };
+        ok=await post(rec);
+        if(ok)await load();
+      }
+      const [ny,nm]=fv.split("-").map(Number);
+      calY=ny;calM=nm-1;calSel=fv;
+      toast(ok?"✓ Visita agendada en el calendario":"No se pudo agendar. Revisa tu conexión",ok?"":"err");
+      close();sig="";render();renderCalDra();
+    }
+  };
+  document.body.appendChild(o);
+  setTimeout(()=>o.querySelector("#qaExp")?.focus(),80);
+}
+
+// Delegación global de eventos para el Calendario (tanto en vista Asistentes como vista Dra. Lilliam)
+document.addEventListener("click",e=>{
+  const nav=e.target.closest("[data-cal-nav]");
+  if(nav){
+    const dir=+nav.dataset.calNav;
+    calAnim=dir>0?"anim-l":"anim-r";
+    calM+=dir;
+    if(calM>11){calM=0;calY++}else if(calM<0){calM=11;calY--}
+    const z=n=>String(n).padStart(2,"0");
+    calSel=`${calY}-${z(calM+1)}-01`;
+    sig="";render();renderCalDra();return;
+  }
+  const td=e.target.closest("[data-cal-today]");
+  if(td){
+    const now=new Date();calY=now.getFullYear();calM=now.getMonth();calSel=todayStr();
+    calAnim="anim-r";sig="";render();renderCalDra();return;
+  }
+  const md=e.target.closest("[data-cal-mode]");
+  if(md){
+    calCompact=md.dataset.calMode==="split";
+    sig="";render();renderCalDra();return;
+  }
+  const cell=e.target.closest("[data-cdate]");
+  if(cell){
+    const iso=cell.dataset.cdate;
+    const [y,m]=iso.split("-").map(Number);
+    const sameSel=calSel===iso;
+    calSel=iso;
+    if(y!==calY||m-1!==calM){calY=y;calM=m-1}
+    if(!calCompact||sameSel){openDayPopup(iso);return}
+    sig="";render();renderCalDra();return;
+  }
+  const dc=e.target.closest("[data-cal-daycard]");
+  if(dc){openDayPopup(dc.dataset.calDaycard);return}
+  const add=e.target.closest("[data-cal-add]");
+  if(add){openQuickAddVisit(add.dataset.calAdd);return}
+  const ev=e.target.closest("[data-cal-ev]");
+  if(ev){openVisitDetailSheet(ev.dataset.calEv,ev.dataset.calKind);return}
+});
+
+// Swipe horizontal sobre el tablero del calendario para cambiar de mes con fluidez
+{let csx=0,csy=0,con=false;
+document.addEventListener("touchstart",e=>{
+  con=false;
+  if(e.touches.length!==1||!e.target.closest(".cal-board"))return;
+  csx=e.touches[0].clientX;csy=e.touches[0].clientY;con=true;
+},{passive:true});
+document.addEventListener("touchend",e=>{
+  if(!con)return;con=false;
+  const dx=e.changedTouches[0].clientX-csx,dy=e.changedTouches[0].clientY-csy;
+  if(Math.abs(dx)<55||Math.abs(dy)>Math.abs(dx)*.6)return;
+  const dir=dx<0?1:-1;
+  calAnim=dir>0?"anim-l":"anim-r";
+  calM+=dir;if(calM>11){calM=0;calY++}else if(calM<0){calM=11;calY--}
+  calSel=`${calY}-${String(calM+1).padStart(2,"0")}-01`;
+  sig="";render();renderCalDra();
+},{passive:true});
+}
 
 // ---- Vista asistentes ----
 function render(){if(role!=="asis")return;
@@ -950,22 +1460,22 @@ ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVi
 ${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
 :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
 $("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
-$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
-const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
-$("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
-if(a==="c")return dl(r);
-if(a==="x"){r.fechaVisita=r.horaVisita="";return up(r,{fechaVisita:"",horaVisita:""},"Fecha eliminada")}
-if(a==="r"){r.estado="Pendiente";r.bdE=r.rcE="En proceso";return up(r,{statusValue:"Pendiente",bdEstado:"En proceso",rcEstado:"En proceso"},"Regresado a pendientes")}
-const i=document.getElementById("o-"+r.id),t=i.value.trim();if(!t)return toast("Escribe la observación","err");
-const autor="Asistente";r.obs.push("[ahora] "+autor+": "+t);i.value="";sig="";render();const ok=await post({action:"addObs",id:r.id,texto:t,autor:autor});toast(ok?"Observación enviada a la Dra.":"Error de conexión",ok?"":"err")};
-$("#list").onchange=async e=>{const i=e.target,a=i.dataset.a,r=DB.find(x=>x.id===i.dataset.id);if(!r||!a)return;
-if(a==="d"){if(!i.value)return;r.fechaVisita=i.value;i.blur();return up(r,{fechaVisita:i.value},"Fecha actualizada")}
-if(a==="t"){r.horaVisita=i.value;i.blur();return up(r,{horaVisita:i.value},i.value?"Hora actualizada":"Hora quitada")}
-const k=i.dataset.k;
-if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
-if(a==="s"){const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
-r[k+"E"]=i.value;r[k+"R"]=n;if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";i.blur();
-up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado")}};
+const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"nexo";
+const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB+calY+"-"+calM+"-"+calSel+"-"+calCompact;if(s===sig)return;if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;sig=s;
+document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
+$("#stats").innerHTML=`<button data-tab="alertas"><b>${pend}</b><span>Pendientes</span></button><button data-tab="alertas"><b>${nue}</b><span>Nuevas</span></button><button data-tab="visitas"><b>${vis}</b><span>Visitas</span></button>`;
+let it=DB.slice().reverse().filter(r=>!q||(r.expediente+" "+r.formularios.join(" ")).toLowerCase().includes(q));
+it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((a,b)=>(a[avMode+"E"]==="Finalizado")-(b[avMode+"E"]==="Finalizado")):tab==="alertas"?it.filter(r=>r.estado==="Pendiente"):tab==="visitas"?it.filter(r=>r.fechaVisita).sort((a,b)=>a.fechaVisita.localeCompare(b.fechaVisita)):it.filter(r=>r.estado!=="Pendiente");
+;{const t=$("#avTabs"),qEl=$("#q"),heroEl=$("#vAsis .hero");if(t&&tab==="avance")t.hidden=false;if(qEl)qEl.style.display=(tab==="avance"||tab==="visitas")?"none":"";if(heroEl)heroEl.hidden=tab==="visitas";if($("#stats"))$("#stats").hidden=(tab==="avance"||tab==="visitas")}
+$("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?it.map(r=>`<div class="card ${r.esNuevo&&r.estado==="Pendiente"?"nw":""}">
+<div class="row"><b class="exp">${esc(r.expediente)}</b>${r.esNuevo?'<span class="tag lime">NUEVA</span>':""}<span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span></div>
+${forms(r)}
+${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
+<p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
+${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
+:`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;calAnim=""}
+$("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
 
 // ---- Alertas de corrección ----
 const ALERT_FORMS=G.flatMap(g=>g[1]);
@@ -1189,7 +1699,7 @@ const free=()=>{const vf=document.getElementById("vForm");return (vs.hidden||!$(
 addEventListener("touchstart",e=>{on=false;if(e.touches.length!==1||!free()||blocked(e.target))return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();on=true},{passive:true});
 addEventListener("touchend",e=>{if(!on)return;on=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
 if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.5||Date.now()-st>700||!free())return;
-const L=role==="dra"?["alertas","reportes","avance","historial","ajustes"]:["alertas","visitas","avance","historial","ajustes"],cur=vs.hidden?(role==="dra"?draTab:tab):"ajustes",i=L.indexOf(cur),n=i+(dx<0?1:-1);
+const L=role==="dra"?["alertas","reportes","visitas","avance","historial","ajustes"]:["alertas","visitas","avance","historial","ajustes"],cur=vs.hidden?(role==="dra"?draTab:tab):"ajustes",i=L.indexOf(cur),n=i+(dx<0?1:-1);
 if(i<0||n<0||n>=L.length)return;
 const g=L[n],b=document.querySelector(g==="ajustes"?(role==="dra"?"#navDra [data-act=settings]":"#nav [data-act=settings]"):role==="dra"?`#navDra [data-dratab="${g}"]`:`#nav [data-tab="${g}"]`);if(b)b.click()},{passive:true})}
 
