@@ -290,19 +290,40 @@ details.grp>summary:active,details.vd>summary:active{background:color-mix(in srg
 details[open]>summary+*{animation:accIn .32s var(--ios) both}
 @keyframes accIn{from{opacity:0;transform:translateY(-6px)}}
 
-/* ===== Ajustes por secciones ===== */
-#vSet{max-width:640px}
-#vSet .slab{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin:20px 6px 8px}
-#vSet .sgrp{padding:4px 8px}
-.srow{display:flex;align-items:center;gap:12px;width:100%;padding:11px 6px;background:none;border:0;color:var(--tx);text-align:left;cursor:pointer;text-decoration:none;font:inherit;border-radius:14px}
-.srow+.srow{border-top:1px solid color-mix(in srgb,var(--bd) 70%,transparent);border-radius:0}
-.srow .sico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--pr) 13%,transparent);color:var(--pr)}
+/* ===== Jerarquía visual, encabezados y separación global refinada ===== */
+header{margin-bottom:18px;padding-top:calc(12px + env(safe-area-inset-top));padding-bottom:14px}
+.card.hero{margin-bottom:20px;padding:24px 24px}
+.card.hero h2{font-size:25px;margin-bottom:6px;line-height:1.15}
+.card.hero p{font-size:13.5px;line-height:1.45;opacity:.92}
+.card{padding:22px;margin-bottom:16px}
+.card>b:first-child{display:block;font-size:16px;font-weight:800;letter-spacing:-.015em;margin-bottom:4px}
+.tabs2{margin-bottom:18px;padding:5px}
+.stats{gap:12px;margin-bottom:18px}
+#q{margin-bottom:18px!important;padding:14px 16px}
+
+/* ===== Ajustes por secciones (Centrado y responsivo en pantallas grandes) ===== */
+#vSet{max-width:760px;margin:0 auto;width:100%}
+#setHub{display:grid;gap:6px}
+#vSet .hero{margin-bottom:8px}
+.set-grid{display:grid;gap:18px}
+.set-col{display:flex;flex-direction:column}
+#vSet .slab{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:6px 10px 8px;display:flex;align-items:center;gap:6px}
+#vSet .sgrp{padding:6px 10px;margin:0}
+.srow{display:flex;align-items:center;gap:14px;width:100%;padding:13px 10px;background:none;border:0;color:var(--tx);text-align:left;cursor:pointer;text-decoration:none;font:inherit;border-radius:16px}
+.srow+.srow{border-top:1px solid color-mix(in srgb,var(--bd) 65%,transparent);border-radius:0}
+.srow:hover{background:color-mix(in srgb,var(--pr) 6%,transparent);border-radius:14px}
+.srow .sico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--pr) 13%,transparent);color:var(--pr);box-shadow:inset 0 1px 0 #ffffff30}
 .srow .sico svg{width:20px;height:20px}
-.srow .stx{flex:1;display:grid;gap:2px;min-width:0}.srow .stx b{font-size:15px;font-weight:700}.srow .stx small{font-size:12px;color:var(--mu)}
+.srow .stx{flex:1;display:grid;gap:3px;min-width:0}.srow .stx b{font-size:15px;font-weight:700;letter-spacing:-.01em}.srow .stx small{font-size:12.5px;color:var(--mu);line-height:1.3}
 .srow .chev{transform:rotate(-90deg);opacity:.55;flex:none}
 .srow.danger .sico{background:#e5484d1f;color:#e5484d}.srow.danger b{color:#e5484d}
-.srow:active{background:color-mix(in srgb,var(--pr) 8%,transparent)}
-.sback{margin-bottom:12px}
+.srow:active{background:color-mix(in srgb,var(--pr) 10%,transparent)}
+.spg{max-width:580px;margin:0 auto;width:100%}
+.sback{margin-bottom:14px;padding:8px 14px;font-size:13px;border-radius:12px;display:inline-flex;align-items:center;gap:4px}
+@media(min-width:820px){
+  #vSet{max-width:860px;padding-top:4px}
+  .set-grid{grid-template-columns:1fr 1fr;gap:20px 22px;align-items:start}
+}
 @keyframes sIn{from{opacity:0;transform:translateX(16px)}}
 #setHub:not([hidden]),.spg:not([hidden]){animation:sIn .32s cubic-bezier(.22,1,.36,1)}
 
@@ -1621,17 +1642,27 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click"
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
 const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
-const back='<button type="button" class="ghost sback">‹ Ajustes</button>';
+const back='<button type="button" class="ghost sback">‹ Volver a Ajustes</button>';
 vs.innerHTML=`<div id="setHub">
 <div class="card hero"><h2>Ajustes</h2><p id="meTxt"></p></div>
-<div class="slab">Cuenta</div>
-<div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
-<div class="slab">Preferencias</div>
-<div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos del dispositivo")}${row("theme","palette","Apariencia","Modo día o noche y temas de color")}</div>
-<div class="slab">Ayuda</div>
-<div class="card sgrp">${row("feed","chat","Retroalimentación o reporte de error","Envíanos tu opinión o cuéntanos qué falla")}</div>
-<div class="slab">Aplicación</div>
-<div class="card sgrp" id="setApp"></div>
+<div class="set-grid">
+  <div class="set-col">
+    <div class="slab">Cuenta y seguridad</div>
+    <div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
+  </div>
+  <div class="set-col">
+    <div class="slab">Preferencias</div>
+    <div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos del dispositivo")}${row("theme","palette","Apariencia","Modo día o noche y temas de color")}</div>
+  </div>
+  <div class="set-col">
+    <div class="slab">Soporte y mejora</div>
+    <div class="card sgrp">${row("feed","chat","Retroalimentación o reporte de error","Envíanos tu opinión o cuéntanos qué falla")}</div>
+  </div>
+  <div class="set-col">
+    <div class="slab">Aplicación y sesión</div>
+    <div class="card sgrp" id="setApp"></div>
+  </div>
+</div>
 </div>
 <div class="spg" id="pg-pass" hidden>${back}
 <div class="card"><b>Contraseña</b><p class="mu">Mínimo 10 caracteres, con letras y números.</p>
