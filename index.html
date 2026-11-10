@@ -18,7 +18,7 @@ button,input,textarea{font:inherit;color:inherit}
 .wrap{max-width:640px;margin:0 auto;padding:0 16px calc(110px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:5;background:var(--glass);margin:0 -16px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)}
 header img{width:38px;height:38px;border-radius:11px}
-header h1{font-size:17px;margin:0;line-height:1.1}header small{color:var(--mu);font-size:12px}
+header h1{font-size:17px;margin:0;line-height:1.1}.wm{height:22px;width:auto;display:block;overflow:visible}header h1 .wm{margin:2px 0 3px}header small{color:var(--mu);font-size:12px}
 header .sp{flex:1}
 .ib{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--glass);color:var(--tx);display:grid;place-items:center;cursor:pointer;padding:0}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--li);display:inline-block;margin-right:5px}.dot.off{background:var(--co)}
@@ -52,7 +52,7 @@ nav button b{display:grid;place-items:center;height:24px;margin-bottom:2px}nav b
 .tip{background:var(--soft);border-radius:14px;padding:10px 12px;font-size:13px;margin-bottom:12px}
 #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 #login .card{width:min(100%,380px);text-align:center;padding:26px}
-#login img{width:84px;height:84px;border-radius:22px}
+#login .wm-lg{height:40px;margin:0 auto 6px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .stats button{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:10px 4px;cursor:pointer}
 .stats b{display:block;font-size:22px;color:var(--pr)}.stats span{font-size:11px;color:var(--mu);font-weight:700}
@@ -320,6 +320,18 @@ body:has(#alertForm.out)::after{animation:fadeOut .34s ease-in forwards}
 body #alertForm:not([hidden]){animation:frmUpD .6s cubic-bezier(.22,1,.36,1) both}
 body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 }
+
+/* ===== Eliminar expedientes / restaurar ===== */
+.ag.del td:first-child{color:#e5484d;font-weight:800;cursor:pointer}
+.ag.del td:first-child::before{content:"✕ "}
+.dlg .rlist{display:grid;max-height:50vh;overflow:auto}
+.dlg .rlist .srow{padding:12px 4px}
+/* ===== Retroalimentación ===== */
+.fbhead{text-align:center;padding:6px 0 4px}
+.fbico{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;background:color-mix(in srgb,var(--pr) 14%,transparent);color:var(--pr)}
+.fbico svg{width:28px;height:28px}
+.fbhead h3{margin:0 0 6px;font-size:20px}
+body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 </style>
 </head>
 <body>
@@ -327,8 +339,7 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 
 <section id="login">
   <form class="card" id="fLogin">
-    <img src="icons/icon-192.png" alt="">
-    <h2 style="margin:12px 0 2px">Nexo</h2>
+    <svg class="wm wm-lg" viewBox="0 0 424 100" role="img" aria-label="nexo" fill="none" stroke="currentColor" stroke-width="22"><defs><clipPath id="wmcL"><rect x="-20" y="0" width="140" height="100"/></clipPath></defs><path d="M11 0V100M11 47a36 36 0 0 1 72 0V100"/><path transform="translate(104 0)" d="M11 50H89A39 39 0 1 0 80 75"/><g transform="translate(214 0)" clip-path="url(#wmcL)"><path d="M-3 -20L103 120M103 -20L-3 120"/></g><circle cx="374" cy="50" r="39"/></svg>
     <p class="mu" style="margin:0 0 18px">Control de expedientes</p>
     <input type="text" id="u" placeholder="Usuario" autocapitalize="none" required style="margin-bottom:10px">
     <input type="password" id="p" placeholder="Contraseña" required style="margin-bottom:14px">
@@ -339,8 +350,7 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 <div id="app" hidden>
 <div class="wrap">
   <header>
-    <img src="icons/icon-192.png" alt="">
-    <div><h1>Nexo</h1><small><span class="dot" id="dot"></span><span id="who"></span></small></div>
+    <div><h1><svg class="wm" viewBox="0 0 424 100" role="img" aria-label="nexo" fill="none" stroke="currentColor" stroke-width="22"><defs><clipPath id="wmcH"><rect x="-20" y="0" width="140" height="100"/></clipPath></defs><path d="M11 0V100M11 47a36 36 0 0 1 72 0V100"/><path transform="translate(104 0)" d="M11 50H89A39 39 0 1 0 80 75"/><g transform="translate(214 0)" clip-path="url(#wmcH)"><path d="M-3 -20L103 120M103 -20L-3 120"/></g><circle cx="374" cy="50" r="39"/></svg></h1><small><span class="dot" id="dot"></span><span id="who"></span></small></div>
     <span class="sp"></span>
     <button class="ib" id="bBell" title="Avisos"></button>
     <button class="ib" id="bTheme" title="Tema"></button>
@@ -358,7 +368,7 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 
   <div class="card" id="cfg" hidden>
     <div class="settings-title"><span data-ic="bell"></span><b>Notificaciones y preferencias</b></div>
-    <p class="mu">Configura aquí el correo que Nexo utilizará para avisos y eventos de calendario.</p>
+    <p class="mu">Configura aquí el correo que nexo utilizará para avisos y eventos de calendario.</p>
     <div id="assistantNotifySettings">
       <label class="f" style="margin-top:12px">Tu correo</label>
       <input type="text" id="mailIn" inputmode="email" autocapitalize="none" placeholder="tu.correo@ucr.ac.cr">
@@ -483,7 +493,7 @@ let role=localStorage.getItem("ms_role"),DB=[],ALERTS=[],ALERT_PREFS={enabled:fa
 
 function toast(m,t){const d=document.createElement("div");if(t==="err")d.className="err";d.textContent=m;$("#toast").appendChild(d);setTimeout(()=>d.remove(),4000)}
 
-const IC={gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
+const IC={chat:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
 belloff:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0M3 3l18 18"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',
@@ -516,7 +526,7 @@ function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(
 [660,880].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f;o.connect(g);g.connect(c.destination);
 g.gain.setValueAtTime(.2,t+i*.18);g.gain.exponentialRampToValueAtTime(.001,t+i*.18+.16);o.start(t+i*.18);o.stop(t+i*.18+.17)})}catch(e){}}
 function notify(n){beep();if("Notification"in window&&Notification.permission==="granted"){const m=n+(n>1?" expedientes nuevos":" expediente nuevo"),o={body:m,icon:"icons/icon-192.png"};
-navigator.serviceWorker?.ready.then(r=>r.showNotification("Nexo",o)).catch(()=>{try{new Notification("Nexo",o)}catch(e){}})}}
+navigator.serviceWorker?.ready.then(r=>r.showNotification("nexo",o)).catch(()=>{try{new Notification("nexo",o)}catch(e){}})}}
 
 // ---- Sesión ----
 $("#fLogin").onsubmit=async e=>{e.preventDefault();const b=$("#fLogin button");b.disabled=true;b.textContent="Verificando…";
@@ -608,11 +618,16 @@ HN={bd:"Base de datos",rm:"RedCap · Madres",rb:"RedCap · Bebés",gn:"General"}
 PR=[["Cuest. 1 · 1ª vis.",0,"rm",1],["Antrop. 1ª vis.",1,"rm",2],["Antrop. 2ª vis.",2,"rm",3],["Antrop. 3ª vis.",3,"rm",4],["Agua 3ª vis.",4,"rm",6],["Cuest. 2 · 4ª vis.",6,"rb",2],["Antrop. 4ª bebé",7,"rb",3],["Antrop. 4ª madre",8,"rm",5],["Agua 4ª madre",9,"rm",7],["Agua 4ª bebé",11,"rb",4]];
 const myR=()=>role==="dra"?"investigadora":"asistente",cSeen=()=>JSON.parse(localStorage.getItem("ms_cseen")||"{}");
 const pad2=n=>String(n).padStart(2,"0");
-function avNums(){const s=new Set(Array.from({length:26},(_,i)=>i+1));DB.forEach(r=>{const x=/^CRM[-\s]?0*(\d{1,3})$/i.exec(String(r.expediente).trim());if(x)s.add(+x[1])});Object.keys(AVD).forEach(k=>{const x=/^(?:BD\|CRM|RM\|CR-M-)(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b)}
-function avRows(m){if(m.pre==="RB"){const s=new Set(Array.from({length:19},(_,i)=>i+1));Object.keys(AVD).forEach(k=>{const x=/^RB\|(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b).map(pad2)}return avNums().map(n=>(m.pre==="BD"?"CRM":"CR-M-")+pad2(n))}
+function isDel(k){const o=AVD[k];return !!(o&&o.v&&o.v[0]==="1")}
+function avNums(){const s=new Set(Array.from({length:26},(_,i)=>i+1));DB.forEach(r=>{const x=/^CRM[-\s]?0*(\d{1,3})$/i.exec(String(r.expediente).trim());if(x)s.add(+x[1])});Object.keys(AVD).forEach(k=>{const x=/^(?:BD\|CRM|RM\|CR-M-)(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b).filter(n=>!isDel("DEL|N|"+pad2(n)))}
+function avRows(m){if(m.pre==="RB"){const s=new Set(Array.from({length:19},(_,i)=>i+1));Object.keys(AVD).forEach(k=>{const x=/^RB\|(\d+)$/.exec(k);if(x)s.add(+x[1])});return[...s].sort((a,b)=>a-b).filter(n=>!isDel("DEL|RB|"+pad2(n))).map(pad2)}return avNums().map(n=>(m.pre==="BD"?"CRM":"CR-M-")+pad2(n))}
 function avRec(m,id){const k=m.pre+"|"+id,o=AVD[k];if(o)return o;const s=SEED[k];return s?{v:s[0].split(","),n:s[1]}:null}
 function avV(m,id){const o=avRec(m,id),a=o?o.v.slice():m.cols.map(c=>c[2]?"A":"");while(a.length<m.cols.length)a.push("");return a.slice(0,m.cols.length)}
 function avPut(m,id,v,n){const k=m.pre+"|"+id,o=avRec(m,id)||{n:""};AVD[k]={v,n:n===null?o.n:n};clearTimeout(AVT[k]);AVT[k]=setTimeout(async()=>{let ok=false;for(const w of[0,1500,4000]){if(w)await new Promise(r=>setTimeout(r,w));ok=await post({action:"setAvance",clave:k,valores:AVD[k].v.join(","),notas:AVD[k].n});if(ok)break}delete AVT[k];if(!ok){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");q[k]=AVD[k];localStorage.setItem("ms_q",JSON.stringify(q));toast("Sin conexión: "+id+" se guardará al volver","err")}},500)}
+function delList(m){const o=[];Object.keys(AVD).forEach(k=>{if(!isDel(k))return;const q=k.split("|");if(m.pre==="RB"){if(q[1]==="RB")o.push({k,id:q[2],lab:"Bebé "+q[2]})}else if(q[1]==="N")o.push({k,id:q[2],lab:"CRM"+q[2]+" · CR-M-"+q[2]})});return o.sort((a,b)=>a.id-b.id)}
+function avDelPut(k,f){AVD[k]={v:[f],n:""};clearTimeout(AVT[k]);AVT[k]=setTimeout(async()=>{let ok=false;for(const w of[0,1500,4000]){if(w)await new Promise(r=>setTimeout(r,w));ok=await post({action:"setAvance",clave:k,valores:f,notas:""});if(ok)break}delete AVT[k];if(!ok){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");q[k]=AVD[k];localStorage.setItem("ms_q",JSON.stringify(q));toast("Sin conexión: el cambio se guardará al volver","err")}},300)}
+function dlgBox(title,body,btns){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b>'+body+'</div>';o.querySelector("b").textContent=title;const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};o.onclick=e=>{const b=e.target.closest("[data-r]");if(b)end(b.dataset.r);else if(e.target===o)end(null)};document.body.appendChild(o)})}
+function confirmDlg(title,text,okL){return dlgBox(title,'<p class="mu" style="margin:0">'+String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</p><div class="dlg-a"><button type="button" class="ghost" data-r="">Cancelar</button><button type="button" class="btn" data-r="1" style="background:#e5484d">'+okL+'</button></div>').then(v=>v==="1")}
 function avBadge(){const s=cSeen(),n=COM.filter(c=>c.r!==myR()&&c.ts>(s[c.h]||0)).length;document.querySelectorAll("[data-tab=avance],[data-dratab=avance]").forEach(b=>{let x=b.querySelector(".bdg");if(!n){x&&x.remove();return}if(!x){x=document.createElement("span");x.className="bdg";b.appendChild(x)}x.textContent=n})}
 async function loadAv(){if(Object.keys(AVT).length)return;try{const d=await api({action:"read",tipo:"avances"});if(!Array.isArray(d)||(d.length&&!d[0].k))return;const o={},cm=[];
 d.forEach(r=>{if(r.k.startsWith("CM|")){const q=r.k.split("|");cm.push({h:q[1],ts:+q[2],t:r.v,r:r.n,f:r.u,a:r.p})}else o[r.k]={v:r.v.split(","),n:r.n}});
@@ -642,9 +657,9 @@ rows.forEach(r=>{t[sOf(r.v)]++;r.v.forEach(x=>cnt[x]=(cnt[x]||0)+1)});
 const pct=Math.round(t.f/rows.length*100),col=x=>(m.st.find(s=>s[0]===x)||[])[2]||"transparent";
 setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>a.scrollLeft=AGX[0]),0);
 return `<div class="card sum"><div class="row"><b>${m.t}</b><span class="sp"></span><span class="mu">${t.f} de ${rows.length} completos · ${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div><p class="mu s" style="margin-top:8px">Con incompletos: ${t.i} · En proceso: ${t.p}</p></div>`
-+`<div class="lg">${m.st.map(s=>`<button type="button" data-ab="${s[0]}" class="${ed&&AB===s[0]?"on":""}" style="background:${s[2]};color:#222">${s[1]} · ${cnt[s[0]]||0}</button>`).join("")}${ed?`<button type="button" data-ab="-" class="${AB==="-"?"on":""}" style="background:var(--soft);color:var(--tx)">Borrar</button><button type="button" data-add="1" style="background:var(--soft);color:var(--pr)">＋ Agregar expediente</button>`:""}</div>`
-+(ed?'<p class="mu s" style="margin-top:8px">Elige un color y toca las celdas para pintarlas.'+(m.notes?" Toca el expediente para ver u escribir observaciones.":"")+"</p>":"")
-+`<div class="ag${ed?" ed":""}"><table><tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}</table></div>`}
++`<div class="lg">${m.st.map(s=>`<button type="button" data-ab="${s[0]}" class="${ed&&AB===s[0]?"on":""}" style="background:${s[2]};color:#222">${s[1]} · ${cnt[s[0]]||0}</button>`).join("")}${ed?`<button type="button" data-ab="-" class="${AB==="-"?"on":""}" style="background:var(--soft);color:var(--tx)">Borrar</button><button type="button" data-add="1" style="background:var(--soft);color:var(--pr)">＋ Agregar expediente</button><button type="button" data-ab="DEL" class="${AB==="DEL"?"on":""}" style="background:#e5484d1f;color:#e5484d">🗑 Eliminar expediente</button>${delList(m).length?`<button type="button" data-restore="1" style="background:var(--soft);color:var(--tx)">↩ Restaurar (${delList(m).length})</button>`:""}`:""}</div>`
++(ed&&AB==="DEL"?'<p class="mu s" style="margin-top:8px;color:#e5484d">Modo eliminar: toca el número del expediente que quieras quitar de la tabla.</p>':ed?'<p class="mu s" style="margin-top:8px">Elige un color y toca las celdas para pintarlas.'+(m.notes?" Toca el expediente para ver u escribir observaciones.":"")+"</p>":"")
++`<div class="ag${ed?" ed":""}${ed&&AB==="DEL"?" del":""}"><table><tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}</table></div>`}
 function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
 sub=avMode==="rc"?`<div class="tabs2" style="margin-bottom:10px">${[["rm","Madres"],["rb","Bebés"]].map(([x,t])=>`<button type="button" data-rs="${x}" class="${rcSub===x?"on":""}">${t}</button>`).join("")}</div>`:"";
 return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chH(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b> · ${HN[avMode==="bd"?"bd":"rm"].split(" ")[0]==="Base"?"Base de datos":"RedCap"}</summary>${avH(it)}</details>`:""}</div>`}
@@ -663,16 +678,18 @@ window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(
 {const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
 addEventListener("online",flushQ);
-document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add]");if(!t)return;const ed=role==="asis",d=t.dataset;
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore]");if(!t)return;const ed=role==="asis",d=t.dataset;
 if(d.cs){chSend(t.closest(".chat"),d.cs);return}
 if(d.avd){avMode=d.avd;renderAvDra(1);return}
 if(d.rs){rcSub=d.rs;sig="";render();renderAvDra(1);return}
 const m=AVS[avMode==="bd"?"bd":rcSub];
 if(d.ab!==undefined){if(ed){AB=d.ab;sig="";render()}return}
 if(d.add){if(!ed)return;const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);if(!x||x<1||x>999)return;const bm=m.pre==="RB"?m:AVS.bd,id=m.pre==="RB"?pad2(x):"CRM"+pad2(x);avPut(bm,id,avV(bm,id),null);sig="";render();toast("Fila "+id+" agregada");return}
+if(d.restore){if(!ed)return;const L=delList(m);if(!L.length)return;const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');if(!r)return;avDelPut(r,"0");sig="";render();toast("Expediente restaurado");return}
 const id=t.closest("tr").firstChild.dataset.an;
+if(d.an!==undefined&&ed&&AB==="DEL"){const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;const ok=await confirmDlg("¿Eliminar "+id+"?",m.pre==="RB"?"Se quitará de la tabla RedCap · Bebés. Podrás restaurarlo con el botón Restaurar.":"Se quitará de Base de datos y de RedCap · Madres. Podrás restaurarlo con el botón Restaurar.","Eliminar");AB="V";if(ok){avDelPut(k,"1");toast("Expediente "+id+" eliminado")}sig="";render();return}
 if(d.an!==undefined){if(!m.notes)return;const cur=(avRec(m,id)||{}).n||"";if(!ed){await ask("Observaciones de "+id,cur||"Sin observaciones",1);return}const n=await ask("Observaciones de "+id,cur,0,"Escribe una observación…");if(n===null)return;avPut(m,id,avV(m,id),n.trim().slice(0,300));sig="";render();return}
-if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
+if(ed&&AB==="DEL")return;if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
 // ---- Movimiento estilo iOS y estabilidad ----
 {const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;let lastT=null,lastN=0,busy=false;
 const order=()=>[...document.querySelectorAll(role==="dra"?"[data-dratab]":"#nav [data-tab]")].map(b=>b.dataset.dratab||b.dataset.tab);
@@ -690,7 +707,7 @@ function obsH(r){return r.obs.map(o=>`<p class="mu s">💬 ${esc(o)}</p>`).join(
 function cd(r){const z=n=>String(n).padStart(2,"0"),y=d=>""+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate()),[a,b,c]=r.fechaVisita.split("-").map(Number);
 if(!r.horaVisita)return[y(new Date(a,b-1,c)),y(new Date(a,b-1,c+1))];const[H,M]=r.horaVisita.split(":").map(Number),t=d=>y(d)+"T"+z(d.getHours())+z(d.getMinutes())+"00";return[t(new Date(a,b-1,c,H,M)),t(new Date(a,b-1,c,H+1,M))]}
 function gcal(r){const[s,e]=cd(r);return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Visita · Exp. "+r.expediente)+"&dates="+s+"/"+e+"&details="+encodeURIComponent("Expediente "+r.expediente)}
-function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Nexo//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@nexo\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nBEGIN:VALARM\r\nTRIGGER:"+(r.horaVisita?"-PT1H":"-PT15H")+"\r\nACTION:DISPLAY\r\nDESCRIPTION:Visita\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
+function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//nexo//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@nexo\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nBEGIN:VALARM\r\nTRIGGER:"+(r.horaVisita?"-PT1H":"-PT15H")+"\r\nACTION:DISPLAY\r\nDESCRIPTION:Visita\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
 a.href=URL.createObjectURL(new Blob([c],{type:"text/calendar"}));a.download="visita-"+r.expediente+".ics";a.click()}
 function ec(e){return e==="Activo"?"st-a":e==="Finalizó"?"st-f":"st-r"}
 function forms(r){const used=new Set();let h="";
@@ -708,7 +725,7 @@ $("#vAlertas").hidden=tab!=="nueva";if(tab==="nueva"){$("#alH").textContent="Cre
 const HD={alertas:["Expedientes por localizar","Pendientes que registró la Dra. Lilliam."],visitas:["Próximas visitas","Participantes con visita programada."],historial:["Historial","Expedientes ya procesados."],avance:["Avance de trabajo","Marca en qué etapa va cada expediente."]}[tab];if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}$("#vAsis").hidden=tab==="nueva";$("#avTabs").hidden=tab!=="avance";$("#stats").hidden=tab==="avance";$("#hsTabs").hidden=tab!=="historial";{const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
 document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
 if(tab==="nueva"){renderAlerts();return}
-const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"Nexo";
+const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"nexo";
 const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB;if(s===sig)return;if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;sig=s;
 document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
 const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
@@ -863,6 +880,8 @@ vs.innerHTML=`<div id="setHub">
 <div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
 <div class="slab">Preferencias</div>
 <div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos del dispositivo")}${row("theme","palette","Apariencia","Modo día o noche y temas de color")}</div>
+<div class="slab">Ayuda</div>
+<div class="card sgrp">${row("feed","chat","Retroalimentación o reporte de error","Envíanos tu opinión o cuéntanos qué falla")}</div>
 <div class="slab">Aplicación</div>
 <div class="card sgrp" id="setApp"></div>
 </div>
@@ -879,6 +898,15 @@ vs.innerHTML=`<div id="setHub">
 <input type="password" id="nu2" placeholder="Tu contraseña, para confirmar" autocomplete="current-password" style="margin-top:8px">
 <button type="button" class="btn" id="nuBtn" style="margin-top:12px">Cambiar usuario</button>
 <p class="mu s">Los cambios de usuario quedan registrados para el administrador.</p></div></div>
+<div class="spg" id="pg-feed" hidden>${back}
+<div class="card"><div class="fbhead"><div class="fbico">${ic("chat")}</div><h3>Opiniones y sugerencias</h3><p class="mu">Ayúdanos a mejorar nexo. Cuéntanos qué te gusta, qué falla o qué te gustaría ver en la app.</p></div>
+<div class="tabs2" id="fbType" style="margin:14px 0 0"><button type="button" data-ft="sug" class="on">Sugerencia</button><button type="button" data-ft="bug">Reportar un error</button></div>
+<label class="f" style="margin-top:14px">Tu comentario <span style="color:#e5484d">*</span></label>
+<textarea id="fbText" rows="5" maxlength="1500" placeholder="Escribe tu comentario aquí…"></textarea>
+<label class="f" style="margin-top:12px">Medio de contacto <small class="mu">(opcional)</small></label>
+<input type="text" id="fbContact" placeholder="WhatsApp, correo, Instagram…" autocapitalize="none">
+<button type="button" class="btn" id="fbSend" style="margin-top:14px">Enviar sugerencia</button>
+<p class="mu s" style="text-align:center">Se abrirá tu aplicación de correo con el mensaje listo para enviar.</p></div></div>
 <div class="spg" id="pg-notif" hidden>${back}</div>
 <div class="spg" id="pg-theme" hidden>${back}<div class="card" id="modeCard"><b>Modo</b><p class="mu">Elige cómo se ve la app: automático, de día o de noche.</p></div></div>`;
 $("#pg-notif").append($("#cfg"));
@@ -892,7 +920,7 @@ $("#bCfg")?.remove();$("#bSwitch")?.remove();
 // el encabezado queda limpio: modo día/noche y ajustes viven en Ajustes
 $("#bTheme").style.display="none";$("#bMenu").style.display="none";
 
-const pages=["pass","user","notif","theme"];
+const pages=["pass","user","notif","theme","feed"];
 const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
 function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p!==id);
 if(id==="notif"){$("#cfg").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";if(typeof mailUI==="function")mailUI();if(role==="dra"&&typeof loadAlertPrefs==="function")loadAlertPrefs()}
@@ -909,6 +937,13 @@ $("#bBell").onclick=()=>openSet("notif");
 // mientras Ajustes está abierto, las actualizaciones automáticas no deben mostrar otra vista debajo
 {const r=render;render=function(){if(!vs.hidden)return;return r.apply(this,arguments)};const a=applyDraTab;applyDraTab=function(){if(!vs.hidden)return;return a.apply(this,arguments)}}
 
+
+let fbT="sug";
+$("#fbType").onclick=e=>{const t=e.target.closest("[data-ft]");if(!t)return;fbT=t.dataset.ft;document.querySelectorAll("#fbType button").forEach(b=>b.classList.toggle("on",b===t));$("#fbSend").textContent=fbT==="bug"?"Enviar reporte":"Enviar sugerencia";$("#fbText").placeholder=fbT==="bug"?"Describe qué pasó, en qué pantalla y qué esperabas que ocurriera…":"Escribe tu comentario aquí…"};
+$("#fbSend").onclick=()=>{const t=$("#fbText").value.trim();if(!t)return toast("Escribe tu comentario","err");
+const c=$("#fbContact").value.trim(),bug=fbT==="bug",subj=bug?"[nexo] Reporte de error":"[nexo] Sugerencia",
+body=t+"\n\n"+(c?"Contacto: "+c+"\n":"")+"—\nUsuario: "+(ME?ME.user+" ("+(role==="dra"?"investigadora":"asistente")+")":"-")+"\nPantalla: "+innerWidth+"x"+innerHeight+"\nNavegador: "+navigator.userAgent+"\nFecha: "+new Date().toLocaleString("es-CR");
+const a=document.createElement("a");a.href="mailto:leo1403b.v@gmail.com?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);document.body.appendChild(a);a.click();a.remove();toast("Abriendo tu correo…")};
 $("#pwBtn").onclick=async()=>{const a=$("#pw0").value,b=$("#pw1").value;
 if(b!==$("#pw2").value)return toast("Las contraseñas nuevas no coinciden","err");
 if(b.length<10||!/[A-Za-z]/.test(b)||!/[0-9]/.test(b))return toast("Mínimo 10 caracteres, con letras y números","err");
@@ -924,13 +959,13 @@ $("#fabNew").onclick=()=>{const f=$("#alertForm");f.classList.remove("out");f.hi
 // ===== Deslizar entre pestañas (izquierda/derecha), asistentes y Dra. =====
 {let sx=0,sy=0,st=0,on=false;
 const blocked=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){if(e.matches&&e.matches("input,textarea,select,[contenteditable],[data-noswipe],#alertForm,.dlg,#toast"))return true;const o=getComputedStyle(e).overflowX;if((o==="auto"||o==="scroll")&&e.scrollWidth>e.clientWidth+2)return true}return false};
-const free=()=>{const vf=document.getElementById("vForm");return vs.hidden&&$("#alertForm").hidden&&!$(".dlg")&&$("#app")&&!$("#app").hidden&&(!vf||vf.hidden)};
+const free=()=>{const vf=document.getElementById("vForm");return (vs.hidden||!$("#setHub").hidden)&&$("#alertForm").hidden&&!$(".dlg")&&$("#app")&&!$("#app").hidden&&(!vf||vf.hidden)};
 addEventListener("touchstart",e=>{on=false;if(e.touches.length!==1||!free()||blocked(e.target))return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();on=true},{passive:true});
 addEventListener("touchend",e=>{if(!on)return;on=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
 if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.5||Date.now()-st>700||!free())return;
-const L=role==="dra"?["alertas","reportes","avance","historial"]:["alertas","visitas","avance","historial"],cur=role==="dra"?draTab:tab,i=L.indexOf(cur),n=i+(dx<0?1:-1);
+const L=role==="dra"?["alertas","reportes","avance","historial","ajustes"]:["alertas","visitas","avance","historial","ajustes"],cur=vs.hidden?(role==="dra"?draTab:tab):"ajustes",i=L.indexOf(cur),n=i+(dx<0?1:-1);
 if(i<0||n<0||n>=L.length)return;
-const b=document.querySelector(role==="dra"?`#navDra [data-dratab="${L[n]}"]`:`#nav [data-tab="${L[n]}"]`);if(b)b.click()},{passive:true})}
+const g=L[n],b=document.querySelector(g==="ajustes"?(role==="dra"?"#navDra [data-act=settings]":"#nav [data-act=settings]"):role==="dra"?`#navDra [data-dratab="${g}"]`:`#nav [data-tab="${g}"]`);if(b)b.click()},{passive:true})}
 })();
 </script>
 </body>
