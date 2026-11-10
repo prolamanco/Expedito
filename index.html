@@ -1440,42 +1440,63 @@ document.addEventListener("touchend",e=>{
 }
 
 // ---- Vista asistentes ----
-function render(){if(role!=="asis")return;
-$("#vAlertas").hidden=tab!=="nueva";if(tab==="nueva"){$("#alH").textContent="Crear alerta de corrección";$("#alP").textContent="Avisa a la Dra. si falta algo o hay dudas en un formulario.";$("#alT").textContent="Historial de alertas"}
-const HD={alertas:["Expedientes por localizar","Pendientes que registró la Dra. Lilliam."],visitas:["Próximas visitas","Participantes con visita programada."],historial:["Historial","Expedientes ya procesados."],avance:["Avance de trabajo","Marca en qué etapa va cada expediente."]}[tab];if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}$("#vAsis").hidden=tab==="nueva";$("#avTabs").hidden=tab!=="avance";$("#stats").hidden=tab==="avance";$("#hsTabs").hidden=tab!=="historial";{const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
-document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
-if(tab==="nueva"){renderAlerts();return}
-const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"nexo";
-const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB;if(s===sig)return;if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;sig=s;
-document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
-const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
-$("#stats").innerHTML=`<button data-tab="alertas"><b>${pend}</b><span>Pendientes</span></button><button data-tab="alertas"><b>${nue}</b><span>Nuevas</span></button><button data-tab="visitas"><b>${vis}</b><span>Visitas</span></button>`;
-let it=DB.slice().reverse().filter(r=>!q||(r.expediente+" "+r.formularios.join(" ")).toLowerCase().includes(q));
-it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((a,b)=>(a[avMode+"E"]==="Finalizado")-(b[avMode+"E"]==="Finalizado")):tab==="alertas"?it.filter(r=>r.estado==="Pendiente"):tab==="visitas"?it.filter(r=>r.fechaVisita).sort((a,b)=>a.fechaVisita.localeCompare(b.fechaVisita)):it.filter(r=>r.estado!=="Pendiente");
-;{const t=$("#avTabs"),q=$("#q");if(t&&tab==="avance")t.hidden=false;if(q)q.style.display=tab==="avance"?"none":""}$("#list").innerHTML=tab==="avance"?avPage(1,it):it.length?it.map(r=>`<div class="card ${r.esNuevo&&r.estado==="Pendiente"?"nw":""}">
+function render(){
+  if(role!=="asis")return;
+  $("#vAlertas").hidden=tab!=="nueva";
+  if(tab==="nueva"){
+    $("#alH").textContent="Crear alerta de corrección";
+    $("#alP").textContent="Avisa a la Dra. si falta algo o hay dudas en un formulario.";
+    $("#alT").textContent="Historial de alertas";
+  }
+  const HD={alertas:["Expedientes por localizar","Pendientes que registró la Dra. Lilliam."],visitas:["Próximas visitas","Participantes con visita programada."],historial:["Historial","Expedientes ya procesados."],avance:["Avance de trabajo","Marca en qué etapa va cada expediente."]}[tab];
+  if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}
+  $("#vAsis").hidden=tab==="nueva";
+  $("#avTabs").hidden=tab!=="avance";
+  $("#stats").hidden=(tab==="avance"||tab==="visitas");
+  $("#hsTabs").hidden=tab!=="historial";
+  {const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  if(tab==="nueva"){renderAlerts();return}
+  const pend=DB.filter(r=>r.estado==="Pendiente").length;
+  $("#cnt").textContent=pend?`(${pend})`:"";
+  document.title=(pend?`(${pend}) `:"")+"nexo";
+  const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB+calY+"-"+calM+"-"+calSel+"-"+calCompact;
+  if(s===sig)return;
+  if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;
+  sig=s;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
+  $("#stats").innerHTML=`<button data-tab="alertas"><b>${pend}</b><span>Pendientes</span></button><button data-tab="alertas"><b>${nue}</b><span>Nuevas</span></button><button data-tab="visitas"><b>${vis}</b><span>Visitas</span></button>`;
+  let it=DB.slice().reverse().filter(r=>!q||(r.expediente+" "+r.formularios.join(" ")).toLowerCase().includes(q));
+  it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((a,b)=>(a[avMode+"E"]==="Finalizado")-(b[avMode+"E"]==="Finalizado")):tab==="alertas"?it.filter(r=>r.estado==="Pendiente"):tab==="visitas"?it.filter(r=>r.fechaVisita).sort((a,b)=>a.fechaVisita.localeCompare(b.fechaVisita)):it.filter(r=>r.estado!=="Pendiente");
+  {const t=$("#avTabs"),qEl=$("#q"),heroEl=$("#vAsis .hero");if(t&&tab==="avance")t.hidden=false;if(qEl)qEl.style.display=(tab==="avance"||tab==="visitas")?"none":"";if(heroEl)heroEl.hidden=tab==="visitas"}
+  $("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?it.map(r=>`<div class="card ${r.esNuevo&&r.estado==="Pendiente"?"nw":""}">
 <div class="row"><b class="exp">${esc(r.expediente)}</b>${r.esNuevo?'<span class="tag lime">NUEVA</span>':""}<span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span></div>
 ${forms(r)}
 ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
 <p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
 ${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
-:`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`}
-$("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
-const pend=DB.filter(r=>r.estado==="Pendiente").length;$("#cnt").textContent=pend?`(${pend})`:"";document.title=(pend?`(${pend}) `:"")+"nexo";
-const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB+calY+"-"+calM+"-"+calSel+"-"+calCompact;if(s===sig)return;if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;sig=s;
-document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
-const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
-$("#stats").innerHTML=`<button data-tab="alertas"><b>${pend}</b><span>Pendientes</span></button><button data-tab="alertas"><b>${nue}</b><span>Nuevas</span></button><button data-tab="visitas"><b>${vis}</b><span>Visitas</span></button>`;
-let it=DB.slice().reverse().filter(r=>!q||(r.expediente+" "+r.formularios.join(" ")).toLowerCase().includes(q));
-it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((a,b)=>(a[avMode+"E"]==="Finalizado")-(b[avMode+"E"]==="Finalizado")):tab==="alertas"?it.filter(r=>r.estado==="Pendiente"):tab==="visitas"?it.filter(r=>r.fechaVisita).sort((a,b)=>a.fechaVisita.localeCompare(b.fechaVisita)):it.filter(r=>r.estado!=="Pendiente");
-;{const t=$("#avTabs"),qEl=$("#q"),heroEl=$("#vAsis .hero");if(t&&tab==="avance")t.hidden=false;if(qEl)qEl.style.display=(tab==="avance"||tab==="visitas")?"none":"";if(heroEl)heroEl.hidden=tab==="visitas";if($("#stats"))$("#stats").hidden=(tab==="avance"||tab==="visitas")}
-$("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?it.map(r=>`<div class="card ${r.esNuevo&&r.estado==="Pendiente"?"nw":""}">
-<div class="row"><b class="exp">${esc(r.expediente)}</b>${r.esNuevo?'<span class="tag lime">NUEVA</span>':""}<span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span></div>
-${forms(r)}
-${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
-<p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
-${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
-:`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;calAnim=""}
-$("#q").oninput=render;$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
+  :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
+  calAnim="";
+}
+$("#q").oninput=render;
+$("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
+$("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
+const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
+$("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
+if(a==="c")return dl(r);
+if(a==="x"){r.fechaVisita=r.horaVisita="";return up(r,{fechaVisita:"",horaVisita:""},"Fecha eliminada")}
+if(a==="r"){r.estado="Pendiente";r.bdE=r.rcE="En proceso";return up(r,{statusValue:"Pendiente",bdEstado:"En proceso",rcEstado:"En proceso"},"Regresado a pendientes")}
+const i=document.getElementById("o-"+r.id),t=i.value.trim();if(!t)return toast("Escribe la observación","err");
+const autor="Asistente";r.obs.push("[ahora] "+autor+": "+t);i.value="";sig="";render();const ok=await post({action:"addObs",id:r.id,texto:t,autor:autor});toast(ok?"Observación enviada a la Dra.":"Error de conexión",ok?"":"err")};
+$("#list").onchange=async e=>{const i=e.target,a=i.dataset.a,r=DB.find(x=>x.id===i.dataset.id);if(!r||!a)return;
+if(a==="d"){if(!i.value)return;r.fechaVisita=i.value;i.blur();return up(r,{fechaVisita:i.value},"Fecha actualizada")}
+if(a==="t"){r.horaVisita=i.value;i.blur();return up(r,{horaVisita:i.value},i.value?"Hora actualizada":"Hora quitada")}
+const k=i.dataset.k;
+if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
+if(a==="s"){const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
+r[k+"E"]=i.value;r[k+"R"]=n;if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";i.blur();
+up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado")}};
 
 // ---- Alertas de corrección ----
 const ALERT_FORMS=G.flatMap(g=>g[1]);
