@@ -227,9 +227,9 @@ html[data-dir=back]::view-transition-old(root){animation:vtOutR .48s var(--ios) 
 .card:has(>.row:first-child>.exp)>.row:first-child::after{content:"";position:absolute;left:11px;top:50%;margin-top:-11px;width:22px;height:22px;background:var(--pr);-webkit-mask:var(--ico-f) center/contain no-repeat;mask:var(--ico-f) center/contain no-repeat}
 .card.nw:has(>.row:first-child>.exp)>.row:first-child::before{background:color-mix(in srgb,var(--li) 34%,transparent)}
 .msg{background:var(--soft);color:var(--tx);border-radius:18px 18px 18px 6px;align-self:flex-start}.msg.me{background:var(--pr);color:#fff;border-radius:18px 18px 6px 18px;align-self:flex-end}.msg.me small{color:#ffffffc0}
-.composer{display:flex;align-items:flex-end;gap:6px;background:var(--soft);border:1.5px solid transparent;border-radius:26px;padding:5px 5px 5px 16px;transition:border-color .2s,background .2s}
-.composer:focus-within{border-color:var(--pr);background:var(--sf)}
-.composer textarea{flex:1;width:auto;min-height:22px;max-height:120px;resize:none;border:0!important;background:none!important;border-radius:0!important;padding:9px 0!important;line-height:1.4;outline:none}
+.composer{display:flex;align-items:flex-end;gap:6px;background:var(--soft);border:1.5px solid transparent;border-radius:26px;padding:5px 5px 5px 16px;transition:border-color .2s,background .2s,box-shadow .2s}
+.composer:focus-within{border-color:var(--pr);background:var(--sf);box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 13%,transparent)}
+.composer textarea,.composer textarea:focus{flex:1;width:auto;min-height:22px;max-height:120px;resize:none;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;padding:9px 0!important;line-height:1.4;outline:none!important}
 .send{width:40px;height:40px;flex:none;border:0;border-radius:50%;background:var(--pr);color:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .5s var(--spring),background .25s}
 .send:disabled{background:var(--bd);color:var(--mu);cursor:default}.send:not(:disabled):active{transform:scale(.88)}
 .dlg{position:fixed;inset:0;z-index:9000;background:#0007;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .3s}
@@ -247,7 +247,7 @@ body:has(#alertForm:not([hidden]))::after{content:"";position:fixed;inset:0;z-in
 /* ===== Cristal: transparencias y desenfoque de alta calidad ===== */
 :root{--gb:blur(26px) saturate(1.7)}
 body::before{display:block;content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 40% at 0% 0%,color-mix(in srgb,var(--pr) 28%,transparent),transparent),radial-gradient(50% 35% at 100% 22%,color-mix(in srgb,var(--co) 20%,transparent),transparent),radial-gradient(60% 40% at 50% 100%,color-mix(in srgb,var(--li) 18%,transparent),transparent)}
-.card,header,#menu,nav,.stats button,.dlg-p{backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb)}
+.card,header,#menu,nav,.stats button,.dlg-p,.cal-top,.cal-board,.cal-split{backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);background-clip:padding-box;overflow:clip}
 .card{background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent);box-shadow:0 1px 1px #1d0f2408,0 16px 36px -16px #1d0f2438,inset 0 1px 0 #ffffff22}
 .card.hero{background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 14px 34px -14px color-mix(in srgb,var(--pr) 60%,transparent)}
 .card.hero h2,.card.hero p{color:#fff}
@@ -397,10 +397,11 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 /* Contenedor animado para plegar/desplegar el panel Dividido sin brusquedad */
 .cal-split-wrap{display:grid;grid-template-rows:1fr;opacity:1;transform:translateY(0);transition:grid-template-rows .52s cubic-bezier(.22,1,.36,1),opacity .36s var(--ios),transform .45s cubic-bezier(.22,1,.36,1),margin-top .45s var(--ios);margin-top:12px}
 .cal-split-wrap.hide{grid-template-rows:0fr;opacity:0;transform:translateY(10px);margin-top:0;pointer-events:none}
-.cal-split-inner{overflow:hidden;min-height:0}
+.cal-split-inner{overflow:visible;min-height:0}
+.cal-split-wrap.hide .cal-split-inner{overflow:hidden}
 
 /* Panel inferior de agenda del día (Split View) que ahora contiene la píldora de añadir adentro */
-.cal-split{border-radius:26px;padding:18px;background:color-mix(in srgb,var(--sf) 68%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 14px 36px -14px #1d0f2430,inset 0 1px 0 #ffffff38}
+.cal-split{border-radius:26px;padding:18px;background:color-mix(in srgb,var(--sf) 68%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);background-clip:padding-box;overflow:clip;border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 14px 36px -14px #1d0f2430,inset 0 1px 0 #ffffff38}
 .cal-shdr{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
 .cal-shdr b{font-size:24px;font-weight:800;letter-spacing:-.03em;color:var(--tx)}
 .cal-shdr span{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mu)}
@@ -1151,7 +1152,7 @@ function buildCalHTML(q=""){
     ${addBarHTML}
   </div></div></div>`;
 
-  return `<div class="cal-shell${calCompact?"":" full-mode"}" data-noswipe="1">
+  return `<div class="cal-shell${calCompact?"":" full-mode"}">
     <div class="cal-top">
       <button type="button" class="cal-navb" data-cal-nav="-1" title="Mes anterior">‹</button>
       <h3 class="cal-mtitle" data-cal-pickm="1">${MESES[calM]} ${calY!==new Date().getFullYear()?`<small>${calY}</small>`:""}</h3>
@@ -1448,25 +1449,6 @@ document.addEventListener("click",e=>{
   const ev=e.target.closest("[data-cal-ev]");
   if(ev){openVisitDetailSheet(ev.dataset.calEv,ev.dataset.calKind);return}
 });
-
-// Swipe horizontal sobre el tablero del calendario para cambiar de mes con fluidez
-{let csx=0,csy=0,con=false;
-document.addEventListener("touchstart",e=>{
-  con=false;
-  if(e.touches.length!==1||!e.target.closest(".cal-board"))return;
-  csx=e.touches[0].clientX;csy=e.touches[0].clientY;con=true;
-},{passive:true});
-document.addEventListener("touchend",e=>{
-  if(!con)return;con=false;
-  const dx=e.changedTouches[0].clientX-csx,dy=e.changedTouches[0].clientY-csy;
-  if(Math.abs(dx)<55||Math.abs(dy)>Math.abs(dx)*.6)return;
-  const dir=dx<0?1:-1;
-  calAnim=dir>0?"anim-l":"anim-r";
-  calM+=dir;if(calM>11){calM=0;calY++}else if(calM<0){calM=11;calY--}
-  calSel=`${calY}-${String(calM+1).padStart(2,"0")}-01`;
-  sig="";render();renderCalDra();
-},{passive:true});
-}
 
 // ---- Vista asistentes ----
 function render(){
