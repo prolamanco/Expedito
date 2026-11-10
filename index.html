@@ -551,7 +551,7 @@ let dp;addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;$("#bI
 $("#bInst").onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$("#bInst").hidden=true};
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!(matchMedia("(display-mode: standalone)").matches||navigator.standalone)&&!localStorage.getItem("ms_ios"))$("#iosTip").hidden=false;
 $("#iosX").onclick=()=>{$("#iosTip").hidden=true;localStorage.setItem("ms_ios","1")};
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));
 
 // ---- Avisos ----
 function bell(){$("#bBell").innerHTML=ic(("Notification"in window&&Notification.permission==="granted")?"bell":"belloff")}
@@ -602,6 +602,17 @@ $("#bConfirmReset").onclick=async()=>{
 };
 
 // ---- Sesión ----
+function syncRole(){
+  try{ME=JSON.parse(localStorage.getItem("ms_me")||"null")}catch(e){ME=null}
+  TOK=localStorage.getItem("ms_tok")||"";
+  role=localStorage.getItem("ms_role");
+  if(role!=="dra"&&role!=="asis"){
+    if(ME&&ME.role){role=ME.role==="investigadora"?"dra":"asis";localStorage.setItem("ms_role",role)}
+    else if(TOK){role="asis";localStorage.setItem("ms_role",role)}
+  }
+}
+syncRole();
+
 $("#fLogin").onsubmit=async e=>{e.preventDefault();if(!$("#resetFields").hidden)return;const b=$("#bLoginSubmit");b.disabled=true;b.textContent="Verificando…";
 let d=null;try{d=await(await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"login",user:$("#u").value.trim().toLowerCase(),pass:$("#p").value})})).json()}catch(x){}
 b.disabled=false;b.textContent="Ingresar";
@@ -611,6 +622,8 @@ $("#bOut").onclick=()=>logout();
 $("#bSwitch").onclick=()=>{role=role==="dra"?"asis":"dra";localStorage.setItem("ms_role",role);view()};
 
 async function start(){
+  syncRole();
+  if(!TOK||!role){$("#app").hidden=true;$("#login").hidden=false;return}
   $("#login").hidden=true;$("#app").hidden=false;
   if(window.closeSet)window.closeSet();
   bell();view();
@@ -618,8 +631,21 @@ async function start(){
   sig="";render();renderRecent();renderAlerts();renderAvDra(1);
   if(!timer)timer=setInterval(load,30000);
 }
-function view(){{const vf=document.getElementById("vForm");if(vf)vf.hidden=true}$("#bCfg").hidden=true;$("#bSheet").hidden=role!=="asis";$("#bSheet").href=SHEET;$("#vDra").hidden=role!=="dra";$("#vAsis").hidden=role!=="asis";$("#vAlertas").hidden=true;$("#navDra").hidden=role!=="dra";$("#nav").hidden=role!=="asis";$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";
-$("#who").textContent=role==="dra"?"Dra. Lilliam":"Equipo asistente";sig="";render();renderRecent();loadAlerts();if(role==="dra"){loadAlertPrefs();applyDraTab()}} 
+function view(){
+  syncRole();
+  {const vf=document.getElementById("vForm");if(vf)vf.hidden=true}
+  {const vs=document.getElementById("vSet");if(vs)vs.hidden=true}
+  $("#bCfg").hidden=true;
+  $("#bSheet").hidden=role!=="asis";$("#bSheet").href=SHEET;
+  $("#vDra").hidden=role!=="dra";
+  $("#vAsis").hidden=role!=="asis";
+  $("#vAlertas").hidden=true;$("#vHist").hidden=true;$("#vAvance").hidden=true;
+  $("#navDra").hidden=role!=="dra";$("#nav").hidden=role!=="asis";
+  $("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";
+  $("#who").textContent=role==="dra"?"Dra. Lilliam":(ME&&ME.name?ME.name:"Equipo asistente");
+  sig="";render();renderRecent();loadAlerts();
+  if(role==="dra"){loadAlertPrefs();applyDraTab()}
+} 
 let histMode="alertas";
 function histUI(){document.querySelectorAll("[data-hm]").forEach(b=>b.classList.toggle("on",b.dataset.hm===histMode));$("#histAlerts").hidden=histMode!=="alertas";$("#recent").hidden=histMode!=="reportes"}
 document.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{histMode=b.dataset.hm;histUI()});
@@ -1164,7 +1190,8 @@ if(i<0||n<0||n>=L.length)return;
 const g=L[n],b=document.querySelector(g==="ajustes"?(role==="dra"?"#navDra [data-act=settings]":"#nav [data-act=settings]"):role==="dra"?`#navDra [data-dratab="${g}"]`:`#nav [data-tab="${g}"]`);if(b)b.click()},{passive:true})}
 
 // Arranca la sesión al final, cuando todos los módulos (Formularios y Ajustes) ya están listos
-if(role&&TOK)start();
+syncRole();
+if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 })();
 </script>
 </body>
