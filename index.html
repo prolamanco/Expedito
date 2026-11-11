@@ -465,6 +465,90 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 .ev-dock button,.ev-dock a{flex:1;border:0;background:none;padding:7px 4px;border-radius:99px;color:var(--tx);font-size:10.5px;font-weight:700; display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;text-decoration:none;transition:transform .25s var(--spring),background .2s}
 .ev-dock button:active,.ev-dock a:active{transform:scale(.9);background:color-mix(in srgb,var(--pr) 12%,transparent)}
 .ev-dock .danger{color:#e5484d}
+
+/* ===== BLOQUE 1 · A1. Barras de scroll unificadas (finas, coherentes con el tema) ===== */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--mu) 45%,transparent) transparent}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--mu) 45%,transparent);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--pr) 55%,transparent);background-clip:padding-box}
+.ag::-webkit-scrollbar,.msgs::-webkit-scrollbar,.gl::-webkit-scrollbar,.rlist::-webkit-scrollbar,.dlg-p::-webkit-scrollbar{height:6px;width:6px}
+.ag{scrollbar-width:thin}
+
+/* ===== BLOQUE 1 · A2. Bloqueo de scroll del body cuando hay modal ===== */
+body.modal-open{overflow:hidden!important}
+
+/* ===== BLOQUE 1 · A3. Chat estilo WhatsApp con separador de fecha ===== */
+.chat .msgs{max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:12px 0 14px;padding:4px 6px 4px 4px;scroll-behavior:smooth}
+.chat .msgs::-webkit-scrollbar{width:6px}
+.msg{position:relative;max-width:82%;padding:8px 12px 18px;border-radius:18px;font-size:13.5px;line-height:1.4;background:color-mix(in srgb,var(--sf) 85%,transparent);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 1px 1px #0000000a;align-self:flex-start;animation:msgIn .3s var(--spring) both;word-wrap:break-word}
+.msg.me{background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;border:0;align-self:flex-end}
+.msg small{display:block;font-size:10.5px;font-weight:700;color:var(--mu);margin-bottom:2px}
+.msg.me small{color:#ffffffcf}
+.msg .t{position:absolute;right:10px;bottom:5px;font-size:10px;font-weight:700;color:var(--mu);opacity:.9}
+.msg.me .t{color:#ffffffcf}
+.msg-sep{display:flex;justify-content:center;margin:10px 0 6px;animation:fadeIn .3s both}
+.msg-sep span{background:color-mix(in srgb,var(--sf) 80%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--mu);font-size:11px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:5px 12px;border-radius:99px;border:1px solid color-mix(in srgb,var(--bd) 55%,transparent);box-shadow:0 2px 8px #0001}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px) scale(.97)}}
+.chat-hdr{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.chat-hdr .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.chat-hdr b{font-size:14.5px;letter-spacing:-.01em}
+.chat-hdr small{color:var(--mu);font-size:11.5px;display:block;margin-top:1px}
+
+/* ===== BLOQUE 1 · A4. Componentes propios de fecha / hora / expediente ===== */
+.pf,.tf{position:relative}
+.pf input,.tf input{width:100%;padding:13px 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--bd) 75%,transparent);background:color-mix(in srgb,var(--sf) 52%,transparent);cursor:pointer}
+.pf input:read-only,.tf input:read-only{cursor:pointer}
+.pf input:focus,.tf input:focus{border-color:var(--pr);box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 13%,transparent)}
+.pf-drop,.tf-drop,.exp-drop{position:absolute;z-index:8000;top:calc(100% + 6px);left:0;right:0;background:color-mix(in srgb,var(--sf) 92%,transparent);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);border-radius:20px;box-shadow:0 18px 48px -12px #1d0f2455;padding:10px;animation:pop .28s var(--spring);transform-origin:top center;max-height:340px;overflow:auto}
+.pf-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:2px 4px}
+.pf-hdr b{flex:1;text-align:center;font-size:14px;text-transform:capitalize;letter-spacing:-.01em}
+.pf-hdr button{width:32px;height:32px;border-radius:50%;border:1px solid color-mix(in srgb,var(--bd) 65%,transparent);background:color-mix(in srgb,var(--sf) 65%,transparent);color:var(--tx);display:grid;place-items:center;cursor:pointer;padding:0;font-size:16px;font-weight:800}
+.pf-hdr button:active{transform:scale(.88)}
+.pf-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.pf-dow{font-size:10px;font-weight:800;color:var(--mu);padding:4px 0;letter-spacing:.04em}
+.pf-day{aspect-ratio:1;border:0;background:none;border-radius:50%;font-size:12.5px;font-weight:700;color:var(--tx);cursor:pointer;display:grid;place-items:center;transition:background .18s,transform .18s var(--spring)}
+.pf-day:hover{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.pf-day.out{opacity:.32}
+.pf-day.today{box-shadow:inset 0 0 0 1.5px var(--pr);color:var(--pr)}
+.pf-day.sel{background:var(--pr);color:#fff;transform:scale(1.06)}
+.pf-actions{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+.pf-actions button{flex:1;border:0;background:var(--soft);color:var(--pr);border-radius:12px;padding:9px;font-size:12.5px;font-weight:800;cursor:pointer;transition:transform .2s var(--spring),background .2s}
+.pf-actions button:active{transform:scale(.94)}
+.pf-actions button.pri{background:var(--pr);color:#fff}
+.tf-drop{padding:14px}
+.tf-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:200px}
+.tf-col{display:flex;flex-direction:column;gap:2px;max-height:200px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:thin}
+.tf-col button{border:0;background:none;padding:8px;border-radius:10px;font-size:13px;font-weight:700;color:var(--tx);cursor:pointer;scroll-snap-align:center;transition:background .15s,color .15s}
+.tf-col button:hover{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.tf-col button.sel{background:var(--pr);color:#fff}
+.exp-drop{padding:6px}
+.exp-drop .edi{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--tx);transition:background .15s}
+.exp-drop .edi:hover,.exp-drop .edi.hl{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.exp-drop .edi b{color:var(--pr);font-weight:800;min-width:72px}
+.exp-drop .edi small{color:var(--mu);font-size:11.5px;font-weight:600}
+.exp-drop .empty{padding:14px;text-align:center;color:var(--mu);font-size:12.5px}
+
+/* ===== BLOQUE 1 · A5. Modal flotante del + de la Dra. (coherente con dlg-p) ===== */
+#draFormModal.dlg{align-items:center;justify-content:center;padding:18px}
+#draFormModal .dlg-p{width:min(100%,620px);max-height:88dvh;border-radius:28px;padding:0;display:flex;flex-direction:column;overflow:hidden;animation:dlgIn .45s var(--ios) both;background:color-mix(in srgb,var(--sf) 92%,transparent)}
+#draFormModal .dfm-hdr{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent);background:color-mix(in srgb,var(--sf) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#draFormModal .dfm-hdr b{flex:1;font-size:17px;font-weight:800;letter-spacing:-.015em}
+#draFormModal .dfm-body{padding:18px 20px 24px;overflow-y:auto;flex:1;scroll-behavior:smooth}
+#draFormModal .dfm-body::-webkit-scrollbar{width:8px}
+#draFormModal .dfm-body .card{background:color-mix(in srgb,var(--sf) 70%,transparent)}
+#draFormModal .dfm-close{width:36px;height:36px;border-radius:50%;border:0;background:color-mix(in srgb,var(--soft) 90%,transparent);color:var(--tx);display:grid;place-items:center;cursor:pointer;font-size:16px;font-weight:800;transition:transform .25s var(--spring),background .2s}
+#draFormModal .dfm-close:active{transform:scale(.88);background:var(--soft)}
+
+/* ===== BLOQUE 1 · A6. Calendario: evitar parpadeo al seleccionar ===== */
+.cal-cell{will-change:background,box-shadow;contain:layout paint}
+.cal-wrow,.cal-weeks{contain:layout style}
+.cal-cell.sel{transition:background .25s var(--ios),box-shadow .25s var(--ios),transform .25s var(--spring)}
+
+/* ===== BLOQUE 1 · A7. Focus visible accesible ===== */
+:focus{outline:none}
+:focus-visible{outline:2.5px solid color-mix(in srgb,var(--pr) 70%,transparent);outline-offset:2px;border-radius:8px}
+  
 </style>
 </head>
 <body>
