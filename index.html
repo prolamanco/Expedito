@@ -1036,19 +1036,115 @@ function showRetiradosDlg(){
 function dlgBox(title,body,btns){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b>'+body+'</div>';o.querySelector("b").textContent=title;const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};o.onclick=e=>{const b=e.target.closest("[data-r]");if(b)end(b.dataset.r);else if(e.target===o)end(null)};document.body.appendChild(o)})}
 function confirmDlg(title,text,okL){return dlgBox(title,'<p class="mu" style="margin:0">'+String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</p><div class="dlg-a"><button type="button" class="ghost" data-r="">Cancelar</button><button type="button" class="btn" data-r="1" style="background:#e5484d">'+okL+'</button></div>').then(v=>v==="1")}
 function avBadge(){const s=cSeen(),n=COM.filter(c=>c.r!==myR()&&c.ts>(s[c.h]||0)).length;document.querySelectorAll("[data-tab=avance],[data-dratab=avance]").forEach(b=>{let x=b.querySelector(".bdg");if(!n){x&&x.remove();return}if(!x){x=document.createElement("span");x.className="bdg";b.appendChild(x)}x.textContent=n})}
-async function loadAv(){if(Object.keys(AVT).length)return;try{const d=await api({action:"read",tipo:"avances"});if(!Array.isArray(d)||(d.length&&!d[0].k))return;const o={},cm=[];
-d.forEach(r=>{if(r.k.startsWith("CM|")){const q=r.k.split("|");cm.push({h:q[1],ts:+q[2],t:r.v,r:r.n,f:r.u,a:r.p})}else o[r.k]={v:r.v.split(","),n:r.n}});
-const mx=COM.reduce((a,c)=>Math.max(a,c.ts),0),nw=cm.filter(c=>c.ts>mx&&c.r!==myR()).length;Object.assign(o,JSON.parse(localStorage.getItem("ms_q")||"{}"));AVD=o;COM=cm.sort((a,b)=>a.ts-b.ts);
-if(!localStorage.getItem("ms_cseen")){const s={};COM.forEach(c=>s[c.h]=Math.max(s[c.h]||0,c.ts));localStorage.setItem("ms_cseen",JSON.stringify(s))}
-if(comLoaded&&nw)toast("💬 Comentario nuevo en Avance");comLoaded=true;avBadge();render();renderAvDra()}catch(e){}}
+async function loadAv(){
+  if(Object.keys(AVT).length)return;
+  try{
+    const d=await api({action:"read",tipo:"avances"});
+    if(!Array.isArray(d)||(d.length&&!d[0].k))return;
+    const o={},remotos=[];
+    d.forEach(r=>{
+      if(r.k.startsWith("CM|")){
+        const q=r.k.split("|");
+        remotos.push({h:q[1],ts:+q[2],t:r.v,r:r.n,f:r.u,a:r.p});
+      }else o[r.k]={v:r.v.split(","),n:r.n};
+    });
+    const mx=COM.reduce((a,c)=>Math.max(a,c.ts),0);
+    const nw=remotos.filter(c=>c.ts>mx&&c.r!==myR()).length;
+    Object.assign(o,JSON.parse(localStorage.getItem("ms_q")||"{}"));
+    AVD=o;
+    COM=mergeComents(COM,remotos);
+    if(!localStorage.getItem("ms_cseen")){
+      const s={};COM.forEach(c=>s[c.h]=Math.max(s[c.h]||0,c.ts));
+      localStorage.setItem("ms_cseen",JSON.stringify(s))
+    }
+    if(comLoaded&&nw)toast("💬 Comentario nuevo en Avance");
+    comLoaded=true;
+    avBadge();render();renderAvDra()
+  }catch(e){}
+}
+/* ===== BLOQUE 2: Chat estilo WhatsApp + sincronización de comentarios ===== */
 const CHD={};
-function msgH(c){return `<div class="msg ${c.r===myR()?"me":""}"><small>${esc(c.a)} · ${esc(c.f)}</small>${esc(c.t)}</div>`}
-function chH(k){const L=COM.filter(c=>c.h===k),s=cSeen(),mx=L.reduce((a,c)=>Math.max(a,c.ts),0);if(mx>(s[k]||0)){s[k]=mx;localStorage.setItem("ms_cseen",JSON.stringify(s));setTimeout(avBadge,0)}
-setTimeout(()=>document.querySelectorAll(".msgs").forEach(e=>e.scrollTop=e.scrollHeight),0);const d=CHD[k]||"";
-return `<div class="card chat"><b>Comentarios · ${HN[k]}</b><div class="msgs">${L.length?L.map(msgH).join(""):'<p class="mu s">Aún no hay comentarios.</p>'}</div><div class="composer"><textarea rows="1" maxlength="500" dir="ltr" enterkeyhint="send" autocomplete="off" placeholder="Escribe un comentario…" data-k="${k}">${esc(d)}</textarea><button class="send" type="button" data-cs="${k}" aria-label="Enviar"${d.trim()?"":" disabled"}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div></div>`}
-async function chSend(box,k){const i=box.querySelector("textarea"),t=i.value.trim();if(!t)return;const c={h:k,ts:Date.now(),t,r:myR(),f:"ahora",a:"Tú"};COM.push(c);CHD[k]="";i.value="";i.style.height="";box.querySelector(".send").disabled=true;
-const m=box.querySelector(".msgs");m.querySelector("p")?.remove();m.insertAdjacentHTML("beforeend",msgH(c));m.scrollTop=m.scrollHeight;
-if(!await post({action:"setAvance",clave:"CM",hilo:k,texto:t}))toast("No se pudo enviar el comentario","err")}
+const fmtChatDay = ts => {
+  const d = new Date(ts), hoy = new Date(); hoy.setHours(0,0,0,0);
+  const dd = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = Math.round((hoy - dd) / 86400000);
+  if (diff === 0) return "Hoy";
+  if (diff === 1) return "Ayer";
+  if (diff < 7) return DIAS_L[d.getDay()];
+  return `${d.getDate()} de ${MESES_C[d.getMonth()]}`;
+};
+const hhmm = ts => { const d = new Date(ts); return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`; };
+const chatKey = c => `${c.h}|${c.ts}|${c.r}|${String(c.t).slice(0,80)}`;
+function mergeComents(local, remote) {
+  const seen = new Set(), out = [];
+  [...(remote||[]), ...(local||[])].forEach(c => {
+    if (!c || !c.h || !c.ts) return;
+    const k = chatKey(c);
+    if (seen.has(k)) return;
+    seen.add(k); out.push(c);
+  });
+  return out.sort((a,b) => a.ts - b.ts);
+}
+function msgH(c, showName) {
+  return `<div class="msg ${c.r === myR() ? "me" : ""}">
+    ${showName ? `<small>${esc(c.a || (c.r === "asistente" ? "Asistente" : "Dra. Lilliam"))}</small>` : ""}
+    ${esc(c.t)}
+    <span class="t">${hhmm(c.ts)}</span>
+  </div>`;
+}
+function chH(k) {
+  const L = COM.filter(c => c.h === k);
+  const s = cSeen();
+  const mx = L.reduce((a,c) => Math.max(a, c.ts), 0);
+  if (mx > (s[k] || 0)) { s[k] = mx; localStorage.setItem("ms_cseen", JSON.stringify(s)); setTimeout(avBadge, 0); }
+
+  let html = "", lastDay = "", lastR = "";
+  L.forEach(c => {
+    const dk = new Date(c.ts).toDateString();
+    if (dk !== lastDay) {
+      html += `<div class="msg-sep"><span>${fmtChatDay(c.ts)}</span></div>`;
+      lastDay = dk; lastR = "";
+    }
+    const showName = c.r !== lastR;
+    lastR = c.r;
+    html += msgH(c, showName);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll(`.msgs[data-k="${k}"]`).forEach(e => e.scrollTop = e.scrollHeight);
+  }, 30);
+
+  const d = CHD[k] || "";
+  return `<div class="card chat">
+    <div class="chat-hdr">
+      <div class="avatar">${HN[k].split(" ")[0].slice(0,2).toUpperCase()}</div>
+      <div><b>${HN[k]}</b><small>${L.length} ${L.length===1?"mensaje":"mensajes"} · compartido entre todos</small></div>
+    </div>
+    <div class="msgs" data-k="${k}">${html || ""}</div>
+    <div class="composer">
+      <textarea rows="1" maxlength="500" dir="ltr" enterkeyhint="send" autocomplete="off" placeholder="Escribe un comentario…" data-k="${k}">${esc(d)}</textarea>
+      <button class="send" type="button" data-cs="${k}" aria-label="Enviar"${d.trim() ? "" : " disabled"}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+async function chSend(box, k) {
+  const i = box.querySelector("textarea"), t = i.value.trim();
+  if (!t) return;
+  const c = { h: k, ts: Date.now(), t, r: myR(), f: "ahora", a: "Tú" };
+  COM = mergeComents([c], COM);
+  CHD[k] = "";
+  i.value = ""; i.style.height = "";
+  box.querySelector(".send").disabled = true;
+  const wrap = box.closest(".chat");
+  if (wrap) wrap.outerHTML = chH(k);
+  const nuevo = document.querySelector(`.msgs[data-k="${k}"]`);
+  if (nuevo) nuevo.scrollTop = nuevo.scrollHeight;
+  if (!await post({ action: "setAvance", clave: "CM", hilo: k, texto: t })) {
+    toast("No se pudo enviar el comentario", "err");
+  }
+}
 function genH(){const T={ok:0,fa:0,so:0,pe:0},per=PR.map(()=>({b:0,r:0})),gap={},rev={};
 const NS=avNums(),RBS=new Set(avRows(AVS.rb));for(const n of NS){const e="CRM"+pad2(n),p2=pad2(n),bv=avV(AVS.bd,e),mv=avV(AVS.rm,"CR-M-"+p2),kv=RBS.has(p2)?avV(AVS.rb,p2):[];
 PR.forEach((p,i)=>{const b=bv[p[1]],r=(p[2]==="rm"?mv:kv)[p[3]];if(b==="G"||b==="P")return;const bd=b==="V",rc=r==="V";per[i].b+=bd;per[i].r+=rc;
