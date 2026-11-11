@@ -1818,7 +1818,7 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click"
 })();
 </script>
 <script>
-// ===== Ajustes por secciones + Retroalimentación corregida + Gesto de deslizar =====
+// ===== Ajustes por secciones + Gestión de usuarios (Dra.) + Retroalimentación + Gesto de deslizar =====
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
 const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
@@ -1828,7 +1828,7 @@ vs.innerHTML=`<div id="setHub">
 <div class="set-grid">
   <div class="set-col">
     <div class="slab">Cuenta y seguridad</div>
-    <div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
+    <div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}<button type="button" class="srow" data-go="team" id="rowTeam" hidden><span class="sico">${ic("user")}</span><span class="stx"><b>Gestión de usuarios</b><small>Crear, editar, cambiar claves o eliminar cuentas</small></span><span class="chev">${ic("chev")}</span></button></div>
   </div>
   <div class="set-col">
     <div class="slab">Preferencias</div>
@@ -1857,6 +1857,24 @@ vs.innerHTML=`<div id="setHub">
 <input type="password" id="nu2" placeholder="Tu contraseña, para confirmar" autocomplete="current-password" style="margin-top:12px">
 <button type="button" class="btn" id="nuBtn" style="margin-top:12px">Cambiar usuario</button>
 <p class="mu s">Los cambios de usuario quedan registrados para el administrador.</p></div></div>
+<div class="spg" id="pg-team" hidden>${back}
+<div class="card">
+  <div class="row"><b>Usuarios registrados</b><span class="sp"></span><button type="button" class="ghost" id="uNewBtn">＋ Nuevo usuario</button></div>
+  <p class="mu s">Como investigadora principal, aquí puedes crear cuentas nuevas o cambiar el nombre, usuario, rol y contraseña de cualquier integrante.</p>
+  <div id="uCreateBox" class="card" hidden style="margin:12px 0 0;background:var(--soft);padding:14px">
+    <b style="font-size:14px">Crear nuevo usuario</b>
+    <input type="text" id="cuName" placeholder="Nombre visible (ej. María)" style="margin-top:8px">
+    <input type="text" id="cuUser" placeholder="Usuario para ingresar (ej. maria.asistente)" autocapitalize="none" style="margin-top:8px">
+    <select id="cuRole" style="margin-top:8px"><option value="asistente">Rol: Asistente</option><option value="investigadora">Rol: Investigadora (Jefa)</option></select>
+    <input type="text" id="cuPass" placeholder="Contraseña inicial (mín. 10 caracteres, letras y números)" autocapitalize="none" style="margin-top:8px">
+    <label class="opt" style="background:var(--sf)"><input type="checkbox" id="cuMust"><span>Pedirle que cambie la contraseña al entrar</span></label>
+    <div class="row" style="margin-top:10px;justify-content:flex-end">
+      <button type="button" class="ghost" id="cuCancel">Cancelar</button>
+      <button type="button" class="btn" id="cuSave" style="width:auto;padding:10px 18px">Crear cuenta</button>
+    </div>
+  </div>
+  <div id="uList" style="margin-top:12px;display:grid;gap:10px"></div>
+</div></div>
 <div class="spg" id="pg-feed" hidden>${back}
 <div class="card"><div class="fbhead"><div class="fbico">${ic("chat")}</div><h3>Opiniones y sugerencias</h3><p class="mu">Ayúdanos a mejorar nexo. Cuéntanos qué te gusta, qué falla o qué te gustaría ver en la app.</p></div>
 <div class="tabs2" id="fbType" style="margin:14px 0 0"><button type="button" data-ft="sug" class="on">Sugerencia</button><button type="button" data-ft="bug">Reportar un error</button></div>
@@ -1881,15 +1899,96 @@ mk($("#bOut"),"out","Cerrar sesión","Salir de tu cuenta","danger");
 $("#bCfg")?.remove();$("#bSwitch")?.remove();
 $("#bTheme").style.display="none";$("#bMenu").style.display="none";
 
-const pages=["pass","user","notif","theme","feed"];
+const pages=["pass","user","team","notif","theme","feed"];
 const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
+
+async function loadTeamUsers(){
+  const box=$("#uList");if(!box)return;
+  box.innerHTML='<p class="mu s">Cargando usuarios…</p>';
+  const d=await api({action:"adminUsers",op:"list"});
+  if(!d||!d.ok)return box.innerHTML='<p class="mu s">No se pudo cargar la lista. Verifica que Seguridad.gs esté implementado con Nueva versión.</p>';
+  box.innerHTML=d.users.map(u=>`<div class="card" style="margin:0;padding:14px;background:var(--soft)">
+    <div class="row">
+      <div><b style="font-size:15px">${esc(u.name)}</b> <span class="tag ${u.role==="investigadora"?"lime":""}">${esc(u.role)}</span> ${!u.activo?'<span class="tag co">Inactivo</span>':""}</div>
+      <span class="sp"></span>
+      <button type="button" class="ghost" data-uedit="${esc(u.user)}">Editar</button>
+      ${ME&&ME.user===u.user?"":`<button type="button" class="ghost" style="color:#e5484d" data-udel="${esc(u.user)}" data-uname="${esc(u.name)}">Eliminar</button>`}
+    </div>
+    <p class="mu s" style="margin:4px 0 0">Usuario: <b>${esc(u.user)}</b> · Último acceso: ${esc(u.ultimo)}</p>
+    <div id="ue-${esc(u.user)}" hidden style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd);display:grid;gap:8px">
+      <label class="f" style="margin:0">Nombre visible</label>
+      <input type="text" data-uf="name" value="${esc(u.name)}">
+      <label class="f" style="margin:0">Usuario de acceso</label>
+      <input type="text" data-uf="user" value="${esc(u.user)}" autocapitalize="none">
+      <label class="f" style="margin:0">Rol</label>
+      <select data-uf="role"><option value="asistente"${u.role==="asistente"?" selected":""}>Asistente</option><option value="investigadora"${u.role==="investigadora"?" selected":""}>Investigadora (Jefa)</option></select>
+      <label class="f" style="margin:0">Nueva contraseña (déjala vacía si no quieres cambiarla)</label>
+      <input type="text" data-uf="pass" placeholder="Mínimo 10 caracteres con letras y números" autocapitalize="none">
+      <label class="opt" style="margin:0;background:var(--sf)"><input type="checkbox" data-uf="activo"${u.activo?" checked":""}><span>Cuenta activa (puede iniciar sesión)</span></label>
+      <div class="row" style="justify-content:flex-end;margin-top:4px">
+        <button type="button" class="ghost" data-ucancel="${esc(u.user)}">Cancelar</button>
+        <button type="button" class="btn" data-usave="${esc(u.user)}" style="width:auto;padding:10px 18px">Guardar cambios</button>
+      </div>
+    </div>
+  </div>`).join("");
+}
+
+$("#uNewBtn").onclick=()=>{$("#uCreateBox").hidden=!$("#uCreateBox").hidden};
+$("#cuCancel").onclick=()=>{$("#uCreateBox").hidden=true};
+$("#cuSave").onclick=async()=>{
+  const name=$("#cuName").value.trim(),newUser=$("#cuUser").value.trim().toLowerCase(),roleVal=$("#cuRole").value,pass=$("#cuPass").value.trim(),mustChange=$("#cuMust").checked;
+  if(!name||!newUser||!pass)return toast("Completa nombre, usuario y contraseña","err");
+  const b=$("#cuSave");b.disabled=true;b.textContent="Creando…";
+  const d=await api({action:"adminUsers",op:"create",name,newUser,role:roleVal,pass,mustChange});
+  b.disabled=false;b.textContent="Crear cuenta";
+  if(d&&d.ok){
+    toast("Usuario "+newUser+" creado");
+    $("#cuName").value=$("#cuUser").value=$("#cuPass").value="";$("#uCreateBox").hidden=true;
+    loadTeamUsers();
+  }else toast(d?.error||"No se pudo crear","err");
+};
+
+$("#uList").onclick=async e=>{
+  const ed=e.target.closest("[data-uedit]");
+  if(ed){const pane=document.getElementById("ue-"+ed.dataset.uedit);if(pane)pane.hidden=!pane.hidden;return}
+  const cn=e.target.closest("[data-ucancel]");
+  if(cn){const pane=document.getElementById("ue-"+cn.dataset.ucancel);if(pane)pane.hidden=true;return}
+  const sv=e.target.closest("[data-usave]");
+  if(sv){
+    const target=sv.dataset.usave,pane=document.getElementById("ue-"+target);if(!pane)return;
+    const name=pane.querySelector('[data-uf="name"]').value.trim();
+    const newUser=pane.querySelector('[data-uf="user"]').value.trim().toLowerCase();
+    const roleVal=pane.querySelector('[data-uf="role"]').value;
+    const newPass=pane.querySelector('[data-uf="pass"]').value.trim();
+    const activo=pane.querySelector('[data-uf="activo"]').checked;
+    sv.disabled=true;sv.textContent="Guardando…";
+    const d=await api({action:"adminUsers",op:"update",target,name,newUser,role:roleVal,newPass,activo,mustChange:false});
+    sv.disabled=false;sv.textContent="Guardar cambios";
+    if(d&&d.ok){
+      if(ME&&ME.user===target){ME={...ME,user:newUser,name};localStorage.setItem("ms_me",JSON.stringify(ME))}
+      toast("Datos de "+name+" actualizados");
+      loadTeamUsers();
+    }else toast(d?.error||"No se pudo actualizar","err");
+    return;
+  }
+  const dl=e.target.closest("[data-udel]");
+  if(dl){
+    const target=dl.dataset.udel,uname=dl.dataset.uname;
+    const ok=await confirmDlg("¿Eliminar a "+uname+" ("+target+")?","Esta cuenta ya no podrá ingresar a nexo. Puedes volver a crearla cuando quieras.","Eliminar cuenta");
+    if(!ok)return;
+    const d=await api({action:"adminUsers",op:"delete",target});
+    if(d&&d.ok){toast("Usuario eliminado");loadTeamUsers()}else toast(d?.error||"No se pudo eliminar","err");
+  }
+};
+
 function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p!==id);
+if(id==="team")loadTeamUsers();
 if(id==="notif"){$("#cfg").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";if(typeof mailUI==="function")mailUI();if(role==="dra"&&typeof loadAlertPrefs==="function")loadAlertPrefs()}
 if(id==="theme"){$("#themeBox").hidden=false;if(typeof thUI==="function")thUI()}
 scrollTo({top:0,behavior:"smooth"})}
 window.openSet=page=>{if(window.hideAlertForm)hideAlertForm();
 document.querySelectorAll("#app section").forEach(x=>x.hidden=true);vs.hidden=false;marks(true);
-$("#bSheet").hidden=role!=="asis";$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";show(page||null)};
+$("#bSheet").hidden=role!=="asis";if($("#rowTeam"))$("#rowTeam").hidden=role!=="dra";$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";show(page||null)};
 window.closeSet=()=>{if(vs.hidden)return;vs.hidden=true;marks(false);if(role==="asis")$("#vAsis").hidden=false};
 vs.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)return show(g.dataset.go);if(e.target.closest(".sback"))show(null)});
 document.querySelectorAll("nav [data-act=settings]").forEach(b=>b.addEventListener("click",()=>openSet()));
@@ -1910,14 +2009,12 @@ $("#fbMailApp").onclick=()=>{const m=buildFbMail();if(!m.t)return toast("Escribe
 $("#fbSend").onclick=async()=>{
   const m=buildFbMail();if(!m.t)return toast("Escribe tu comentario","err");
   const b=$("#fbSend");b.disabled=true;b.textContent="Enviando…";
-  // 1) Intenta enviarlo directo desde el servidor de Apps Script (no depende de tener app de correo configurada)
   const ok=await post({action:"feedback",tipo:fbT,texto:m.t,contacto:m.c,meta:innerWidth+"x"+innerHeight});
   b.disabled=false;b.textContent=fbT==="bug"?"Enviar reporte":"Enviar sugerencia";
   if(ok){
     $("#fbText").value="";$("#fbContact").value="";
     toast("¡Gracias! Tu mensaje fue enviado directamente");
   }else{
-    // 2) Respaldo inmediato: redirige con window.location.href al cliente de correo
     toast("Abriendo tu aplicación de correo…");
     window.location.href=m.mailto;
   }
