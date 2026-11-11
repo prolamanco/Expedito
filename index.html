@@ -106,6 +106,200 @@ nav button.on::after{content:"";position:absolute;bottom:3px;width:16px;height:3
 .chip{transition:transform .2s}.chip:hover{transform:translateY(-1px)}
 #toast div{backdrop-filter:blur(10px);border-radius:16px}
 .af{background:var(--bg);box-shadow:none!important;margin:0 0 8px}.alert-form{max-width:680px}
+@media (min-width:820px){
+.wrap{max-width:1060px;padding-left:28px;padding-right:112px}
+nav{left:auto;right:22px;top:50%;bottom:auto;transform:translateY(-50%);width:78px;flex-direction:column;border-radius:30px}
+nav button{padding:12px 2px}
+#fDra{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}#fDra>.card{margin:0}#fDra>.btn,#forms{grid-column:1/-1}
+#forms{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}#forms .card{margin:0}
+#list,#alertsList,#recent,#visList{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}#list .card,#alertsList .card,#recent .card{margin:0}
+.stats{max-width:520px}#list .empty{grid-column:1/-1}
+}
+@media (min-width:1200px){.wrap{max-width:1280px}#list,#alertsList{grid-template-columns:repeat(3,1fr)}}
+.tabs2{display:flex;gap:6px;margin-bottom:12px;padding:5px;border:1px solid var(--bd);border-radius:99px;background:var(--card)}
+.tabs2 button{flex:1;border:0;background:none;padding:10px 6px;border-radius:99px;color:var(--mu);font-weight:700;font-size:13px;cursor:pointer;transition:background .25s,color .25s,transform .2s var(--spring)}.tabs2 button.on{background:var(--pr);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--pr) 30%,transparent)}
+.flow{display:flex;align-items:center;gap:6px;margin-top:18px}.st{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--mu);display:grid;justify-items:center;gap:8px}
+.st i{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--pr);border:1px dashed var(--pr);opacity:.75}
+.ln{height:2px;flex:.4;background:repeating-linear-gradient(90deg,var(--bd) 0 6px,transparent 6px 12px)}
+.sum{grid-column:1/-1}.bar{height:10px;border-radius:99px;background:var(--soft);overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pr),var(--li));border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+nav button.fab b{background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;width:48px;height:48px;border-radius:50%;margin:-24px 0 2px;box-shadow:0 8px 20px color-mix(in srgb,var(--pr) 33%,transparent)}
+nav button.fab.on{background:none}nav button.fab.on::after{display:none}
+@media (min-width:820px){nav button.fab b{margin:0 0 2px;width:44px;height:44px}}
+:root[data-c=salvia]{--bg:#f3f6f3;--card:#ffffffb8;--glass:#ffffffa6;--tx:#1f2a24;--mu:#66756b;--bd:#dde6df;--soft:#e8f0ea;--pr:#4f7d68;--fu:#6b9684;--li:#b9c9a3;--co:#d49a7a}
+:root[data-c=salvia][data-t=dark]{--bg:#0f1512;--card:#17211ca8;--glass:#0f1512b3;--tx:#e9f0ec;--mu:#93a69b;--bd:#26342d;--soft:#1d2b24;--pr:#6fa58b;--fu:#4f7d68;--li:#8aa06f;--co:#c98f70}
+:root[data-c=oceano]{--bg:#f2f5f9;--card:#ffffffb8;--glass:#ffffffa6;--tx:#1d2733;--mu:#64748b;--bd:#dce4ee;--soft:#e7eef7;--pr:#4a6fa5;--fu:#6b8fc0;--li:#a9c4c9;--co:#d6a07f}
+:root[data-c=oceano][data-t=dark]{--bg:#0e131a;--card:#161e29a8;--glass:#0e131ab3;--tx:#e8eef6;--mu:#8fa0b5;--bd:#243040;--soft:#1b2736;--pr:#6e93c9;--fu:#4a6fa5;--li:#86a8ad;--co:#c7936f}
+:root[data-c=arena]{--bg:#f7f4ef;--card:#ffffffb8;--glass:#ffffffa6;--tx:#2b2620;--mu:#7a6f62;--bd:#e8e0d3;--soft:#f0e9dd;--pr:#a0694b;--fu:#bf8a6c;--li:#c5c79a;--co:#c98a7a}
+:root[data-c=arena][data-t=dark]{--bg:#16120f;--card:#211b16a8;--glass:#16120fb3;--tx:#f2ebe2;--mu:#a99b8a;--bd:#33291f;--soft:#2a2118;--pr:#c68b6a;--fu:#a0694b;--li:#a3a577;--co:#b97d6e}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.sw{border:1px solid var(--bd);background:var(--card);border-radius:16px;padding:10px 4px;cursor:pointer;display:grid;justify-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--tx);transition:transform .15s,border-color .2s,box-shadow .2s}
+.sw i{width:34px;height:34px;border-radius:50%}.sw:active{transform:scale(.94)}
+.sw.on{border-color:var(--pr);box-shadow:0 0 0 3px color-mix(in srgb,var(--pr) 25%,transparent)}
+@media (min-width:820px){#asAlerts,#histAlerts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}#asAlerts .card,#histAlerts .card{margin:0}}
+.fcard{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;color:var(--tx)}
+.vpick{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.vpick .ghost{padding:10px 14px;font-size:13px}.vpick .ghost.on{background:var(--pr);color:#fff}.vpick .ghost:disabled{opacity:.45}
+.fl{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--bd)}.fl .mu{margin:2px 0 0}
+.q{padding:12px 8px;border-top:1px solid var(--bd);border-radius:12px}.q:first-child{border-top:0}.q.miss{background:color-mix(in srgb,var(--co) 16%,transparent)}
+.yrow{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:8px}.yrow>span{flex:1;font-size:13px}.yrow .seg{width:124px}
+.seg.yn label:nth-child(n) input:checked+span{background:var(--pr);border-color:var(--pr);color:#fff}
+#printArea{display:none}
+@media print{body>*{display:none!important}body>#printArea{display:block!important;font:11px/1.35 Arial,sans-serif;color:#000}body::before{display:none}
+#printArea h2{text-align:center;font-size:15px;margin:0 0 6px}#printArea h3{font-size:12px;margin:14px 0 4px}#printArea .sm{font-size:9px;color:#444}
+#printArea table{width:100%;border-collapse:collapse}#printArea td{border:1px solid #999;padding:3px 5px;vertical-align:top}#printArea .c1{width:34px;font-weight:700}#printArea .c2{width:38%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.alert-form{display:grid;gap:12px}.alert-form textarea{min-height:82px}.alert-card{border-left:4px solid var(--co)}.alert-card.done{border-left-color:#2e9e5b}.fabplus{font-size:23px!important;font-weight:800!important;background:var(--pr)!important;color:white!important;min-width:48px;max-width:54px;flex:1.1!important}
+#cfg{position:relative}.settings-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}.settings-section{border-top:1px solid var(--bd);padding-top:12px;margin-top:12px}
+.form-select{display:grid;gap:6px}.form-select select{padding:13px 14px;border-radius:14px}
+nav button{min-height:58px}nav button.on{box-shadow:0 2px 8px color-mix(in srgb,var(--pr) 7%,transparent)}
+.ag{overflow-x:auto;border-radius:18px;border:1px solid var(--bd);margin:14px 0 22px;-webkit-overflow-scrolling:touch;box-shadow:0 8px 24px -12px #1d0f2422}
+.ag table{border-collapse:separate;border-spacing:0;font-size:11px;min-width:100%}
+.ag th{padding:6px 4px;min-width:60px;font-size:10px;line-height:1.15;color:#222}
+.ag td{height:26px;min-width:60px;border:1px solid #fff8;transition:background-color .22s ease,transform .15s var(--spring)}
+.ag td:first-child{position:sticky;left:0;z-index:2;background:var(--soft);font-weight:700;padding:0 8px;min-width:78px;color:var(--tx);white-space:nowrap;cursor:pointer}
+.ag.ed td:not(:first-child){cursor:pointer}
+.ag.ed td:not(:first-child):active{transform:scale(.88)}
+.lg{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}.lg button{border:2px solid transparent;border-radius:99px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:transform .25s var(--spring),box-shadow .2s,border-color .2s}.lg button.on{border-color:var(--tx);transform:scale(1.04)}
+.lg button[data-ret-info]{cursor:pointer;box-shadow:0 2px 8px #0002}
+.lg button[data-ret-info]:hover{transform:translateY(-1px)}
+.seg .ghost.on{background:var(--pr);color:#fff}
+.avw{grid-column:1/-1;min-width:0;display:flex;flex-direction:column;gap:18px}.avw>.card,.avw>.tabs2{margin:0!important}.ag th.mic,.ag td.mic{min-width:34px}
+.stk{display:flex}.pf{display:grid;grid-template-columns:128px 1fr 64px;gap:8px;align-items:center;margin-top:8px;font-size:12px}.pf small{color:var(--mu);text-align:right}.gl{max-height:240px;overflow:auto;margin-top:6px}
+.chat{margin-top:4px!important}.chat .msgs{max-height:280px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin:12px 0 14px}
+.msg{max-width:85%;padding:8px 12px;border-radius:14px;font-size:13px;background:var(--soft);align-self:flex-start;line-height:1.35;animation:pop .25s var(--spring) both}.msg small{display:block;font-size:10px;color:var(--mu);margin-bottom:2px}.msg.dr{background:var(--pr);color:#fff;align-self:flex-end}.msg.dr small{color:#ffffffc0}
+.chat .row{flex-wrap:nowrap;gap:8px}.chat .row input{flex:1}
+.bdg{background:#e5484d;color:#fff;border-radius:99px;font-size:10px;padding:1px 6px;margin-left:4px;animation:pop .3s var(--spring)}
+#toast{z-index:99999;pointer-events:none}
+@media(min-width:820px){.ag table{table-layout:fixed;width:100%}.ag th,.ag td{min-width:0}.ag td{height:30px}.ag th{font-size:12px;padding:8px 6px}.ag th.mic{width:44px}.ag td:first-child{width:98px;font-size:13px}.gn{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.gn>.card{margin:0!important}.gn>.sum{grid-column:1/-1}}
+
+:root[data-c=aurora]{--bg:#f3f6fc;--card:#ffffffb8;--glass:#ffffffa6;--tx:#14203a;--mu:#62708a;--bd:#dde6f5;--soft:#eaf1ff;--pr:#3b73f0;--fu:#8b6ff0;--li:#60a5fa;--co:#f472b6}
+:root[data-c=aurora][data-t=dark]{--bg:#0c1220;--card:#131c30a8;--glass:#0c1220b3;--tx:#eaf0fb;--mu:#94a3bd;--bd:#243350;--soft:#172238;--pr:#6aa5ff;--fu:#a78bfa;--li:#60a5fa;--co:#f9a8d4}
+:root[data-c=sunset]{--bg:#fbf5ef;--card:#ffffffb8;--glass:#ffffffa6;--tx:#2d1c10;--mu:#85705f;--bd:#f2e2d2;--soft:#ffeedd;--pr:#e0560b;--fu:#f08a1c;--li:#fbb931;--co:#d9480f}
+:root[data-c=sunset][data-t=dark]{--bg:#1b110b;--card:#271a11a8;--glass:#1b110bb3;--tx:#fbeedd;--mu:#bb9f88;--bd:#40281a;--soft:#2e1c10;--pr:#f88f22;--fu:#fbb931;--li:#ffd37a;--co:#ea6113}
+:root[data-c=viola]{--bg:#f8f3fa;--card:#ffffffb8;--glass:#ffffffa6;--tx:#2a1533;--mu:#7d6a88;--bd:#eadcf0;--soft:#f6e8f8;--pr:#8a1fa6;--fu:#c44fbf;--li:#ffc472;--co:#f59e4b}
+:root[data-c=viola][data-t=dark]{--bg:#150c1a;--card:#201229a8;--glass:#150c1ab3;--tx:#f6ecf8;--mu:#b39ec0;--bd:#3a2447;--soft:#2a1633;--pr:#c44fbf;--fu:#e08ad8;--li:#ffc472;--co:#f59e4b}
+:root[data-c=luigi]{--bg:#f3f8f2;--card:#ffffffb8;--glass:#ffffffa6;--tx:#142a1a;--mu:#61806a;--bd:#d9ead9;--soft:#e7f6ea;--pr:#1f9d47;--fu:#4fbf5d;--li:#c2dd6c;--co:#e8a25a}
+:root[data-c=luigi][data-t=dark]{--bg:#0e1a12;--card:#16261aa8;--glass:#0e1a12b3;--tx:#eaf6ec;--mu:#92b59a;--bd:#244030;--soft:#17301f;--pr:#30b155;--fu:#79ce67;--li:#c2dd6c;--co:#ffe3b3}
+/* ===== Rediseño: espaciado, tipografía y movimiento estilo iOS ===== */
+:root{--ios:cubic-bezier(.32,.72,0,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+@supports(transition-timing-function:linear(0,1)){:root{--spring:linear(0,.009,.035 2.1%,.141,.281 6.7%,.723 12.9%,.938 16.7%,1.017,1.077,1.121,1.149 24.3%,1.159,1.163,1.161,1.154 29.9%,1.129 32.8%,1.051 39.6%,1.017 43.1%,.991,.977 51%,.974 53.8%,.975 57.1%,.997 69.8%,1.003 76.9%,1)}}
+body{font-family:"Plus Jakarta Sans",-apple-system,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;letter-spacing:-.011em}
+label.f{text-transform:none;letter-spacing:0;font-size:13px}
+.card{border-radius:26px;padding:20px;margin-bottom:16px;border-color:color-mix(in srgb,var(--bd) 65%,transparent);box-shadow:0 1px 1px #1d0f2406,0 14px 32px -14px #1d0f2430;animation:up .42s var(--ios) both;transition:transform .35s var(--spring),box-shadow .35s var(--ios),background-color .35s,border-color .35s}
+.card.nw{animation:up .42s var(--ios) both,glow 2.2s ease-in-out 3}
+.hero{border-radius:28px;padding:22px}.hero h2{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.exp{letter-spacing:-.03em;font-weight:800}
+.stats{gap:12px;margin-bottom:16px}.stats button{border-radius:22px;padding:16px 6px}
+.chips{gap:8px}.chip{padding:5px 12px}.ib{width:44px;height:44px}header{padding-bottom:12px}
+.opt,.seg span,input[type=text],input[type=password],input[type=date],input[type=search],textarea{border-radius:16px}
+nav{padding:7px;gap:2px;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(28px) saturate(1.9);-webkit-backdrop-filter:blur(28px) saturate(1.9);box-shadow:0 14px 44px -10px #1d0f2440,0 0 0 1px color-mix(in srgb,var(--bd) 70%,transparent)}
+nav button.on{background:color-mix(in srgb,var(--pr) 14%,transparent)}
+nav button.on b{animation:icoIn .7s var(--spring)}
+nav button.on svg [pathLength]{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .7s .05s var(--ios) forwards}
+nav button.fab b svg{transition:transform .6s var(--spring)}nav button.fab.on b svg{transform:rotate(135deg)}
+nav button.fab.on svg [pathLength]{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
+nav button.ring b{animation:ring 1.1s var(--ios);transform-origin:50% 12%}
+.btn,.ib,.ghost,.acts button,nav button,.stats button,.opt,.sw,.seg span,.tabs2 button,.mi,.srow,.fcard{transition:transform .5s var(--spring),background .3s var(--ios),box-shadow .3s var(--ios),color .3s,border-color .3s}
+.btn:active,.ib:active,.ghost:active,.acts button:active,nav button:active,.stats button:active,.opt:active,.sw:active,.tabs2 button:active,.srow:active,.fcard:active{transform:scale(.94);transition-duration:.1s}
+.chev{transition:transform .6s var(--spring)}.bar i{transition:width .9s var(--ios)}.entering .bar i{animation:grow 1s var(--ios) both;transform-origin:left}
+#menu:not([hidden]){animation:menuIn .5s var(--spring);transform-origin:top right}
+#toast{z-index:99999;pointer-events:none}
+#toast div{display:flex;align-items:center;gap:10px;padding:12px 16px 12px 12px;border-radius:22px;background:color-mix(in srgb,var(--pr) 92%,#000);animation:toastIn .65s var(--spring) both;box-shadow:0 12px 32px -8px #0006}
+#toast div i{width:24px;height:24px;border-radius:50%;background:#fff3;display:grid;place-items:center;font-style:normal;font-size:13px;flex:none}
+#toast div.out{animation:toastOut .35s var(--ios) forwards}
+@media(max-width:819px){.wrap{padding-left:20px;padding-right:20px}header{margin:0 -20px;padding-left:20px;padding-right:20px}}
+header{view-transition-name:hdr}nav{view-transition-name:nav}
+html[data-dir=fwd]::view-transition-old(root){animation:vtOutL .48s var(--ios) both}html[data-dir=fwd]::view-transition-new(root){animation:vtInR .48s var(--ios) both}
+html[data-dir=back]::view-transition-old(root){animation:vtOutR .48s var(--ios) both}html[data-dir=back]::view-transition-new(root){animation:vtInL .48s var(--ios) both}
+@keyframes vtOutL{to{opacity:0;transform:translateX(-16%) scale(.985)}}@keyframes vtInR{from{opacity:0;transform:translateX(22%)}}
+@keyframes vtOutR{to{opacity:0;transform:translateX(16%) scale(.985)}}@keyframes vtInL{from{opacity:0;transform:translateX(-22%)}}
+@keyframes icoIn{from{transform:scale(.55) rotate(-16deg)}}@keyframes draw{to{stroke-dashoffset:0}}@keyframes grow{from{transform:scaleX(0)}}
+@keyframes ring{15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-7deg)}75%{transform:rotate(3deg)}}
+@keyframes menuIn{from{opacity:0;transform:scale(.8) translateY(-8px)}}@keyframes toastIn{from{opacity:0;transform:translateY(-28px) scale(.9)}}@keyframes toastOut{to{opacity:0;transform:translateY(-18px) scale(.95)}}
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+
+/* ===== Etapa 2: superficies, chat, diálogos, esqueletos ===== */
+:root{--sf:#fff;--ico-f:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E")}
+:root[data-t=dark]{--sf:color-mix(in srgb,var(--bg) 86%,#fff)}
+.card:has(>.row:first-child>.exp)>.row:first-child{position:relative;gap:12px}
+.card:has(>.row:first-child>.exp)>.row:first-child::before{content:"";flex:none;width:44px;height:44px;border-radius:15px;background:color-mix(in srgb,var(--pr) 13%,transparent)}
+.card:has(>.row:first-child>.exp)>.row:first-child::after{content:"";position:absolute;left:11px;top:50%;margin-top:-11px;width:22px;height:22px;background:var(--pr);-webkit-mask:var(--ico-f) center/contain no-repeat;mask:var(--ico-f) center/contain no-repeat}
+.card.nw:has(>.row:first-child>.exp)>.row:first-child::before{background:color-mix(in srgb,var(--li) 34%,transparent)}
+.msg{background:var(--soft);color:var(--tx);border-radius:18px 18px 18px 6px;align-self:flex-start}.msg.me{background:var(--pr);color:#fff;border-radius:18px 18px 6px 18px;align-self:flex-end}.msg.me small{color:#ffffffc0}
+.composer{display:flex;align-items:flex-end;gap:6px;background:var(--soft);border:1.5px solid transparent;border-radius:26px;padding:5px 5px 5px 16px;transition:border-color .2s,background .2s,box-shadow .2s}
+.composer:focus-within{border-color:var(--pr);background:var(--sf);box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 13%,transparent)}
+.composer textarea,.composer textarea:focus{flex:1;width:auto;min-height:22px;max-height:120px;resize:none;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;padding:9px 0!important;line-height:1.4;outline:none!important}
+.send{width:40px;height:40px;flex:none;border:0;border-radius:50%;background:var(--pr);color:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .5s var(--spring),background .25s}
+.send:disabled{background:var(--bd);color:var(--mu);cursor:default}.send:not(:disabled):active{transform:scale(.88)}
+.dlg{position:fixed;inset:0;z-index:9000;background:#0007;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .3s}
+.dlg-p{width:min(100%,460px);background:var(--sf);border-radius:28px 28px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom));display:grid;gap:14px;animation:sheetIn .55s var(--spring)}
+.dlg-p b{font-size:17px}.dlg-a{display:flex;gap:10px;justify-content:flex-end}.dlg-a .btn{width:auto;padding:12px 24px}.dlg-a .ghost{padding:12px 18px;font-size:14px;border-radius:14px}
+.dlg.out{animation:fadeOut .3s forwards}.dlg.out .dlg-p{animation:sheetOut .3s var(--ios) forwards}
+#alertForm:not([hidden]){position:fixed;left:0;right:0;bottom:0;z-index:60;width:min(100%,560px);margin:0 auto;max-height:92dvh;overflow:auto;border-radius:28px 28px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom));animation:sheetIn .55s var(--ios)}
+body:has(#alertForm:not([hidden]))::after{content:"";position:fixed;inset:0;z-index:55;background:#0006;animation:fadeIn .3s}
+#fx{position:absolute;top:12px;right:12px;width:36px;height:36px;font-size:15px}
+@media(min-width:820px){.dlg{align-items:center}.dlg-p{border-radius:28px}#alertForm:not([hidden]){top:50%;bottom:auto;border-radius:28px;animation:dlgIn .45s var(--ios);transform:translateY(-50%)}}
+.sk{height:96px;border-radius:24px;margin-bottom:16px;background:linear-gradient(90deg,var(--soft) 25%,color-mix(in srgb,var(--soft) 45%,var(--sf)) 50%,var(--soft) 75%);background-size:200% 100%;animation:shim 1.3s linear infinite}
+@keyframes sheetIn{from{transform:translateY(100%)}}@keyframes sheetOut{to{transform:translateY(100%)}}@keyframes fadeIn{from{opacity:0}}@keyframes fadeOut{to{opacity:0}}
+@keyframes dlgIn{from{opacity:0;transform:translateY(-50%) scale(.96)}}@keyframes shim{to{background-position:-200% 0}}
+
+/* ===== Cristal: transparencias y desenfoque de alta calidad ===== */
+:root{--gb:blur(26px) saturate(1.7)}
+body::before{display:block;content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 40% at 0% 0%,color-mix(in srgb,var(--pr) 28%,transparent),transparent),radial-gradient(50% 35% at 100% 22%,color-mix(in srgb,var(--co) 20%,transparent),transparent),radial-gradient(60% 40% at 50% 100%,color-mix(in srgb,var(--li) 18%,transparent),transparent)}
+.card,header,#menu,nav,.stats button,.dlg-p,.cal-top,.cal-board,.cal-split{backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);background-clip:padding-box;overflow:clip}
+.card{background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent);box-shadow:0 1px 1px #1d0f2408,0 16px 36px -16px #1d0f2438,inset 0 1px 0 #ffffff22}
+.card.hero{background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 14px 34px -14px color-mix(in srgb,var(--pr) 60%,transparent)}
+.card.hero h2,.card.hero p{color:#fff}
+header{background:color-mix(in srgb,var(--bg) 52%,transparent);border-bottom:1px solid color-mix(in srgb,var(--bd) 45%,transparent)}
+.stats button{background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+input[type=text],input[type=password],input[type=date],input[type=time],input[type=search],textarea,select{background:color-mix(in srgb,var(--sf) 52%,transparent);border:1.5px solid color-mix(in srgb,var(--bd) 75%,transparent)}
+input:focus,textarea:focus,select:focus{background:color-mix(in srgb,var(--sf) 85%,transparent);border-color:var(--pr)}
+#menu{background:color-mix(in srgb,var(--sf) 78%,transparent)}
+nav{background:color-mix(in srgb,var(--sf) 56%,transparent);backdrop-filter:blur(30px) saturate(1.9);-webkit-backdrop-filter:blur(30px) saturate(1.9);border:1px solid color-mix(in srgb,#fff 28%,var(--bd));box-shadow:0 18px 48px -12px #1d0f2450,inset 0 1px 0 #ffffff30}
+@media(max-width:819px){nav{left:50%;right:auto;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(92%,440px);border-radius:34px;padding:7px 6px}}
+.dlg{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.dlg-p{background:color-mix(in srgb,var(--sf) 88%,transparent)}
+#alertForm:not([hidden]){background:color-mix(in srgb,var(--sf) 88%,transparent)}
+body:has(#alertForm:not([hidden]))::after{background:#0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+section:not([hidden]){animation:up .38s var(--ios) both}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,header,nav,#menu,.dlg-p,.stats button{background:var(--sf)}}
+
+/* ===== Barra tipo cápsula y botón flotante ===== */
+body nav{padding:4px;gap:2px;border-radius:999px}
+body nav button{min-height:54px;padding:7px 2px 6px;border-radius:999px;font-size:10.5px;font-weight:700;gap:0;justify-content:center;background:none;box-shadow:none}
+body nav button b{width:auto;height:22px;margin:0 0 2px;border-radius:0;background:none}
+body nav button svg{width:22px;height:22px}
+body nav button.on{background:color-mix(in srgb,var(--pr) 15%,transparent);color:var(--pr);font-weight:800;box-shadow:none}
+body nav button.on::after{display:none}
+body nav button.on b{background:none;transform:none}
+#fabNew,#fabDra{display:none;position:fixed;z-index:7;width:54px;height:54px;border-radius:50%;border:0;padding:0;place-items:center;color:#fff;background:linear-gradient(135deg,var(--pr),var(--fu));box-shadow:0 10px 26px -6px color-mix(in srgb,var(--pr) 55%,transparent),0 2px 6px #0003;cursor:pointer;transition:transform .5s var(--spring),box-shadow .3s}
+#fabNew svg,#fabDra svg{width:26px;height:26px;stroke-width:2.4;transition:transform .45s var(--spring)}
+#fabNew:active,#fabDra:active{transform:scale(.9)}
+#fabDra.on{box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 28%,transparent),0 12px 28px -6px color-mix(in srgb,var(--pr) 65%,transparent)}
+#nav:not([hidden])+#fabNew,#navDra:not([hidden])+#fabDra{display:grid}
+@media(max-width:819px){body nav{padding:4px 5px}#fabNew,#fabDra{right:max(4vw,calc((100vw - 440px)/2));bottom:calc(12px + env(safe-area-inset-bottom) + var(--navH,62px) + 12px)}}
+@media(min-width:820px){body nav{width:68px;padding:5px 4px}#fabNew,#fabDra{right:30px;top:calc(50% - var(--navH,300px)/2 - 12px - 54px)}}
+
+/* ===== Micro-interacciones y onda al tocar (Ripple) ===== */
+.rpl-h{position:relative;overflow:hidden}
+.rpl{position:absolute;border-radius:50%;background:currentColor;opacity:.16;transform:scale(0);animation:rplA .55s ease-out forwards;pointer-events:none}
+@keyframes rplA{to{transform:scale(3.6);opacity:0}}
+details.grp>summary,details.vd>summary{transition:background-color .2s;border-radius:16px}
+details.grp>summary:active,details.vd>summary:active{background:color-mix(in srgb,var(--pr) 8%,transparent)}
+details[open]>summary+*{animation:accIn .32s var(--ios) both}
+@keyframes accIn{from{opacity:0;transform:translateY(-6px)}}
+
+/* ===== Jerarquía visual, encabezados y separación global refinada ===== */
+header{margin-bottom:18px;padding-top:calc(12px + env(safe-area-inset-top));padding-bottom:14px}
+.card.hero{margin-bottom:20px;padding:24px 24px}
+.card.hero h2{font-size:25px;margin-bottom:6px;line-height:1.15}
+.card.hero p{font-size:13.5px;line-height:1.45;opacity:.92}
+.card{padding:22px;margin-bottom:16px}
+.card>b:first-child{display:block;font-size:16px;font-weight:800;letter-spacing:-.015em;margin-bottom:4px}
+.tabs2{margin-bottom:18px;padding:5px}
+.stats{gap:12px;margin-bottom:18px}
+#q{margin-bottom:18px!important;padding:14px 16px}
 
 /* ===== Ajustes por secciones (Centrado y responsivo en pantallas grandes) ===== */
 #vSet{max-width:760px;margin:0 auto;width:100%}
@@ -165,7 +359,7 @@ body #alertForm.out{animation:frmDownD .34s cubic-bezier(.4,0,1,1) forwards}
 .l-link:hover{background:var(--soft)}
 body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 
-/* ===== Calendario Interactivo Glassmorphism ===== */
+/* ===== Calendario Interactivo Glassmorphism (Estilo iOS / One UI Video) ===== */
 #list:has(.cal-shell){display:block!important}
 .cal-shell{position:relative;user-select:none;padding-bottom:24px;animation:up .42s var(--ios) both}
 .cal-top{display:flex;align-items:center;gap:8px;padding:12px 16px;margin-bottom:12px;border-radius:26px;background:color-mix(in srgb,var(--sf) 66%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);border:1px solid color-mix(in srgb,var(--bd) 65%,transparent);box-shadow:0 12px 32px -14px #1d0f2428,inset 0 1px 0 #ffffff38}
@@ -192,17 +386,18 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 .cal-board.compact .cal-wrow{min-height:54px}
 .cal-wrow:last-child{border-bottom:0}
 .cal-wnum{font-size:9.5px;font-weight:700;color:color-mix(in srgb,var(--mu) 65%,transparent);display:flex;align-items:flex-start;justify-content:center;padding-top:8px}
-.cal-cell{position:relative;padding:4px 2.5px 5px;border-left:1px solid color-mix(in srgb,var(--bd) 28%,transparent);cursor:pointer;display:flex;flex-direction:column;gap:2.5px;border-radius:12px;transition:background .22s,transform .22s var(--spring),box-shadow .22s;will-change:background,box-shadow;contain:layout paint}
+.cal-cell{position:relative;padding:4px 2.5px 5px;border-left:1px solid color-mix(in srgb,var(--bd) 28%,transparent);cursor:pointer;display:flex;flex-direction:column;gap:2.5px;border-radius:12px;transition:background .22s,transform .22s var(--spring),box-shadow .22s}
 .cal-cell:hover{background:color-mix(in srgb,var(--pr) 6%,transparent)}
 .cal-cell:active{transform:scale(.93)}
 .cal-cell.out{opacity:.34}
 .cal-cell.sun .cal-dnum{color:#e5484d}
-.cal-cell.sel{background:color-mix(in srgb,var(--pr) 11%,transparent);box-shadow:inset 0 0 0 1.8px var(--pr);transition:background .25s var(--ios),box-shadow .25s var(--ios),transform .25s var(--spring)}
+.cal-cell.sel{background:color-mix(in srgb,var(--pr) 11%,transparent);box-shadow:inset 0 0 0 1.8px var(--pr)}
 .cal-dhead{display:flex;align-items:center;justify-content:center;height:24px}
 .cal-dnum{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:700;transition:transform .3s var(--spring),background .25s,color .25s}
 .cal-cell.today .cal-dnum{background:var(--tx);color:var(--bg);font-weight:800;box-shadow:0 3px 9px #0003}
 .cal-cell.sel.today .cal-dnum{background:var(--pr);color:#fff}
 
+/* Píldoras de eventos en modo expandido y barritas en modo dividido con transición fluida */
 .cal-ev-list{display:flex;flex-direction:column;gap:2.5px;overflow:hidden;max-height:64px;opacity:1;transform:translateY(0) scale(1);transition:max-height .48s cubic-bezier(.22,1,.36,1),opacity .32s var(--ios),transform .38s var(--ios)}
 .cal-pill{font-size:9.5px;font-weight:700;line-height:1.15;padding:2.5px 4px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;box-shadow:0 1px 3px #0002}
 .cal-pill.c-vis{background:linear-gradient(135deg,var(--pr),var(--fu))}
@@ -220,11 +415,13 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 .cal-bar.c-new{background:var(--co)}
 .cal-bar.c-done{background:#4a6fa5}
 
+/* Contenedor animado para plegar/desplegar el panel Dividido sin brusquedad */
 .cal-split-wrap{display:grid;grid-template-rows:1fr;opacity:1;transform:translateY(0);transition:grid-template-rows .52s cubic-bezier(.22,1,.36,1),opacity .36s var(--ios),transform .45s cubic-bezier(.22,1,.36,1),margin-top .45s var(--ios);margin-top:12px}
 .cal-split-wrap.hide{grid-template-rows:0fr;opacity:0;transform:translateY(10px);margin-top:0;pointer-events:none}
 .cal-split-inner{overflow:visible;min-height:0}
 .cal-split-wrap.hide .cal-split-inner{overflow:hidden}
 
+/* Panel inferior de agenda del día (Split View) que ahora contiene la píldora de añadir adentro */
 .cal-split{border-radius:26px;padding:18px;background:color-mix(in srgb,var(--sf) 68%,transparent);backdrop-filter:var(--gb);-webkit-backdrop-filter:var(--gb);background-clip:padding-box;overflow:clip;border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 14px 36px -14px #1d0f2430,inset 0 1px 0 #ffffff38}
 .cal-shdr{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
 .cal-shdr b{font-size:24px;font-weight:800;letter-spacing:-.03em;color:var(--tx)}
@@ -243,6 +440,7 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 .cal-tbody b{display:block;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cal-tbody p{margin:3px 0 0;font-size:12px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* Tarjeta flotante tipo carrusel de día (como el video 00:09 - 00:13) */
 .cal-day-ov{position:fixed;inset:0;z-index:8500;background:#0004;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeIn .26s var(--ios)}
 .cal-day-ov.out{animation:fadeOut .22s forwards}
 .cal-day-card{width:min(100%,430px);min-height:420px;max-height:82dvh;display:flex;flex-direction:column;border-radius:32px;padding:22px 20px 18px;background:color-mix(in srgb,var(--sf) 86%,transparent);backdrop-filter:blur(32px) saturate(1.9);-webkit-backdrop-filter:blur(32px) saturate(1.9);border:1px solid color-mix(in srgb,#fff 40%,var(--bd));box-shadow:0 28px 68px -12px #0006,inset 0 1px 0 #ffffff50;animation:cardPop .42s var(--spring) both}
@@ -250,6 +448,7 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 @keyframes cardPop{from{opacity:0;transform:scale(.9) translateY(20px)}}
 @keyframes cardOut{to{opacity:0;transform:scale(.92) translateY(14px)}}
 
+/* Píldora "Añadir el 1 nov +" integrada dentro del cuadro para no colisionar nunca */
 .cal-add-bar{width:100%;max-width:380px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;padding:11px 14px 11px 20px;border-radius:999px;border:1px solid color-mix(in srgb,#fff 45%,var(--bd));background:color-mix(in srgb,var(--sf) 86%,transparent);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:0 8px 24px -8px #1d0f2428,inset 0 1px 0 #ffffff60;color:var(--tx);font-size:14px;font-weight:700;cursor:pointer;transition:transform .38s var(--spring),box-shadow .25s,background .25s}
 .cal-add-bar:hover{transform:translateY(-1.5px);box-shadow:0 12px 28px -8px color-mix(in srgb,var(--pr) 32%,transparent)}
 .cal-add-bar:active{transform:scale(.96)}
@@ -258,15 +457,16 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 .cal-full-add{max-height:0;opacity:0;overflow:hidden;transition:max-height .45s cubic-bezier(.22,1,.36,1),opacity .3s var(--ios),margin-top .35s}
 .cal-shell.full-mode .cal-full-add{max-height:74px;opacity:1;margin-top:4px}
 
+/* Hoja de detalle de visita con barra de acciones inferior estilo iOS (video 00:04) */
 .ev-detail-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent);font-size:13.5px}
 .ev-detail-row:last-of-type{border-bottom:0}
 .ev-detail-ico{width:36px;height:36px;border-radius:11px;background:var(--soft);color:var(--pr);display:grid;place-items:center;flex:none}
 .ev-dock{display:flex;justify-content:space-around;gap:4px;margin-top:8px;padding:8px 6px;border-radius:999px;background:color-mix(in srgb,var(--soft) 85%,transparent);border:1px solid color-mix(in srgb,var(--bd) 65%,transparent)}
-.ev-dock button,.ev-dock a{flex:1;border:0;background:none;padding:7px 4px;border-radius:99px;color:var(--tx);font-size:10.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;text-decoration:none;transition:transform .25s var(--spring),background .2s}
+.ev-dock button,.ev-dock a{flex:1;border:0;background:none;padding:7px 4px;border-radius:99px;color:var(--tx);font-size:10.5px;font-weight:700; display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;text-decoration:none;transition:transform .25s var(--spring),background .2s}
 .ev-dock button:active,.ev-dock a:active{transform:scale(.9);background:color-mix(in srgb,var(--pr) 12%,transparent)}
 .ev-dock .danger{color:#e5484d}
 
-/* ===== BLOQUE 1: scroll finas, chat WhatsApp, pickers, modal Dra. ===== */
+/* ===== BLOQUE 1 · A1. Barras de scroll unificadas (finas, coherentes con el tema) ===== */
 *{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--mu) 45%,transparent) transparent}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -274,8 +474,11 @@ body:has(#vSet:not([hidden])) #fabNew{display:none!important}
 ::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--pr) 55%,transparent);background-clip:padding-box}
 .ag::-webkit-scrollbar,.msgs::-webkit-scrollbar,.gl::-webkit-scrollbar,.rlist::-webkit-scrollbar,.dlg-p::-webkit-scrollbar{height:6px;width:6px}
 .ag{scrollbar-width:thin}
+
+/* ===== BLOQUE 1 · A2. Bloqueo de scroll del body cuando hay modal ===== */
 body.modal-open{overflow:hidden!important}
 
+/* ===== BLOQUE 1 · A3. Chat estilo WhatsApp con separador de fecha ===== */
 .chat .msgs{max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:12px 0 14px;padding:4px 6px 4px 4px;scroll-behavior:smooth}
 .chat .msgs::-webkit-scrollbar{width:6px}
 .msg{position:relative;max-width:82%;padding:8px 12px 18px;border-radius:18px;font-size:13.5px;line-height:1.4;background:color-mix(in srgb,var(--sf) 85%,transparent);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);box-shadow:0 1px 1px #0000000a;align-self:flex-start;animation:msgIn .3s var(--spring) both;word-wrap:break-word}
@@ -292,40 +495,60 @@ body.modal-open{overflow:hidden!important}
 .chat-hdr b{font-size:14.5px;letter-spacing:-.01em}
 .chat-hdr small{color:var(--mu);font-size:11.5px;display:block;margin-top:1px}
 
-/* ===== BLOQUE 4: Menú FAB de 2 opciones ===== */
-#fabDra svg{transition:transform .45s var(--spring)}
-#fabDra.open{box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 28%,transparent),0 12px 28px -6px color-mix(in srgb,var(--pr) 65%,transparent)}
-#fabDra.open svg{transform:rotate(135deg)}
-.fab-menu{position:fixed;inset:0;z-index:8;pointer-events:none}
-.fab-menu.show{pointer-events:auto}
-.fab-menu .fab-backdrop{position:absolute;inset:0;background:#0000;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s,-webkit-backdrop-filter .3s}
-.fab-menu.show .fab-backdrop{background:#0005;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.fab-item{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom) + var(--navH,62px) + 12px + 66px);right:max(4vw,calc((100vw - 440px)/2));display:flex;align-items:center;gap:10px;border:0;background:none;padding:0;cursor:pointer;opacity:0;transform:translateY(20px) scale(.8);transition:opacity .32s var(--ios),transform .42s var(--spring);pointer-events:none}
-.fab-menu.show .fab-item{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;transition-delay:calc(var(--i)*60ms)}
-.fab-item .fab-lab{padding:9px 14px;border-radius:12px;background:color-mix(in srgb,var(--sf) 92%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);color:var(--tx);font-size:13px;font-weight:800;letter-spacing:-.01em;box-shadow:0 6px 18px -6px #1d0f2440;white-space:nowrap}
-.fab-item .fab-ico{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--fu));color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px -6px color-mix(in srgb,var(--pr) 55%,transparent)}
-.fab-item .fab-ico svg{width:22px;height:22px}
-.fab-item:active .fab-ico{transform:scale(.9)}
-@media(min-width:820px){
-  .fab-item{bottom:calc(50% - var(--navH,300px)/2 - 12px - 54px + 70px);right:30px}
-  .fab-item[data-fab-act="formulario"]{bottom:calc(50% - var(--navH,300px)/2 - 12px - 54px + 70px + 62px)}
-}
+/* ===== BLOQUE 1 · A4. Componentes propios de fecha / hora / expediente ===== */
+.pf,.tf{position:relative}
+.pf input,.tf input{width:100%;padding:13px 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--bd) 75%,transparent);background:color-mix(in srgb,var(--sf) 52%,transparent);cursor:pointer}
+.pf input:read-only,.tf input:read-only{cursor:pointer}
+.pf input:focus,.tf input:focus{border-color:var(--pr);box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 13%,transparent)}
+.pf-drop,.tf-drop,.exp-drop{position:absolute;z-index:8000;top:calc(100% + 6px);left:0;right:0;background:color-mix(in srgb,var(--sf) 92%,transparent);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);border:1px solid color-mix(in srgb,var(--bd) 60%,transparent);border-radius:20px;box-shadow:0 18px 48px -12px #1d0f2455;padding:10px;animation:pop .28s var(--spring);transform-origin:top center;max-height:340px;overflow:auto}
+.pf-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:2px 4px}
+.pf-hdr b{flex:1;text-align:center;font-size:14px;text-transform:capitalize;letter-spacing:-.01em}
+.pf-hdr button{width:32px;height:32px;border-radius:50%;border:1px solid color-mix(in srgb,var(--bd) 65%,transparent);background:color-mix(in srgb,var(--sf) 65%,transparent);color:var(--tx);display:grid;place-items:center;cursor:pointer;padding:0;font-size:16px;font-weight:800}
+.pf-hdr button:active{transform:scale(.88)}
+.pf-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.pf-dow{font-size:10px;font-weight:800;color:var(--mu);padding:4px 0;letter-spacing:.04em}
+.pf-day{aspect-ratio:1;border:0;background:none;border-radius:50%;font-size:12.5px;font-weight:700;color:var(--tx);cursor:pointer;display:grid;place-items:center;transition:background .18s,transform .18s var(--spring)}
+.pf-day:hover{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.pf-day.out{opacity:.32}
+.pf-day.today{box-shadow:inset 0 0 0 1.5px var(--pr);color:var(--pr)}
+.pf-day.sel{background:var(--pr);color:#fff;transform:scale(1.06)}
+.pf-actions{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--bd) 55%,transparent)}
+.pf-actions button{flex:1;border:0;background:var(--soft);color:var(--pr);border-radius:12px;padding:9px;font-size:12.5px;font-weight:800;cursor:pointer;transition:transform .2s var(--spring),background .2s}
+.pf-actions button:active{transform:scale(.94)}
+.pf-actions button.pri{background:var(--pr);color:#fff}
+.tf-drop{padding:14px}
+.tf-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:200px}
+.tf-col{display:flex;flex-direction:column;gap:2px;max-height:200px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:thin}
+.tf-col button{border:0;background:none;padding:8px;border-radius:10px;font-size:13px;font-weight:700;color:var(--tx);cursor:pointer;scroll-snap-align:center;transition:background .15s,color .15s}
+.tf-col button:hover{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.tf-col button.sel{background:var(--pr);color:#fff}
+.exp-drop{padding:6px}
+.exp-drop .edi{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--tx);transition:background .15s}
+.exp-drop .edi:hover,.exp-drop .edi.hl{background:color-mix(in srgb,var(--pr) 12%,transparent)}
+.exp-drop .edi b{color:var(--pr);font-weight:800;min-width:72px}
+.exp-drop .edi small{color:var(--mu);font-size:11.5px;font-weight:600}
+.exp-drop .empty{padding:14px;text-align:center;color:var(--mu);font-size:12.5px}
 
+/* ===== BLOQUE 1 · A5. Modal flotante del + de la Dra. (coherente con dlg-p) ===== */
 #draFormModal.dlg{align-items:center;justify-content:center;padding:18px}
 #draFormModal .dlg-p{width:min(100%,620px);max-height:88dvh;border-radius:28px;padding:0;display:flex;flex-direction:column;overflow:hidden;animation:dlgIn .45s var(--ios) both;background:color-mix(in srgb,var(--sf) 92%,transparent)}
 #draFormModal .dfm-hdr{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--bd) 55%,transparent);background:color-mix(in srgb,var(--sf) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 #draFormModal .dfm-hdr b{flex:1;font-size:17px;font-weight:800;letter-spacing:-.015em}
-#draFormModal .dfm-body{padding:18px 20px 24px;overflow-y:auto;flex:1;scroll-behavior:smooth;display:flex;flex-direction:column;gap:12px}
+#draFormModal .dfm-body{padding:18px 20px 24px;overflow-y:auto;flex:1;scroll-behavior:smooth}
 #draFormModal .dfm-body::-webkit-scrollbar{width:8px}
-#draFormModal .dfm-body .card{background:color-mix(in srgb,var(--sf) 70%,transparent);border-color:color-mix(in srgb,var(--bd) 55%,transparent)}
-#draFormModal .dfm-body #fDra{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;background:none;border:0}
-#draFormModal .dfm-body #fDra > .card{margin:0}
-#draFormModal .dfm-body #fDra > .btn{margin-top:6px}
+#draFormModal .dfm-body .card{background:color-mix(in srgb,var(--sf) 70%,transparent)}
 #draFormModal .dfm-close{width:36px;height:36px;border-radius:50%;border:0;background:color-mix(in srgb,var(--soft) 90%,transparent);color:var(--tx);display:grid;place-items:center;cursor:pointer;font-size:16px;font-weight:800;transition:transform .25s var(--spring),background .2s}
 #draFormModal .dfm-close:active{transform:scale(.88);background:var(--soft)}
 
+/* ===== BLOQUE 1 · A6. Calendario: evitar parpadeo al seleccionar ===== */
+.cal-cell{will-change:background,box-shadow;contain:layout paint}
+.cal-wrow,.cal-weeks{contain:layout style}
+.cal-cell.sel{transition:background .25s var(--ios),box-shadow .25s var(--ios),transform .25s var(--spring)}
+
+/* ===== BLOQUE 1 · A7. Focus visible accesible ===== */
 :focus{outline:none}
 :focus-visible{outline:2.5px solid color-mix(in srgb,var(--pr) 70%,transparent);outline-offset:2px;border-radius:8px}
+  
 </style>
 </head>
 <body>
@@ -400,15 +623,15 @@ body.modal-open{overflow:hidden!important}
     <div class="settings-section"><button class="ghost" id="browserNotify" type="button">Activar notificaciones de este dispositivo</button></div>
   </div>
 
+  <!-- VISTA LILLIAM -->
   <div class="card" id="themeBox" hidden>
     <b>Temas</b><p class="mu">Elige un estilo. Cada uno tiene versión de día y de noche.</p>
     <div class="swatches" id="sw"></div>
     <div class="tabs2" id="modeTabs" style="margin:12px 0 0"><button type="button" data-m="auto">Auto</button><button type="button" data-m="light">Día</button><button type="button" data-m="dark">Noche</button></div>
   </div>
-
   <section id="vDra" hidden>
-    <div class="card hero"><h2>Bienvenida, Dra. Lilliam</h2><p>Usa el botón <b>＋</b> (abajo a la derecha) para registrar reportes o llenar formularios.</p></div>
-    <form id="fDra" hidden>
+    <div class="card hero"><h2>Registrar reporte</h2><p>Indica el expediente y los formularios que se llenaron.</p></div>
+    <form id="fDra">
       <div class="card">
         <label class="f">Número de expediente</label>
         <input type="text" id="exp" placeholder="Ej. 1234" autocapitalize="characters" required>
@@ -436,7 +659,7 @@ body.modal-open{overflow:hidden!important}
       <button class="btn" id="send">Enviar reporte</button>
     </form>
   </section>
- 
+
   <!-- VISTA ASISTENTES -->
   <section id="vAsis" hidden>
     <div class="card hero"><h2 id="aH">Expedientes por localizar</h2><p id="aP">Pendientes que registró la Dra. Lilliam.</p></div>
@@ -488,7 +711,7 @@ body.modal-open{overflow:hidden!important}
   <button data-dratab="historial"><b data-ic="check"></b>Historial</button>
   <button data-act="settings"><b data-ic="gear"></b>Ajustes</button>
 </nav>
-<button type="button" id="fabDra" aria-label="Acciones rápidas" title="Acciones rápidas"><span data-ic="plus"></span></button>
+<button type="button" id="fabDra" aria-label="Nuevo reporte" title="Registrar reporte"><span data-ic="plus"></span></button>
 </div>
 
 <script>
@@ -520,9 +743,9 @@ out:'<path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>',
 cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',chev:'<path d="M6 9l6 6 6-6"/>',plus:'<path d="M12 5v14M5 12h14"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',palette:'<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="15.5" cy="10" r="1"/>'};
 function ic(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>'}
 
-// ---- Efecto onda (ripple) ----
+// ---- Efecto onda (ripple) al tocar cualquier botón interactivo ----
 document.addEventListener("pointerdown",e=>{
-  const b=e.target.closest(".btn,.ghost,.ib,nav button,.srow,.lg button,.tabs2 button,.sw,.fab-item");
+  const b=e.target.closest(".btn,.ghost,.ib,nav button,.srow,.lg button,.tabs2 button,.sw");
   if(!b||b.disabled)return;
   b.classList.add("rpl-h");
   const r=b.getBoundingClientRect(),s=document.createElement("span"),d=Math.max(r.width,r.height);
@@ -530,18 +753,10 @@ document.addEventListener("pointerdown",e=>{
   s.style.left=(e.clientX-r.left-d/2)+"px";s.style.top=(e.clientY-r.top-d/2)+"px";
   b.appendChild(s);setTimeout(()=>s.remove(),600);
 },{passive:true});
-</script>
 
-<script>
-// ===== Tema =====
-function theme(){
-  const s=localStorage.getItem("ms_theme");
-  const d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.dataset.t=d?"dark":"light";
-  document.documentElement.dataset.c=localStorage.getItem("ms_color")||"ciruela";
-  $("meta[name=theme-color]").content=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#92228C";
-  $("#bTheme").innerHTML=ic(d?"sun":"moon");
-}
+// ---- Tema ----
+function theme(){const s=localStorage.getItem("ms_theme");const d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+document.documentElement.dataset.t=d?"dark":"light";document.documentElement.dataset.c=localStorage.getItem("ms_color")||"ciruela";$("meta[name=theme-color]").content=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#92228C";$("#bTheme").innerHTML=ic(d?"sun":"moon")}
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",theme);
 $("#bTheme").onclick=()=>{localStorage.setItem("ms_theme",document.documentElement.dataset.t==="dark"?"light":"dark");theme()};
 theme();
@@ -555,7 +770,7 @@ if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWork
 
 // ---- Avisos ----
 function bell(){$("#bBell").innerHTML=ic(("Notification"in window&&Notification.permission==="granted")?"bell":"belloff")}
-$("#bBell").onclick=()=>{const open=$("#cfg").hidden;$("#cfg").hidden=!open;if(open){mailUI();if(role==="dra")loadAlertPrefs()}};
+$("#bBell").onclick=()=>{const open=$("#cfg").hidden;$("#cfg").hidden=!open;if(open){mailUI();if(role==="dra")loadAlertPrefs()} };
 $("#browserNotify").onclick=async()=>{if(!( "Notification"in window))return toast("Este dispositivo no admite avisos","err");const p=await Notification.requestPermission();bell();toast(p==="granted"?"Notificaciones del dispositivo activadas":"Permiso de notificaciones no concedido",p==="granted"?"":"err")};
 function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(),t=c.currentTime;
 [660,880].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f;o.connect(g);g.connect(c.destination);
@@ -563,7 +778,7 @@ g.gain.setValueAtTime(.2,t+i*.18);g.gain.exponentialRampToValueAtTime(.001,t+i*.
 function notify(n){beep();if("Notification"in window&&Notification.permission==="granted"){const m=n+(n>1?" expedientes nuevos":" expediente nuevo"),o={body:m,icon:"icons/icon-192.png"};
 navigator.serviceWorker?.ready.then(r=>r.showNotification("nexo",o)).catch(()=>{try{new Notification("nexo",o)}catch(e){}})}}
 
-// ---- Recuperar contraseña ----
+// ---- Recuperar contraseña desde la pantalla de ingreso ----
 $("#bForgot").onclick=()=>{
   $("#loginFields").hidden=true;$("#resetFields").hidden=false;
   $("#resetStep1").hidden=false;$("#resetStep2").hidden=true;
@@ -650,22 +865,20 @@ function view(){
   if($("#who"))$("#who").textContent=role==="dra"?"Dra. Lilliam":(ME&&ME.name?ME.name:"Equipo asistente");
   sig="";render();renderRecent();loadAlerts();
   if(role==="dra"){loadAlertPrefs();applyDraTab()}
-}
+} 
 let histMode="alertas";
 function histUI(){document.querySelectorAll("[data-hm]").forEach(b=>b.classList.toggle("on",b.dataset.hm===histMode));$("#histAlerts").hidden=histMode!=="alertas";$("#recent").hidden=histMode!=="reportes"}
 document.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{histMode=b.dataset.hm;histUI()});
-function applyDraTab(){
-  if(role!=="dra")return;
-  setTimeout(renderAvDra,0);setTimeout(renderCalDra,0);
-  document.querySelectorAll("[data-dratab]").forEach(b=>b.classList.toggle("on",b.dataset.dratab===draTab));
-  if($("#fabDra"))$("#fabDra").classList.toggle("on",draTab==="reportes");
-  $("#vDra").hidden=draTab!=="reportes";$("#vAlertas").hidden=draTab!=="alertas";$("#vHist").hidden=draTab!=="historial";$("#vAvance").hidden=draTab!=="avance";if($("#vCalDra"))$("#vCalDra").hidden=draTab!=="visitas";$("#alertForm").hidden=true;$("#alT").hidden=false;$("#alertsList").hidden=false;
-  if(draTab==="alertas"){$("#alH").textContent="Alertas de corrección";$("#alP").textContent="Solicitudes de los asistentes por atender.";$("#alT").textContent="Pendientes de corregir"}
-  histUI();window.scrollTo({top:0,behavior:"smooth"});
-}
+function applyDraTab(){if(role!=="dra")return;setTimeout(renderAvDra,0);setTimeout(renderCalDra,0);
+document.querySelectorAll("[data-dratab]").forEach(b=>b.classList.toggle("on",b.dataset.dratab===draTab));
+if($("#fabDra"))$("#fabDra").classList.toggle("on",draTab==="reportes");
+$("#vDra").hidden=draTab!=="reportes";$("#vAlertas").hidden=draTab!=="alertas";$("#vHist").hidden=draTab!=="historial";$("#vAvance").hidden=draTab!=="avance";if($("#vCalDra"))$("#vCalDra").hidden=draTab!=="visitas";$("#alertForm").hidden=true;$("#alT").hidden=false;$("#alertsList").hidden=false;
+if(draTab==="alertas"){$("#alH").textContent="Alertas de corrección";$("#alP").textContent="Solicitudes de los asistentes por atender.";$("#alT").textContent="Pendientes de corregir"}
+histUI();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll("[data-dratab]").forEach(b=>b.onclick=()=>{draTab=b.dataset.dratab;applyDraTab();renderAlerts();loadAlerts()});
+if($("#fabDra"))$("#fabDra").onclick=()=>{if(window.closeSet)window.closeSet();draTab="reportes";applyDraTab()};
 
-// ---- Preferencias de notificaciones ----
+// ---- Preferencias de notificaciones y correo ----
 function mailUI(){const m=localStorage.getItem("ms_mail")||"";$("#mailIn").value=m;$("#calOpt").checked=localStorage.getItem("ms_cal")==="1";$("#assistantMailOpt").checked=localStorage.getItem("ms_mail_enabled")!=="0";$("#mailStatus").textContent=m?"Correo guardado: "+m:"Agrega tu correo para recibir avisos y usarlo en invitaciones de calendario."}
 $("#mailAdd").onclick=async()=>{const m=$("#mailIn").value.trim().toLowerCase(),cal=$("#calOpt").checked,mailOn=$("#assistantMailOpt").checked;if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))return toast("Escribe un correo válido","err");const ok=await post({action:"subscribe",email:m,calendar:cal,notifications:mailOn});if(!ok)return toast("No se pudo guardar. Revisa la conexión","err");localStorage.setItem("ms_mail",m);localStorage.setItem("ms_cal",cal?"1":"0");localStorage.setItem("ms_mail_enabled",mailOn?"1":"0");mailUI();toast("Preferencias guardadas")};
 $("#saveDraPrefs").onclick=async()=>{const email=$("#draEmail").value.trim().toLowerCase(),enabled=$("#draNotify").checked;if(enabled&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido","err");const ok=await post({action:"setAlertPrefs",enabled,email});if(!ok)return toast("No se pudo guardar. Revisa la conexión","err");localStorage.setItem("ms_dra_email",email);if(email)$("#calMail").value=email;ALERT_PREFS={enabled,email};toast("Preferencias guardadas")};
@@ -675,17 +888,13 @@ async function loadAlertPrefs(){try{const d=await api({action:"read",tipo:"prefe
 async function api(o){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...o,token:TOK}),signal:AbortSignal.timeout?AbortSignal.timeout(25000):undefined}),d=await r.json();if(d&&d.error==="auth"){logout(true);return null}return d}catch(e){return null}}
 async function post(o){const d=await api(o);return !!(d&&d.ok)}
 function logout(exp){if(!TOK&&!exp)return;try{if(!exp)api({action:"logout"})}catch(e){}["ms_tok","ms_me","ms_role"].forEach(k=>localStorage.removeItem(k));if(exp)toast("Tu sesión terminó. Inicia sesión de nuevo","err");setTimeout(()=>location.reload(),exp?900:300)}
-async function load(){
-  let ok=true;
-  try{
-    const d=await api({action:"read",tipo:""});if(!Array.isArray(d))throw 0;
-    const prev=new Set(DB.map(x=>x.id));
-    DB=d.map(w=>({id:w.ID,timestamp:w["Fecha Registro"],expediente:w.Expediente,esNuevo:w["Es Nuevo"]==="SÍ",estadoParticipante:w["Estado Participante"]||"Activo",fechaVisita:w["Fecha Visita"]||"",fechaLlegada:w["Fecha Llegada"]||"",formularios:(w.Formularios||"").split(", ").filter(Boolean),notas:w.Notas||"",estado:w.Estado||"Pendiente",horaVisita:w["Hora Visita"]||"",completos:w["Formularios Completos"]!=="NO",bdE:w["BD Estado"]||"Sin iniciar",bdR:w["BD Responsable"]||"",rcE:w["RedCap Estado"]||"Sin iniciar",rcR:w["RedCap Responsable"]||"",obs:String(w.Observaciones||"").split("\n").filter(Boolean)}));
-    const n=DB.filter(r=>r.estado==="Pendiente"&&!prev.has(r.id)).length;
-    if(loaded&&n&&role==="asis")notify(n);loaded=true;
-  }catch(e){ok=false}
-  $("#dot").className="dot"+(ok?"":" off");render();renderRecent();await Promise.all([loadAlerts(),loadAv()]);
-}
+async function load(){let ok=true;
+try{const d=await api({action:"read",tipo:""});if(!Array.isArray(d))throw 0;
+const prev=new Set(DB.map(x=>x.id));
+DB=d.map(w=>({id:w.ID,timestamp:w["Fecha Registro"],expediente:w.Expediente,esNuevo:w["Es Nuevo"]==="SÍ",estadoParticipante:w["Estado Participante"]||"Activo",fechaVisita:w["Fecha Visita"]||"",fechaLlegada:w["Fecha Llegada"]||"",formularios:(w.Formularios||"").split(", ").filter(Boolean),notas:w.Notas||"",estado:w.Estado||"Pendiente",horaVisita:w["Hora Visita"]||"",completos:w["Formularios Completos"]!=="NO",bdE:w["BD Estado"]||"Sin iniciar",bdR:w["BD Responsable"]||"",rcE:w["RedCap Estado"]||"Sin iniciar",rcR:w["RedCap Responsable"]||"",obs:String(w.Observaciones||"").split("\n").filter(Boolean)}));
+const n=DB.filter(r=>r.estado==="Pendiente"&&!prev.has(r.id)).length;
+if(loaded&&n&&role==="asis")notify(n);loaded=true}catch(e){ok=false}
+$("#dot").className="dot"+(ok?"":" off");render();renderRecent();await Promise.all([loadAlerts(),loadAv()])}
 
 // ---- Vista Lilliam ----
 $("#forms").innerHTML=G.map((g,i)=>`<details class="card grp"><summary><b>${g[0]}</b><span class="gc" id="gc${i}">0/${g[1].length}</span><span class="sp"></span><button type="button" class="ghost" data-all="${i}">Seleccionar todo</button><span class="chev">${ic("chev")}</span></summary><div class="gb">${g[1].map(f=>`<label class="opt"><input type="checkbox" name="fm" data-g="${i}" value="${f}"><span>${f}</span></label>`).join("")}</div></details>`).join("");
@@ -724,10 +933,8 @@ function trkOne(r,k){const e=r[k+"E"],p=r[k+"R"];return `<div class="trk"><selec
 function avH(it){const nm=avMode==="bd"?"Base de datos":"RedCap",all=DB.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)),done=all.filter(r=>r[avMode+"E"]==="Finalizado").length,pct=all.length?Math.round(done/all.length*100):0;
 return `<div class="card sum"><div class="row"><b>${nm}</b><span class="sp"></span><span class="mu">${done} de ${all.length} finalizados · ${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`+(it.length?it.map(r=>{const e=r[avMode+"E"];return `<div class="card"><div class="row"><b class="exp">${esc(r.expediente)}</b><span class="sp"></span><span class="tag ${e==="Finalizado"?"st-a":e==="En proceso"?"co":""}">${esc(e)}</span></div>${trkOne(r,avMode)}</div>`}).join(""):'<div class="empty">Nada por aquí</div>')}
 document.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{avMode=b.dataset.av;document.querySelectorAll("[data-av]").forEach(x=>x.classList.toggle("on",x===b));sig="";render()});
-</script>
-  
-<script>
-// ---- Avances v2: Base de datos / RedCap / General + comentarios + sincronización ----
+
+// ---- Avances v2: Base de datos / RedCap / General + comentarios + sincronización multiusuario ----
 let AVD={},AVT={},COM=[],AB="V",rcSub="rm",AGX=[0],comLoaded=false;
 const GR="#cfd8e3",SEED={"BD|CRM01":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM02":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM03":["V,V,V,V,V,A,R,V,V,V,A,V,A",""],"BD|CRM04":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM05":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM06":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM07":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM08":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM09":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM10":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM11":["V,V,V,V,V,A,V,V,V,V,A,R,A",""],"BD|CRM12":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM13":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM14":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM15":["V,V,G,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM16":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM17":["V,V,V,V,V,A,R,V,R,R,A,R,A",""],"BD|CRM18":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM19":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM20":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM21":["V,V,G,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM22":["V,R,V,V,V,A,N,N,N,N,A,N,A",""],"BD|CRM23":["R,V,N,N,N,A,N,N,N,N,A,N,A",""],"BD|CRM24":[",,,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM25":[",,,,,A,,,,,A,,A",""],"BD|CRM26":[",,,,,A,,,,,A,,A",""],"RM|CR-M-01":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-02":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-03":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, falta registrar el perímetro al nacer en el apartado 2.11 del Cuestionario 2."],"RM|CR-M-04":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-05":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-06":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-07":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-08":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-09":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-10":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-11":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal del formulario N.º 4 y del formulario N.º 7. También se requiere revisar y completar los datos correspondientes al formulario N.º 8."],"RM|CR-M-12":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-13":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-14":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-15":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-16":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-17":["V,V,V,V,V,R,R,R","Están pendientes los resultados de composición corporal de los formularios N.º 4 y N.º 8. En el formulario N.º 6 falta el peso final del embarazo. En el formulario N.º 7 falta el número de frasco. En el formulario N.º 8 se deben completar los datos sobre líquidos entre la medición basal y la posdosi"],"RM|CR-M-18":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, se debe corregir el código de la persona entrevistadora en el Cuestionario 2."],"RM|CR-M-19":["V,V,V,V,V,R,S,S","Falta registrar el número de frasco y la hora de la última ingesta de alimentos. También están pendientes los resultados de composición corporal del formulario N.º 4 y el número de frasco correspondiente."],"RM|CR-M-20":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. En el formulario N.º 4 falta el número de frasco y están pendientes los resultados de composición corporal correspondientes."],"RM|CR-M-21":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-22":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-23":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-24":["V,V,R,V,S,S,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8.  Falta registrar el peso al inicio del control prenatal en el formulario de recolección N.º 1."],"RM|CR-M-25":["V,V,V,V,V,R,S,S","El expediente cuenta con información hasta la tercera visita. En el formulario N.º 4 se deben completar o verificar el número de frasco, la hora de consumo de líquidos, la muestra de saliva posdosis y la hora de obtención de la muestra."],"RM|CR-M-26":["V,V,V,V,S,S,S,S","El expediente cuenta con información hasta la primera visita. Se requieren las firmas correspondientes en el formulario N.º 2."],"RB|01":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|02":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|03":["V,R,V,V,R","Datos del niño: Falta el perimetro cefálico al nacer (centímetros)"],"RB|04":["V,S,S,S,S","Retiro "],"RB|05":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|06":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|07":["V,S,S,S,S","Retiro"],"RB|08":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|09":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|10":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|11":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|12":["V,S,S,S,S","Retiro"],"RB|13":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|14":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|15":["V,S,S,S,S","Retiro"],"RB|16":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|17":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|18":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|None":[",,,,",""]},
 RC=[["V","Completo","#a9d18e"],["R","Incompleto","#ff4d4d"],["S","Incompleto (sin datos guardados)","#ff9f43"],["X","Por verificar","#ffd966"]],
@@ -740,11 +947,9 @@ HN={bd:"Base de datos",rm:"RedCap · Madres",rb:"RedCap · Bebés",gn:"General"}
 PR=[["Cuest. 1 · 1ª vis.",0,"rm",1],["Antrop. 1ª vis.",1,"rm",2],["Antrop. 2ª vis.",2,"rm",3],["Antrop. 3ª vis.",3,"rm",4],["Agua 3ª vis.",4,"rm",6],["Cuest. 2 · 4ª vis.",6,"rb",2],["Antrop. 4ª bebé",7,"rb",3],["Antrop. 4ª madre",8,"rm",5],["Agua 4ª madre",9,"rm",7],["Agua 4ª bebé",11,"rb",4]];
 const myR=()=>role==="dra"?"investigadora":"asistente",cSeen=()=>JSON.parse(localStorage.getItem("ms_cseen")||"{}");
 const pad2=n=>String(n).padStart(2,"0");
-const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-const MESES_C=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-const DIAS_C=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
 
+// Sincronización de eliminaciones para TODOS los usuarios:
+// Guarda tanto en DEL|... (para nuevo backend) como el marcador "[ELIMINADO]" en la nota de BD|CRMxx o RB|xx (compatible de inmediato sin tocar nada)
 function isDel(k){
   const o=AVD[k];if(o&&o.v&&o.v[0]==="1")return true;
   const q=k.split("|");
@@ -796,9 +1001,13 @@ function avDelPut(k,f){
     const rv=avV(AVS.rb,num),oldN=((SEED["RB|"+num]||[])[1])||"";
     avPut(AVS.rb,num,rv,f==="1"?"[ELIMINADO]":oldN);
   }
-  clearTimeout(AVT[k]);AVT[k]=setTimeout(async()=>{await post({action:"setAvance",clave:k,valores:f,notas:""});delete AVT[k]},250);
+  clearTimeout(AVT[k]);AVT[k]=setTimeout(async()=>{
+    await post({action:"setAvance",clave:k,valores:f,notas:""});
+    delete AVT[k];
+  },250);
 }
 
+// Detalle de expedientes retirados ("G" = Se retiró): cantidad por expediente + formulario a partir del cual se retiró
 function getRetiradosBD(){
   const m=AVS.bd,ord=m.ord||m.cols.map((_,i)=>i);
   const rows=avRows(m).map(id=>({id,v:avV(m,id)}));
@@ -819,12 +1028,12 @@ function getRetiradosBD(){
 function showRetiradosDlg(){
   const L=getRetiradosBD();
   const body=L.length
-    ?`<p class="mu s" style="margin:0">Total: <b>${L.length} ${L.length===1?"expediente retirado":"expedientes retirados"}</b>:</p><div class="rlist">${L.map(x=>`<div class="ret-item"><b>${esc(x.id)}</b><span>Se retiró a partir de: <b>${esc(x.desde)}</b></span>${x.nota?`<small>📝 ${esc(x.nota)}</small>`:""}</div>`).join("")}</div>`
+    ?`<p class="mu s" style="margin:0">Total: <b>${L.length} ${L.length===1?"expediente retirado":"expedientes retirados"}</b>. Se indica a partir de cuál formulario se registró el retiro:</p><div class="rlist">${L.map(x=>`<div class="ret-item"><b>${esc(x.id)}</b><span>Se retiró a partir de: <b>${esc(x.desde)}</b></span>${x.nota?`<small>📝 ${esc(x.nota)}</small>`:""}</div>`).join("")}</div>`
     :`<p class="mu" style="margin:0">No hay expedientes marcados como «Se retiró» en este momento.</p>`;
   dlgBox("Expedientes que se retiraron",body+'<div class="dlg-a"><button type="button" class="btn" data-r="1">Entendido</button></div>');
 }
 
-function dlgBox(title,body){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b>'+body+'</div>';o.querySelector("b").textContent=title;const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};o.onclick=e=>{const b=e.target.closest("[data-r]");if(b)end(b.dataset.r);else if(e.target===o)end(null)};document.body.appendChild(o)})}
+function dlgBox(title,body,btns){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b>'+body+'</div>';o.querySelector("b").textContent=title;const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};o.onclick=e=>{const b=e.target.closest("[data-r]");if(b)end(b.dataset.r);else if(e.target===o)end(null)};document.body.appendChild(o)})}
 function confirmDlg(title,text,okL){return dlgBox(title,'<p class="mu" style="margin:0">'+String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</p><div class="dlg-a"><button type="button" class="ghost" data-r="">Cancelar</button><button type="button" class="btn" data-r="1" style="background:#e5484d">'+okL+'</button></div>').then(v=>v==="1")}
 function avBadge(){const s=cSeen(),n=COM.filter(c=>c.r!==myR()&&c.ts>(s[c.h]||0)).length;document.querySelectorAll("[data-tab=avance],[data-dratab=avance]").forEach(b=>{let x=b.querySelector(".bdg");if(!n){x&&x.remove();return}if(!x){x=document.createElement("span");x.className="bdg";b.appendChild(x)}x.textContent=n})}
 async function loadAv(){
@@ -853,8 +1062,7 @@ async function loadAv(){
     avBadge();render();renderAvDra()
   }catch(e){}
 }
-
-// ===== Chat WhatsApp =====
+/* ===== BLOQUE 2: Chat estilo WhatsApp + sincronización de comentarios ===== */
 const CHD={};
 const fmtChatDay = ts => {
   const d = new Date(ts), hoy = new Date(); hoy.setHours(0,0,0,0);
@@ -937,7 +1145,6 @@ async function chSend(box, k) {
     toast("No se pudo enviar el comentario", "err");
   }
 }
-
 function genH(){const T={ok:0,fa:0,so:0,pe:0},per=PR.map(()=>({b:0,r:0})),gap={},rev={};
 const NS=avNums(),RBS=new Set(avRows(AVS.rb));for(const n of NS){const e="CRM"+pad2(n),p2=pad2(n),bv=avV(AVS.bd,e),mv=avV(AVS.rm,"CR-M-"+p2),kv=RBS.has(p2)?avV(AVS.rb,p2):[];
 PR.forEach((p,i)=>{const b=bv[p[1]],r=(p[2]==="rm"?mv:kv)[p[3]];if(b==="G"||b==="P")return;const bd=b==="V",rc=r==="V";per[i].b+=bd;per[i].r+=rc;
@@ -971,7 +1178,7 @@ function agH(k,ed){
 }
 function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
 sub=avMode==="rc"?`<div class="tabs2" style="margin-bottom:10px">${[["rm","Madres"],["rb","Bebés"]].map(([x,t])=>`<button type="button" data-rs="${x}" class="${rcSub===x?"on":""}">${t}</button>`).join("")}</div>`:"";
-return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chH(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b></summary>${avH(it)}</details>`:""}</div>`}
+return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chH(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b> · ${HN[avMode==="bd"?"bd":"rm"].split(" ")[0]==="Base"?"Base de datos":"RedCap"}</summary>${avH(it)}</details>`:""}</div>`}
 function renderAvDra(f){
   if(role!=="dra"||draTab!=="avance")return;
   if(!f&&document.activeElement?.matches("#avDra input,#avDra textarea"))return;
@@ -980,12 +1187,78 @@ function renderAvDra(f){
   sigAvDra=s;
   $("#avDra").innerHTML=avPage(0,[]);
 }
-</script>
+document.body.appendChild($("#toast"));
+document.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("ag"))AGX[0]=e.target.scrollLeft},true);
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.target.matches&&e.target.matches(".composer textarea")){e.preventDefault();const b=e.target.closest(".chat");chSend(b,b.querySelector("[data-cs]").dataset.cs)}if(e.key==="Escape"&&!$("#alertForm").hidden)closeForm()});
+document.addEventListener("input",e=>{const t=e.target;if(!t.matches||!t.matches(".composer textarea"))return;CHD[t.dataset.k]=t.value;t.style.height="auto";t.style.height=Math.min(t.scrollHeight,120)+"px";t.closest(".composer").querySelector(".send").disabled=!t.value.trim()});
+function ask(title,val,ro,ph){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b><textarea rows="3" maxlength="300"></textarea><div class="dlg-a"><button type="button" class="ghost" data-x></button>'+(ro?"":'<button type="button" class="btn" data-ok>Guardar</button>')+'</div></div>';
+o.querySelector("b").textContent=title;o.querySelector("[data-x]").textContent=ro?"Cerrar":"Cancelar";const t=o.querySelector("textarea");t.value=val||"";t.readOnly=!!ro;if(ph)t.placeholder=ph;
+const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};
+o.onclick=e=>{if(e.target===o||e.target.dataset.x!==undefined)end(null);else if(e.target.dataset.ok!==undefined)end(t.value.trim())};
+t.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!ro)end(t.value.trim())}if(e.key==="Escape")end(null)};
+document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
+window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(!f||f.hidden||f.classList.contains("out"))return;f.classList.add("out");setTimeout(()=>{f.classList.remove("out");f.hidden=true},340)};function closeForm(){hideAlertForm()}
+{const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
+async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
+addEventListener("online",flushQ);
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");if(!t)return;const ed=role==="asis",d=t.dataset;
+if(d.cs){chSend(t.closest(".chat"),d.cs);return}
+if(d.avd){avMode=d.avd;renderAvDra(1);return}
+if(d.rs){rcSub=d.rs;sig="";render();renderAvDra(1);return}
+const m=AVS[avMode==="bd"?"bd":rcSub];
+if(d.ab!==undefined){
+  // Si la Dra. toca "Se retiró" (G), o si un asistente lo toca cuando ya estaba seleccionado, abre el desglose detallado
+  if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return}
+  if(ed){AB=d.ab;sig="";render()}
+  return;
+}
+if(d.add){if(!ed)return;const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);if(!x||x<1||x>999)return;const p2=pad2(x),delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;if(isDel(delK))avDelPut(delK,"0");if(m.pre==="RB"){avPut(AVS.rb,p2,avV(AVS.rb,p2),"")}else{avPut(AVS.bd,"CRM"+p2,avV(AVS.bd,"CRM"+p2),"");avPut(AVS.rm,"CR-M-"+p2,avV(AVS.rm,"CR-M-"+p2),"")}sig="";render();toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado para todos");return}
+if(d.restore){if(!ed)return;const L=delList(m);if(!L.length)return;const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');if(!r)return;avDelPut(r,"0");sig="";render();toast("Expediente restaurado para todos");return}
+const tr=t.closest("tr");if(!tr)return;const id=tr.firstChild.dataset.an;
+if(d.an!==undefined&&ed&&AB==="DEL"){const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;const ok=await confirmDlg("¿Eliminar "+id+" para todos?",m.pre==="RB"?"Se quitará de la tabla RedCap · Bebés en todos los usuarios. Podrás restaurarlo con el botón Restaurar.":"Se quitará de Base de datos y de RedCap · Madres en todos los usuarios. Podrás restaurarlo con el botón Restaurar.","Eliminar");AB="V";if(ok){avDelPut(k,"1");toast("Expediente "+id+" eliminado para todos")}sig="";render();return}
+if(d.an!==undefined){if(!m.notes)return;const raw=(avRec(m,id)||{}).n||"",cur=raw==="[ELIMINADO]"?"":raw;if(!ed){await ask("Observaciones de "+id,cur||"Sin observaciones",1);return}const n=await ask("Observaciones de "+id,cur,0,"Escribe una observación…");if(n===null)return;avPut(m,id,avV(m,id),n.trim().slice(0,300));sig="";render();return}
+if(ed&&AB==="DEL")return;if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
 
-<script>
-// ---- Calendario (renderCalDra, popups, quick-add) ----
-let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim="";
+// ---- Movimiento estilo iOS y estabilidad en la primera carga ----
+{const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;let lastT=null,lastN=0,busy=false;
+const order=()=>[...document.querySelectorAll(role==="dra"?"[data-dratab]":"#nav [data-tab]")].map(b=>b.dataset.dratab||b.dataset.tab);
+function vt(fn,cur){const L=order(),dir=L.indexOf(cur)>=L.indexOf(lastT)?"fwd":"back",go=lastT!==null&&cur!==lastT&&document.startViewTransition&&!reduce;lastT=cur;if(!go){fn();return}
+document.documentElement.dataset.dir=dir;document.body.classList.add("entering");setTimeout(()=>document.body.classList.remove("entering"),1100);document.startViewTransition(fn)}
+function ring(){const n=+(($("#cnt")||{}).textContent||"").replace(/\D/g,"")||0,b=document.querySelector("#nav [data-tab=alertas]");if(b&&n>lastN){b.classList.remove("ring");void b.offsetWidth;b.classList.add("ring")}lastN=n}
+const R=render,A=applyDraTab,Ld=load;
+let skOn=true;render=function(){if(skOn&&!loaded&&role==="asis"&&!DB.length&&["alertas","visitas","historial"].includes(tab)){$("#list").innerHTML='<div class="sk"></div>'.repeat(3);return}role==="asis"?vt(R,tab):R();setTimeout(ring,0)};
+applyDraTab=function(){role==="dra"?vt(A,draTab):A()};
+load=async function(){if(busy)return;busy=true;try{await Ld()}finally{busy=false;if(skOn){skOn=false;sig="";sigRecent="";sigAlert="";sigAvDra="";sigCalDra="";render();renderRecent();renderAvDra(1);if(typeof renderCalDra==="function")renderCalDra(1)}else if(typeof renderCalDra==="function"){renderCalDra()}if((localStorage.getItem("ms_q")||"{}")!=="{}")flushQ()}};
+toast=function(m,t){const d=document.createElement("div"),i=document.createElement("i"),s=document.createElement("span");if(t==="err")d.className="err";i.textContent=t==="err"?"!":"✓";s.textContent=m;d.append(i,s);$("#toast").appendChild(d);setTimeout(()=>{d.classList.add("out");setTimeout(()=>d.remove(),400)},3400)};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&TOK)load()});
+setTimeout(()=>{const t=()=>document.querySelectorAll("nav svg *").forEach(e=>e.setAttribute("pathLength","1")),mo=new MutationObserver(t);t();document.querySelectorAll("nav").forEach(n=>mo.observe(n,{childList:true,subtree:true}))},0)}
+
+function obsH(r){return r.obs.map(o=>`<p class="mu s">💬 ${esc(o)}</p>`).join("")}
+function cd(r){const z=n=>String(n).padStart(2,"0"),y=d=>""+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate()),[a,b,c]=r.fechaVisita.split("-").map(Number);
+if(!r.horaVisita)return[y(new Date(a,b-1,c)),y(new Date(a,b-1,c+1))];const[H,M]=r.horaVisita.split(":").map(Number),t=d=>y(d)+"T"+z(d.getHours())+z(d.getMinutes())+"00";return[t(new Date(a,b-1,c,H,M)),t(new Date(a,b-1,c,H+1,M))]}
+function gcal(r){const[s,e]=cd(r);return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Visita · Exp. "+r.expediente)+"&dates="+s+"/"+e+"&details="+encodeURIComponent("Expediente "+r.expediente)}
+function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//nexo//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@nexo\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nBEGIN:VALARM\r\nTRIGGER:"+(r.horaVisita?"-PT1H":"-PT15H")+"\r\nACTION:DISPLAY\r\nDESCRIPTION:Visita\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
+a.href=URL.createObjectURL(new Blob([c],{type:"text/calendar"}));a.download="visita-"+r.expediente+".ics";a.click()}
+function ec(e){return e==="Activo"?"st-a":e==="Finalizó"?"st-f":"st-r"}
+function forms(r){const used=new Set();let h="";
+G.forEach(g=>{const m=g[1].filter(f=>r.formularios.includes(f));if(!m.length)return;m.forEach(f=>used.add(f));
+h+=`<details class="vd"${tab==="alertas"?" open":""}><summary><b>${g[0]}</b><span class="gc on">${m.length}</span><span class="sp"></span><span class="chev">${ic("chev")}</span></summary><div class="chips">${m.map(f=>`<span class="chip">${esc(f)}</span>`).join("")}</div></details>`});
+const o=r.formularios.filter(f=>!used.has(f));
+if(o.length)h+=`<div class="chips">${o.map(f=>`<span class="chip">${esc(f)}</span>`).join("")}</div>`;return h}
+function renderRecent(){if(role!=="dra")return;const it=DB.slice(-30).reverse(),s=JSON.stringify(it);if(s===sigRecent)return;sigRecent=s;
+$("#recent").innerHTML=it.length?it.map(r=>`<div class="card"><div class="row"><b>${esc(r.expediente)}</b><span class="sp"></span><span class="tag ${r.estado==="Pendiente"?"co":""}">${r.estado==="Pendiente"?"Pendiente":"✓ "+esc(r.estado)}</span></div><p class="mu s">${esc(r.timestamp)}</p>${chk(r)}${trk(r,0)}${obsH(r)}</div>`).join(""):'<div class="empty">Aún no hay envíos</div>'}
+function dtag(f){const t=new Date();t.setHours(0,0,0,0);const n=Math.round((new Date(f+"T00:00:00")-t)/864e5);return n<0?'<span class="tag co">Vencida</span>':n===0?'<span class="tag lime">Hoy</span>':n===1?'<span class="tag">Mañana</span>':""}
+function ago(t){const m=String(t).match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/);if(!m)return"";const d=Math.round((Date.now()-new Date(m[3],m[2]-1,m[1],m[4],m[5]))/6e4);return d<1?"ahora":d<60?`hace ${d} min`:d<1440?`hace ${Math.floor(d/60)} h`:`hace ${Math.floor(d/1440)} d`}
+
+// ====== CALENDARIO INTERACTIVO (Dra. Lilliam y Asistentes) ======
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const MESES_C=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const DIAS_C=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
+const isoToday=()=>{const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}}-${z(d.getDate())}`.replace("}}","}")};
 function todayStr(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
+let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim="";
+
 function fmt12(hm){
   if(!hm)return"Todo el día";
   const [h,m]=String(hm).split(":").map(Number);
@@ -1030,7 +1303,7 @@ function calEventsMap(q=""){
 function buildCalHTML(q=""){
   const evMap=calEventsMap(q);
   const first=new Date(calY,calM,1);
-  const startOffset=(first.getDay()+6)%7;
+  const startOffset=(first.getDay()+6)%7; // Lunes = 0
   const cur=new Date(calY,calM,1-startOffset);
   const tStr=todayStr(),tDay=new Date().getDate();
   let weeksHTML="";
@@ -1118,13 +1391,19 @@ function shiftDateISO(iso,deltaDays){
   return `${dt.getFullYear()}-${z(dt.getMonth()+1)}-${z(dt.getDate())}`;
 }
 
+// Tarjeta emergente interactiva del día (con swipe izquierda/derecha para cambiar de día como en el video 00:09-00:13)
 function openDayPopup(iso){
   calSel=iso;
   const [y,m,d]=iso.split("-").map(Number);
   calY=y;calM=m-1;
   sig="";render();renderCalDra();
   let ov=document.querySelector(".cal-day-ov");
-  if(!ov){ov=document.createElement("div");ov.className="cal-day-ov";ov.setAttribute("data-noswipe","1");document.body.appendChild(ov)}
+  if(!ov){
+    ov=document.createElement("div");
+    ov.className="cal-day-ov";
+    ov.setAttribute("data-noswipe","1");
+    document.body.appendChild(ov);
+  }
   const paint=curIso=>{
     calSel=curIso;
     const [cy,cm,cd]=curIso.split("-").map(Number);
@@ -1169,6 +1448,7 @@ function openDayPopup(iso){
   };
 }
 
+// Hoja de detalle de una visita (con barra inferior Editar, Calendario, Compartir, Quitar como el video 00:04)
 function openVisitDetailSheet(id,kind="visita"){
   const r=DB.find(x=>x.id===id);if(!r)return;
   const fStr=kind==="llegada"?r.fechaLlegada:r.fechaVisita;
@@ -1187,6 +1467,20 @@ function openVisitDetailSheet(id,kind="visita"){
         <div><small class="mu s">HORARIO</small><b style="display:block;font-size:14px;margin-top:2px">${esc(fmt12(hStr))}</b></div>
       </div>
     </div>
+    <div>
+      <div class="ev-detail-row"><span class="ev-detail-ico">${ic("sheet")}</span><div><small class="mu s" style="display:block">Formularios asociados</small><b>${esc(r.formularios.join(", ")||"Visita general")}</b></div></div>
+      <div class="ev-detail-row"><span class="ev-detail-ico">${ic("bell")}</span><div><small class="mu s" style="display:block">Estado y seguimiento</small><b>${esc(r.estado)} · BD: ${esc(r.bdE)} · RedCap: ${esc(r.rcE)}</b></div></div>
+      ${r.notas?`<div class="ev-detail-row"><span class="ev-detail-ico">${ic("chat")}</span><div><small class="mu s" style="display:block">Notas</small><b>${esc(r.notas)}</b></div></div>`:""}
+    </div>
+    <div id="evEditBox" hidden class="card" style="margin:0;padding:12px;background:var(--soft)">
+      <label class="f">Reprogramar fecha y hora</label>
+      <div class="row" style="flex-wrap:nowrap;margin-bottom:8px">
+        <input type="date" id="evNewDate" value="${esc(r.fechaVisita||fStr)}" style="flex:2">
+        <input type="time" id="evNewTime" value="${esc(r.horaVisita||"")}" style="flex:1">
+      </div>
+      <input type="text" id="evNewNote" placeholder="Nota de la visita (opcional)" value="${esc(r.notas||"")}" style="margin-bottom:8px">
+      <button type="button" class="btn" id="evSaveBtn" style="padding:11px">Guardar cambios</button>
+    </div>
     <div class="ev-dock">
       <button type="button" id="evBtnEdit">${ic("sliders")}<span>Editar</span></button>
       ${r.fechaVisita?`<a target="_blank" rel="noopener" href="${esc(gcal(r))}">${ic("cal")}<span>Google Cal</span></a>`:""}
@@ -1197,7 +1491,17 @@ function openVisitDetailSheet(id,kind="visita"){
   const close=()=>{o.classList.add("out");setTimeout(()=>o.remove(),280)};
   o.onclick=async e=>{
     if(e.target===o||e.target.closest("[data-x]"))return close();
+    if(e.target.closest("#evBtnEdit")){const b=o.querySelector("#evEditBox");b.hidden=!b.hidden;return}
     if(e.target.closest("#evBtnIcs")){dl(r);return}
+    if(e.target.closest("#evSaveBtn")){
+      const nf=o.querySelector("#evNewDate").value,nh=o.querySelector("#evNewTime").value,nn=o.querySelector("#evNewNote").value.trim();
+      if(!nf)return toast("Selecciona una fecha","err");
+      const btn=o.querySelector("#evSaveBtn");btn.disabled=true;btn.textContent="Guardando…";
+      r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn;calSel=nf;
+      const ok=await post({action:"updateStatus",id:r.id,fechaVisita:nf,horaVisita:nh,notas:nn});
+      toast(ok?"Visita reprogramada":"Error al guardar",ok?"":"err");
+      close();sig="";render();renderCalDra();return;
+    }
     if(e.target.closest("#evBtnDel")){
       const okC=await confirmDlg("¿Quitar esta visita del calendario?","El expediente "+r.expediente+" seguirá registrado pero ya no tendrá esta fecha de visita asignada.","Quitar fecha");
       if(!okC)return;
@@ -1210,28 +1514,37 @@ function openVisitDetailSheet(id,kind="visita"){
   document.body.appendChild(o);
 }
 
+// Modal rápido para agendar una visita futura en cualquier fecha seleccionada (Dra. y Asistentes)
 function openQuickAddVisit(isoDate){
   const dIso=isoDate||calSel||todayStr();
   const exps=[...new Set(DB.map(r=>r.expediente).concat(avNums().map(n=>"CRM"+pad2(n))))].sort();
   const o=document.createElement("div");o.className="dlg";o.setAttribute("data-noswipe","1");
   o.innerHTML=`<div class="dlg-p" role="dialog" aria-modal="true">
     <div class="row"><b>Programar visita en calendario</b><span class="sp"></span><button type="button" class="ib" data-x="1" style="width:34px;height:34px">✕</button></div>
-    <div><label class="f">Expediente</label><input type="text" id="qaExp" placeholder="Ej. CRM01" autocapitalize="characters" required></div>
+    <div>
+      <label class="f">Expediente</label>
+      <input type="text" id="qaExp" list="qaExpList" placeholder="Ej. CRM01" autocapitalize="characters" required>
+      <datalist id="qaExpList">${exps.map(x=>`<option value="${esc(x)}">`).join("")}</datalist>
+    </div>
     <div class="row" style="flex-wrap:nowrap">
       <div style="flex:2"><label class="f">Fecha de visita</label><input type="date" id="qaDate" value="${esc(dIso)}"></div>
-      <div style="flex:1.2"><label class="f">Hora</label><input type="time" id="qaTime" value="08:00"></div>
+      <div style="flex:1.2"><label class="f">Hora (opc.)</label><input type="time" id="qaTime" value="08:00"></div>
     </div>
-    <div><label class="f">Motivo</label>
+    <div>
+      <label class="f">Motivo o visita a realizar</label>
       <select id="qaVisitType">
-        <option value="Próxima visita programada">Próxima visita</option>
-        <option value="1ª visita · Seguimiento">1ª visita</option>
-        <option value="2ª visita · Antropometría">2ª visita</option>
-        <option value="3ª visita · Agua corporal">3ª visita</option>
-        <option value="4ª visita (3 meses)">4ª visita</option>
+        <option value="Próxima visita programada">Próxima visita programada</option>
+        <option value="1ª visita · Seguimiento">1ª visita · Seguimiento</option>
+        <option value="2ª visita · Antropometría">2ª visita · Antropometría</option>
+        <option value="3ª visita · Agua corporal">3ª visita · Agua corporal</option>
+        <option value="4ª visita (3 meses)">4ª visita (3 meses)</option>
       </select>
     </div>
-    <div><label class="f">Notas (opcional)</label><input type="text" id="qaNotes" placeholder="Ej. Confirmar asistencia…"></div>
-    <label class="opt" style="margin:0"><input type="checkbox" id="qaCal" checked><span>Enviar invitación por correo</span></label>
+    <div>
+      <label class="f">Notas adicionales (opcional)</label>
+      <input type="text" id="qaNotes" placeholder="Ej. Confirmar asistencia por teléfono, traer muestras…">
+    </div>
+    <label class="opt" style="margin:0"><input type="checkbox" id="qaCal" checked><span>Enviar invitación por correo / Google Calendar a los suscritos</span></label>
     <div class="dlg-a" style="margin-top:4px">
       <button type="button" class="ghost" data-x="1">Cancelar</button>
       <button type="button" class="btn" id="qaSubmit">Guardar visita</button>
@@ -1246,16 +1559,42 @@ function openQuickAddVisit(isoDate){
       const hv=o.querySelector("#qaTime").value;
       const vt=o.querySelector("#qaVisitType").value;
       const nt=o.querySelector("#qaNotes").value.trim();
+      const sendCal=o.querySelector("#qaCal").checked;
       if(!exp||!fv)return toast("Indica el expediente y la fecha","err");
       const btn=o.querySelector("#qaSubmit");btn.disabled=true;btn.textContent="Agendando…";
-      const now=new Date(),z=n=>String(n).padStart(2,"0");
-      const mail=(role==="dra"?(localStorage.getItem("ms_dra_email")||localStorage.getItem("ms_dmail")):localStorage.getItem("ms_mail"))||"";
-      const rec={action:"add",id:"REG-"+Date.now(),timestamp:`${z(now.getDate())}/${z(now.getMonth()+1)}/${now.getFullYear()} ${z(now.getHours())}:${z(now.getMinutes())}:${z(now.getSeconds())}`,expediente:exp,esNuevo:false,estadoParticipante:"Activo",fechaVisita:fv,horaVisita:hv,completos:true,formularios:[vt],notas:nt,estado:"Pendiente",usuario:ME?.name||(role==="dra"?"Dra":"Asistente"),fechaLlegada:"",calendar:true,calEmail:mail};
-      const ok=await post(rec);
-      if(ok)await load();
+      // Si hay un expediente pendiente existente y sin fecha, o si el usuario prefiere crear el evento
+      const existing=DB.find(r=>r.expediente===exp&&r.estado==="Pendiente"&&!r.fechaVisita);
+      let ok=false;
+      if(existing&&!sendCal){
+        existing.fechaVisita=fv;existing.horaVisita=hv;if(nt)existing.notas=nt;
+        ok=await post({action:"updateStatus",id:existing.id,fechaVisita:fv,horaVisita:hv,notas:existing.notas});
+      }else{
+        const now=new Date(),z=n=>String(n).padStart(2,"0");
+        const mail=(role==="dra"?(localStorage.getItem("ms_dra_email")||localStorage.getItem("ms_dmail")):localStorage.getItem("ms_mail"))||"";
+        const rec={
+          action:"add",
+          id:"REG-"+Date.now(),
+          timestamp:`${z(now.getDate())}/${z(now.getMonth()+1)}/${now.getFullYear()} ${z(now.getHours())}:${z(now.getMinutes())}:${z(now.getSeconds())}`,
+          expediente:exp,
+          esNuevo:false,
+          estadoParticipante:"Activo",
+          fechaVisita:fv,
+          horaVisita:hv,
+          completos:true,
+          formularios:[vt],
+          notas:nt,
+          estado:"Pendiente",
+          usuario:ME?.name||(role==="dra"?"Dra":"Asistente"),
+          fechaLlegada:"",
+          calendar:sendCal,
+          calEmail:mail
+        };
+        ok=await post(rec);
+        if(ok)await load();
+      }
       const [ny,nm]=fv.split("-").map(Number);
       calY=ny;calM=nm-1;calSel=fv;
-      toast(ok?"✓ Visita agendada":"No se pudo agendar",ok?"":"err");
+      toast(ok?"✓ Visita agendada en el calendario":"No se pudo agendar. Revisa tu conexión",ok?"":"err");
       close();sig="";render();renderCalDra();
     }
   };
@@ -1263,7 +1602,7 @@ function openQuickAddVisit(isoDate){
   setTimeout(()=>o.querySelector("#qaExp")?.focus(),80);
 }
 
-// Delegación global del calendario
+// Delegación global de eventos para el Calendario (tanto en vista Asistentes como vista Dra. Lilliam)
 document.addEventListener("click",e=>{
   const nav=e.target.closest("[data-cal-nav]");
   if(nav){
@@ -1276,12 +1615,16 @@ document.addEventListener("click",e=>{
     sig="";render();renderCalDra();return;
   }
   const td=e.target.closest("[data-cal-today]");
-  if(td){const now=new Date();calY=now.getFullYear();calM=now.getMonth();calSel=todayStr();calAnim="anim-r";sig="";render();renderCalDra(1);return}
+  if(td){
+    const now=new Date();calY=now.getFullYear();calM=now.getMonth();calSel=todayStr();
+    calAnim="anim-r";sig="";render();renderCalDra(1);return;
+  }
   const md=e.target.closest("[data-cal-mode]");
   if(md){
     const wantCompact=md.dataset.calMode==="split";
     if(calCompact===wantCompact)return;
     calCompact=wantCompact;
+    // Transición suave en vivo sin destruir el DOM para que las celdas y el panel inferior se animen con fluidez
     document.querySelectorAll(".cal-shell").forEach(sh=>{
       sh.classList.toggle("full-mode",!calCompact);
       sh.querySelector(".cal-board")?.classList.toggle("compact",calCompact);
@@ -1308,32 +1651,21 @@ document.addEventListener("click",e=>{
   if(ev){openVisitDetailSheet(ev.dataset.calEv,ev.dataset.calKind);return}
 });
 
-// ---- Utilidades compartidas ----
-function obsH(r){return r.obs.map(o=>`<p class="mu s">💬 ${esc(o)}</p>`).join("")}
-function cd(r){const z=n=>String(n).padStart(2,"0"),y=d=>""+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate()),[a,b,c]=r.fechaVisita.split("-").map(Number);
-if(!r.horaVisita)return[y(new Date(a,b-1,c)),y(new Date(a,b-1,c+1))];const[H,M]=r.horaVisita.split(":").map(Number),t=d=>y(d)+"T"+z(d.getHours())+z(d.getMinutes())+"00";return[t(new Date(a,b-1,c,H,M)),t(new Date(a,b-1,c,H+1,M))]}
-function gcal(r){const[s,e]=cd(r);return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Visita · Exp. "+r.expediente)+"&dates="+s+"/"+e+"&details="+encodeURIComponent("Expediente "+r.expediente)}
-function dl(r){const[s,e]=cd(r),t=r.horaVisita?"":";VALUE=DATE",c="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//nexo//ES\r\nBEGIN:VEVENT\r\nUID:"+r.id+"@nexo\r\nDTSTAMP:"+new Date().toISOString().replace(/[-:]|\.\d+/g,"")+"\r\nDTSTART"+t+":"+s+"\r\nDTEND"+t+":"+e+"\r\nSUMMARY:Visita · Exp. "+r.expediente+"\r\nEND:VEVENT\r\nEND:VCALENDAR",a=document.createElement("a");
-a.href=URL.createObjectURL(new Blob([c],{type:"text/calendar"}));a.download="visita-"+r.expediente+".ics";a.click()}
-function ec(e){return e==="Activo"?"st-a":e==="Finalizó"?"st-f":"st-r"}
-function forms(r){const used=new Set();let h="";
-G.forEach(g=>{const m=g[1].filter(f=>r.formularios.includes(f));if(!m.length)return;m.forEach(f=>used.add(f));
-h+=`<details class="vd"${tab==="alertas"?" open":""}><summary><b>${g[0]}</b><span class="gc on">${m.length}</span><span class="sp"></span><span class="chev">${ic("chev")}</span></summary><div class="chips">${m.map(f=>`<span class="chip">${esc(f)}</span>`).join("")}</div></details>`});
-const o=r.formularios.filter(f=>!used.has(f));
-if(o.length)h+=`<div class="chips">${o.map(f=>`<span class="chip">${esc(f)}</span>`).join("")}</div>`;return h}
-function renderRecent(){if(role!=="dra")return;const it=DB.slice(-30).reverse(),s=JSON.stringify(it);if(s===sigRecent)return;sigRecent=s;
-$("#recent").innerHTML=it.length?it.map(r=>`<div class="card"><div class="row"><b>${esc(r.expediente)}</b><span class="sp"></span><span class="tag ${r.estado==="Pendiente"?"co":""}">${r.estado==="Pendiente"?"Pendiente":"✓ "+esc(r.estado)}</span></div><p class="mu s">${esc(r.timestamp)}</p>${chk(r)}${trk(r,0)}${obsH(r)}</div>`).join(""):'<div class="empty">Aún no hay envíos</div>'}
-function dtag(f){const t=new Date();t.setHours(0,0,0,0);const n=Math.round((new Date(f+"T00:00:00")-t)/864e5);return n<0?'<span class="tag co">Vencida</span>':n===0?'<span class="tag lime">Hoy</span>':n===1?'<span class="tag">Mañana</span>':""}
-function ago(t){const m=String(t).match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/);if(!m)return"";const d=Math.round((Date.now()-new Date(m[3],m[2]-1,m[1],m[4],m[5]))/6e4);return d<1?"ahora":d<60?`hace ${d} min`:d<1440?`hace ${Math.floor(d/60)} h`:`hace ${Math.floor(d/1440)} d`}
-
 // ---- Vista asistentes ----
 function render(){
   if(role!=="asis")return;
   $("#vAlertas").hidden=tab!=="nueva";
-  if(tab==="nueva"){$("#alH").textContent="Crear alerta de corrección";$("#alP").textContent="Avisa a la Dra. si falta algo o hay dudas en un formulario.";$("#alT").textContent="Historial de alertas"}
+  if(tab==="nueva"){
+    $("#alH").textContent="Crear alerta de corrección";
+    $("#alP").textContent="Avisa a la Dra. si falta algo o hay dudas en un formulario.";
+    $("#alT").textContent="Historial de alertas";
+  }
   const HD={alertas:["Expedientes por localizar","Pendientes que registró la Dra. Lilliam."],visitas:["Próximas visitas","Participantes con visita programada."],historial:["Historial","Expedientes ya procesados."],avance:["Avance de trabajo","Marca en qué etapa va cada expediente."]}[tab];
   if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}
-  $("#vAsis").hidden=tab==="nueva";$("#avTabs").hidden=tab!=="avance";$("#stats").hidden=(tab==="avance"||tab==="visitas");$("#hsTabs").hidden=tab!=="historial";
+  $("#vAsis").hidden=tab==="nueva";
+  $("#avTabs").hidden=tab!=="avance";
+  $("#stats").hidden=(tab==="avance"||tab==="visitas");
+  $("#hsTabs").hidden=tab!=="historial";
   {const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
   if(tab==="nueva"){renderAlerts();return}
@@ -1355,7 +1687,7 @@ function render(){
 ${forms(r)}
 ${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
 <p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
-${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
+${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
   :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
   calAnim="";
 }
@@ -1376,173 +1708,26 @@ const k=i.dataset.k;
 if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
 if(a==="s"){const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
 r[k+"E"]=i.value;r[k+"R"]=n;if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";i.blur();
-up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado":"Estado actualizado")}};
+up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado")}};
 
 // ---- Alertas de corrección ----
+const ALERT_FORMS=G.flatMap(g=>g[1]);
 $("#alertForms").innerHTML=G.map(g=>`<details class="card grp af"><summary><b>${g[0]}</b><span class="gc" data-af>0/${g[1].length}</span><span class="sp"></span><span class="chev">${ic("chev")}</span></summary><div class="gb">${g[1].map(f=>`<label class="opt"><input type="checkbox" name="af" value="${esc(f)}"><span>${esc(f)}</span></label>`).join("")}</div></details>`).join("");
 $("#alertForms").onchange=()=>document.querySelectorAll("#alertForms details").forEach(d=>{const n=d.querySelectorAll("[name=af]:checked").length,e=d.querySelector("[data-af]");e.textContent=n+"/"+d.querySelectorAll("[name=af]").length;e.classList.toggle("on",n>0)});
 $("#alertForm").addEventListener("reset",()=>setTimeout(()=>$("#alertForms").onchange()));
 async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"});if(Array.isArray(d))ALERTS=d;renderAlerts()}catch(e){}}
 
-function renderAlerts(){
-  if(role!=="dra"&&role!=="asis")return;
-  const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;
-  let list=ALERTS.slice().reverse();
-  if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));
-  const s=JSON.stringify(list)+"|"+role+"|"+draTab+"|"+tab+"|"+hsMode;
-  if(s===sigAlert&&host.innerHTML)return;sigAlert=s;
-  host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';
-}
+function renderAlerts(){if(role!=="dra"&&role!=="asis")return;const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;let list=ALERTS.slice().reverse();if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));const s=JSON.stringify(list)+"|"+role+"|"+draTab+"|"+tab+"|"+hsMode;if(s===sigAlert&&host.innerHTML)return;sigAlert=s;host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';}
 $("#cancelAlert").onclick=()=>hideAlertForm();
-$("#alertForm").onsubmit=async e=>{e.preventDefault();const forms=[...document.querySelectorAll("[name=af]:checked")].map(x=>x.value),email=$("#aCreatorEmail").value.trim().toLowerCase()||(role==="dra"?(localStorage.getItem("ms_dra_email")||$("#draEmail").value.trim().toLowerCase()):localStorage.getItem("ms_mail"))||"";if(!forms.length)return toast("Selecciona un formulario","err");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido","err");$("#aCreatorEmail").value=email;const data={action:"createAlert",id:"ALT-"+Date.now(),expediente:$("#aExp").value.trim().toUpperCase(),formularios:forms,pregunta:$("#aQuestion").value.trim(),observaciones:$("#aNotes").value.trim(),creador:$("#aCreator").value.trim(),email:email};if(!data.expediente||!data.pregunta||!data.observaciones||!data.creador)return toast("Complete todos los campos","err");const b=$("#sendAlert");b.disabled=true;b.textContent="Enviando…";await post(data);await new Promise(r=>setTimeout(r,800));await loadAlerts();const ok=ALERTS.some(a=>a.id===data.id);toast(ok?"Alerta enviada":"No se pudo confirmar",ok?"":"err");if(ok){$("#alertForm").reset();hideAlertForm()}b.disabled=false;b.textContent="Enviar alerta"};
-$("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve],[data-alert-delete]");if(!r)return;const id=r.dataset.alertResolve||r.dataset.alertDelete;if(r.dataset.alertResolve){const respuesta=prompt("Anote brevemente qué se corrigió (opcional):")||"La Dra. Lilliam marcó la alerta como corregida.";await post({action:"resolveAlert",id,respuesta});toast("Alerta marcada como corregida")}else{if(!confirm("¿Eliminar esta alerta del historial?"))return;await post({action:"deleteAlert",id});toast("Alerta eliminada")}await new Promise(r=>setTimeout(r,500));await loadAlerts()};
+$("#alertForm").onsubmit=async e=>{e.preventDefault();const forms=[...document.querySelectorAll("[name=af]:checked")].map(x=>x.value),email=$("#aCreatorEmail").value.trim().toLowerCase()||(role==="dra"?(localStorage.getItem("ms_dra_email")||$("#draEmail").value.trim().toLowerCase()):localStorage.getItem("ms_mail"))||"";if(!forms.length)return toast("Selecciona un formulario","err");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido para recibir la notificación","err");$("#aCreatorEmail").value=email;const data={action:"createAlert",id:"ALT-"+Date.now(),expediente:$("#aExp").value.trim().toUpperCase(),formularios:forms,pregunta:$("#aQuestion").value.trim(),observaciones:$("#aNotes").value.trim(),creador:$("#aCreator").value.trim(),email:email};if(!data.expediente||!data.pregunta||!data.observaciones||!data.creador)return toast("Complete todos los campos","err");const b=$("#sendAlert");b.disabled=true;b.textContent="Enviando…";await post(data);await new Promise(r=>setTimeout(r,800));await loadAlerts();const ok=ALERTS.some(a=>a.id===data.id);toast(ok?"Alerta enviada a la Dra. Lilliam":"No se pudo confirmar. Revise la conexión",ok?"":"err");if(ok){$("#alertForm").reset();hideAlertForm()}b.disabled=false;b.textContent="Enviar alerta"};
+$("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve],[data-alert-delete]");if(!r)return;const id=r.dataset.alertResolve||r.dataset.alertDelete;if(r.dataset.alertResolve){const respuesta=prompt("Anote brevemente qué se corrigió (opcional):")||"La Dra. Lilliam marcó la alerta como corregida.";await post({action:"resolveAlert",id,respuesta});toast("Alerta marcada como corregida; se notificará al asistente")}else{if(!confirm("¿Eliminar esta alerta del historial? Esta acción no se puede deshacer."))return;await post({action:"deleteAlert",id});toast("Alerta eliminada del historial")}await new Promise(r=>setTimeout(r,500));await loadAlerts()};
+
 document.querySelectorAll("[data-ic]").forEach(e=>e.insertAdjacentHTML("afterbegin",ic(e.dataset.ic)));
 $("#bMenu").onclick=e=>{e.stopPropagation();$("#menu").hidden=!$("#menu").hidden};
 addEventListener("click",()=>{$("#menu").hidden=true});
-document.body.appendChild($("#toast"));
-document.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("ag"))AGX[0]=e.target.scrollLeft},true);
-document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.target.matches&&e.target.matches(".composer textarea")){e.preventDefault();const b=e.target.closest(".chat");chSend(b,b.querySelector("[data-cs]").dataset.cs)}if(e.key==="Escape"&&!$("#alertForm").hidden)closeForm()});
-document.addEventListener("input",e=>{const t=e.target;if(!t.matches||!t.matches(".composer textarea"))return;CHD[t.dataset.k]=t.value;t.style.height="auto";t.style.height=Math.min(t.scrollHeight,120)+"px";t.closest(".composer").querySelector(".send").disabled=!t.value.trim()});
-function ask(title,val,ro,ph){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b><textarea rows="3" maxlength="300"></textarea><div class="dlg-a"><button type="button" class="ghost" data-x></button>'+(ro?"":'<button type="button" class="btn" data-ok>Guardar</button>')+'</div></div>';
-o.querySelector("b").textContent=title;o.querySelector("[data-x]").textContent=ro?"Cerrar":"Cancelar";const t=o.querySelector("textarea");t.value=val||"";t.readOnly=!!ro;if(ph)t.placeholder=ph;
-const end=v=>{o.classList.add("out");setTimeout(()=>o.remove(),300);res(v)};
-o.onclick=e=>{if(e.target===o||e.target.dataset.x!==undefined)end(null);else if(e.target.dataset.ok!==undefined)end(t.value.trim())};
-t.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!ro)end(t.value.trim())}if(e.key==="Escape")end(null)};
-document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
-window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(!f||f.hidden||f.classList.contains("out"))return;f.classList.add("out");setTimeout(()=>{f.classList.remove("out");f.hidden=true},340)};function closeForm(){hideAlertForm()}
-{const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
-async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
-addEventListener("online",flushQ);
-document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");if(!t)return;const ed=role==="asis",d=t.dataset;
-if(d.cs){chSend(t.closest(".chat"),d.cs);return}
-if(d.avd){avMode=d.avd;renderAvDra(1);return}
-if(d.rs){rcSub=d.rs;sig="";render();renderAvDra(1);return}
-const m=AVS[avMode==="bd"?"bd":rcSub];
-if(d.ab!==undefined){if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return}if(ed){AB=d.ab;sig="";render()}return}
-if(d.add){if(!ed)return;const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);if(!x||x<1||x>999)return;const p2=pad2(x),delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;if(isDel(delK))avDelPut(delK,"0");if(m.pre==="RB"){avPut(AVS.rb,p2,avV(AVS.rb,p2),"")}else{avPut(AVS.bd,"CRM"+p2,avV(AVS.bd,"CRM"+p2),"");avPut(AVS.rm,"CR-M-"+p2,avV(AVS.rm,"CR-M-"+p2),"")}sig="";render();toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado");return}
-if(d.restore){if(!ed)return;const L=delList(m);if(!L.length)return;const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');if(!r)return;avDelPut(r,"0");sig="";render();toast("Expediente restaurado");return}
-const tr=t.closest("tr");if(!tr)return;const id=tr.firstChild.dataset.an;
-if(d.an!==undefined&&ed&&AB==="DEL"){const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;const ok=await confirmDlg("¿Eliminar "+id+" para todos?",m.pre==="RB"?"Se quitará de RedCap · Bebés. Podrás restaurarlo.":"Se quitará de Base de datos y RedCap · Madres.","Eliminar");AB="V";if(ok){avDelPut(k,"1");toast("Expediente "+id+" eliminado")}sig="";render();return}
-if(d.an!==undefined){if(!m.notes)return;const raw=(avRec(m,id)||{}).n||"",cur=raw==="[ELIMINADO]"?"":raw;if(!ed){await ask("Observaciones de "+id,cur||"Sin observaciones",1);return}const n=await ask("Observaciones de "+id,cur,0,"Escribe una observación…");if(n===null)return;avPut(m,id,avV(m,id),n.trim().slice(0,300));sig="";render();return}
-if(ed&&AB==="DEL")return;if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
-
-// ---- Movimiento iOS ----
-{const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;let lastT=null,lastN=0,busy=false;
-const order=()=>[...document.querySelectorAll(role==="dra"?"[data-dratab]":"#nav [data-tab]")].map(b=>b.dataset.dratab||b.dataset.tab);
-function vt(fn,cur){const L=order(),dir=L.indexOf(cur)>=L.indexOf(lastT)?"fwd":"back",go=lastT!==null&&cur!==lastT&&document.startViewTransition&&!reduce;lastT=cur;if(!go){fn();return}
-document.documentElement.dataset.dir=dir;document.body.classList.add("entering");setTimeout(()=>document.body.classList.remove("entering"),1100);document.startViewTransition(fn)}
-function ring(){const n=+(($("#cnt")||{}).textContent||"").replace(/\D/g,"")||0,b=document.querySelector("#nav [data-tab=alertas]");if(b&&n>lastN){b.classList.remove("ring");void b.offsetWidth;b.classList.add("ring")}lastN=n}
-const R=render,A=applyDraTab,Ld=load;
-let skOn=true;render=function(){if(skOn&&!loaded&&role==="asis"&&!DB.length&&["alertas","visitas","historial"].includes(tab)){$("#list").innerHTML='<div class="sk"></div>'.repeat(3);return}role==="asis"?vt(R,tab):R();setTimeout(ring,0)};
-applyDraTab=function(){role==="dra"?vt(A,draTab):A()};
-load=async function(){if(busy)return;busy=true;try{await Ld()}finally{busy=false;if(skOn){skOn=false;sig="";sigRecent="";sigAlert="";sigAvDra="";sigCalDra="";render();renderRecent();renderAvDra(1);if(typeof renderCalDra==="function")renderCalDra(1)}else if(typeof renderCalDra==="function"){renderCalDra()}if((localStorage.getItem("ms_q")||"{}")!=="{}")flushQ()}};
-toast=function(m,t){const d=document.createElement("div"),i=document.createElement("i"),s=document.createElement("span");if(t==="err")d.className="err";i.textContent=t==="err"?"!":"✓";s.textContent=m;d.append(i,s);$("#toast").appendChild(d);setTimeout(()=>{d.classList.add("out");setTimeout(()=>d.remove(),400)},3400)};
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&TOK)load()});
-setTimeout(()=>{const t=()=>document.querySelectorAll("nav svg *").forEach(e=>e.setAttribute("pathLength","1")),mo=new MutationObserver(t);t();document.querySelectorAll("nav").forEach(n=>mo.observe(n,{childList:true,subtree:true}))},0)}
-
-// ===== BLOQUE 4: Menú FAB de 2 opciones =====
-function buildFabDraMenu(){
-  if(document.getElementById("fabDraMenu"))return;
-  const fab=document.getElementById("fabDra");
-  if(!fab)return;
-  fab.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
-  fab.setAttribute("aria-label","Acciones rápidas");
-  fab.setAttribute("aria-expanded","false");
-
-  const menu=document.createElement("div");
-  menu.id="fabDraMenu";
-  menu.className="fab-menu";
-  menu.hidden=true;
-  menu.innerHTML=`
-    <button type="button" class="fab-item" data-fab-act="reporte" style="--i:0">
-      <span class="fab-lab">Registrar reporte</span>
-      <span class="fab-ico">${ic("sheet")}</span>
-    </button>
-    <button type="button" class="fab-item" data-fab-act="formulario" style="--i:1">
-      <span class="fab-lab">Llenar formulario</span>
-      <span class="fab-ico">${ic("chat")}</span>
-    </button>
-    <div class="fab-backdrop"></div>
-  `;
-  document.body.appendChild(menu);
-
-  let open=false;
-  const toggle=(v)=>{
-    open=v===undefined?!open:v;
-    fab.classList.toggle("open",open);
-    fab.setAttribute("aria-expanded",String(open));
-    if(open){menu.hidden=false;requestAnimationFrame(()=>menu.classList.add("show"));document.body.classList.add("modal-open")}
-    else{menu.classList.remove("show");document.body.classList.remove("modal-open");setTimeout(()=>{if(!open)menu.hidden=true},300)}
-  };
-  fab.onclick=(e)=>{e.stopPropagation();toggle()};
-  menu.onclick=(e)=>{
-    const it=e.target.closest("[data-fab-act]");
-    if(it){
-      e.stopPropagation();
-      toggle(false);
-      if(it.dataset.fabAct==="reporte")openDraFormModal();
-      if(it.dataset.fabAct==="formulario"){const btn=document.getElementById("openForms");if(btn)btn.click()}
-      return;
-    }
-    if(e.target.closest(".fab-backdrop"))toggle(false);
-  };
-  document.addEventListener("keydown",(e)=>{if(e.key==="Escape"&&open){e.stopPropagation();toggle(false)}},true);
-}
-
-function openDraFormModal(){
-  const old=document.getElementById("draFormModal");
-  if(old)old.remove();
-  const modal=document.createElement("div");
-  modal.id="draFormModal";
-  modal.className="dlg";
-  modal.setAttribute("data-noswipe","1");
-  modal.innerHTML=`<div class="dlg-p" role="dialog" aria-modal="true" aria-label="Registrar reporte">
-    <div class="dfm-hdr">
-      <b>Registrar reporte</b>
-      <button type="button" class="dfm-close" data-dfm-x aria-label="Cerrar">✕</button>
-    </div>
-    <div class="dfm-body"></div>
-  </div>`;
-  document.body.appendChild(modal);
-  document.body.classList.add("modal-open");
-
-  const f=document.getElementById("fDra");
-  const body=modal.querySelector(".dfm-body");
-  if(f){f.hidden=false;body.appendChild(f)}
-
-  let pushed=false;
-  try{history.pushState({__modal:"draForm"},"");pushed=true}catch(e){}
-
-  const close=()=>{
-    modal.classList.add("out");
-    document.body.classList.remove("modal-open");
-    if(pushed){try{history.back()}catch(e){}}
-    setTimeout(()=>{
-      if(f){
-        f.hidden=true;
-        const vDra=document.getElementById("vDra");
-        if(vDra){
-          const submit=vDra.querySelector("#send")||vDra.querySelector("button[type=submit]");
-          if(submit)vDra.insertBefore(f,submit);
-          else vDra.appendChild(f);
-        }
-      }
-      modal.remove();
-    },300);
-  };
-  modal.querySelector("[data-dfm-x]").onclick=close;
-  modal.onclick=e=>{if(e.target===modal)close()};
-  const escHandler=ev=>{if(ev.key==="Escape"){ev.stopPropagation();close();document.removeEventListener("keydown",escHandler,true)}};
-  document.addEventListener("keydown",escHandler,true);
-  const popHandler=()=>{close();window.removeEventListener("popstate",popHandler)};
-  window.addEventListener("popstate",popHandler,{once:true});
-}
-
-setTimeout(()=>{if(typeof buildFabDraMenu==="function")buildFabDraMenu()},200);
 </script>
-
 <script>
-// ===== Formularios (PILOTO) =====
+// ===== Formularios (PILOTO): se guardan en este dispositivo y se exportan a PDF =====
 (()=>{
 const AL=["Carne y/o pollo","Pescado y/o mariscos","Embutidos","Arroz, pasta o frijoles","Vegetales o ensalada","Pan o tortillas","Postre","Fresco sin azúcar","Fresco con azúcar","Agua","Huevos","Lácteos"];
 const NSNR=["1. Sí","2. No","9. NS/NR"];
@@ -1600,41 +1785,40 @@ const at=(q,a)=>{const v=a[q[0]],t=q[2];let r;
 if(t==="m")r=(v||[]).map(esc).join(", ");else if(t==="g")r=q[3].map(f=>`${esc(f)}: ${esc(v?.[f]||"—")}`).join(" · ");
 else if(t==="y")r=q[3].map(f=>`${esc(f)}: ${esc(v?.[f]||"—")}`).join("<br>");else r=esc(v||"");
 if(a[q[0]+"_x"])r+=` — ${esc(a[q[0]+"_x"])}`;return r||"—"};
-function pdf(x){const a=x.ans;$("#printArea").innerHTML=`<h2>CUESTIONARIO No.1 A LA MUJER EMBARAZADA</h2><p class="sm">PROYECTO: Composición corporal de mujeres embarazadas y sus hijos en Costa Rica.</p>${S.map(s=>`<h3>${esc(s[0])}</h3><table>${s[1].map(q=>`<tr><td class="c1">${q[0]}</td><td class="c2">${esc(q[1])}</td><td>${at(q,a)}</td></tr>`).join("")}</table>`).join("")}<p class="sm">Estado: ${x.done?"Completo":"Borrador"} · ${new Date(x.ts).toLocaleString("es-CR")}</p>`;
+function pdf(x){const a=x.ans;$("#printArea").innerHTML=`<h2>CUESTIONARIO No.1 A LA MUJER EMBARAZADA</h2><p class="sm">PROYECTO: Composición corporal de mujeres embarazadas y sus hijos en Costa Rica utilizando como indicadores la antropometría, la bioimpedancia y el método de agua deuterada para la valoración del estado nutricional de los participantes.</p>${S.map(s=>`<h3>${esc(s[0])}</h3><table>${s[1].map(q=>`<tr><td class="c1">${q[0]}</td><td class="c2">${esc(q[1])}</td><td>${at(q,a)}</td></tr>`).join("")}</table>`).join("")}<p class="sm">Estado: ${x.done?"Completo":"Borrador"} · ${new Date(x.ts).toLocaleString("es-CR")}</p>`;
 const t=document.title;document.title=`Cuestionario1_${String(a.P1||"sin-IP").replace(/\W+/g,"-")}_${a.P2||""}`;window.print();setTimeout(()=>document.title=t,1500)}
 const lst=()=>{const l=ld().sort((a,b)=>b.ts-a.ts);return l.length?l.map(x=>`<div class="fl"><div><b>${esc(x.ans.P1||"Sin identificador")}</b> <span class="tag ${x.done?"st-a":"co"}">${x.done?"Completo":"Borrador"}</span><p class="mu s">Cuestionario No.1 · ${new Date(x.ts).toLocaleString("es-CR")}</p></div><div class="row"><button type="button" class="ghost" data-o="${x.id}">Abrir</button><button type="button" class="ghost" data-p="${x.id}">PDF</button><button type="button" class="ghost" data-d="${x.id}">Borrar</button></div></div>`).join(""):'<p class="mu">Todavía no hay formularios guardados.</p>'};
 document.body.insertAdjacentHTML("beforeend",'<div id="printArea"></div>');
 const vf=document.createElement("section");vf.id="vForm";vf.hidden=true;$("#vDra").after(vf);
-function menu(){vf.innerHTML=`<div class="card hero"><h2>Formularios</h2><p>Piloto: lo que llenes se guarda en este dispositivo.</p></div>
+function menu(){vf.innerHTML=`<div class="card hero"><h2>Formularios</h2><p>Piloto: lo que llenes se guarda en este dispositivo y se puede pasar a PDF.</p></div>
 <div class="card"><b>1. Elige la visita</b><div class="vpick">${G.map((g,i)=>`<button type="button" class="ghost${fv===i?" on":""}" data-v="${i}"${i?" disabled":""}>${esc(g[0])}${i?" · pronto":""}</button>`).join("")}</div></div>
-${fv===0?`<div class="card"><b>2. Elige el formulario</b><button type="button" class="btn" id="fNew" style="margin-top:10px">Cuestionario No.1 · Mujer embarazada</button></div>`:""}
+${fv===0?`<div class="card"><b>2. Elige el formulario</b><button type="button" class="btn" id="fNew" style="margin-top:10px">Cuestionario No.1 · Mujer embarazada</button>${G[0][1].slice(1).map(n=>`<p class="mu">${esc(n)} · próximamente</p>`).join("")}</div>`:""}
 <div class="card"><b>Guardados en este dispositivo</b>${lst()}</div>`}
-function fill(){const a=cur.ans;vf.innerHTML=`<div class="card hero"><h2>Cuestionario No.1</h2><p>A la mujer embarazada · se guarda mientras escribes</p></div>
+function fill(){const a=cur.ans;vf.innerHTML=`<div class="card hero"><h2>Cuestionario No.1</h2><p>A la mujer embarazada · 1ª visita · se guarda solo mientras escribes</p></div>
 <div class="card"><div class="row"><b id="fp"></b><span class="sp"></span><span class="tag co">Piloto</span></div><div class="bar"><i id="fbar" style="width:0"></i></div></div>
 <div id="fBody">${S.map((s,i)=>`<details class="card grp"${i===0?" open":""}><summary><b>${esc(s[0])}</b><span class="gc" id="fc${i}">0/0</span><span class="sp"></span><span class="chev">${ic("chev")}</span></summary><div class="gb">${s[1].map(q=>`<div class="q" data-q="${q[0]}"><label class="f">${q[0]} · ${esc(q[1])}${q[5]?" (opcional)":""}</label>${ctl(q,a)}</div>`).join("")}</div></details>`).join("")}</div>
 <div class="row" style="gap:8px"><button type="button" class="ghost" id="fBack">‹ Volver</button><span class="sp"></span><button type="button" class="ghost" id="fPdf">PDF</button><button type="button" class="btn" id="fEnd" style="width:auto;padding:12px 20px">Finalizar</button></div>`;prog()}
 function fin(){const a=prog(),miss=Q.filter(q=>!ok(q,a));document.querySelectorAll(".q.miss").forEach(e=>e.classList.remove("miss"));
 if(miss.length){miss.forEach(q=>vf.querySelector(`[data-q="${q[0]}"]`).classList.add("miss"));const f=vf.querySelector(`[data-q="${miss[0][0]}"]`);f.closest("details").open=true;f.scrollIntoView({behavior:"smooth",block:"center"});save(a,false);return toast(`Faltan ${miss.length} preguntas por responder`,"err")}
-save(a,true);toast("Formulario completo ✓ Guardado")}
+save(a,true);toast("Formulario completo ✓ Guardado en este dispositivo")}
 vf.onclick=e=>{const t=e.target.closest("button");if(!t)return;
 if(t.dataset.v!=null){fv=+t.dataset.v;menu()}
 else if(t.id==="fNew"){cur={id:"F"+Date.now(),done:false,ts:Date.now(),ans:{P2:new Date().toISOString().slice(0,10)}};save(cur.ans);fill()}
 else if(t.dataset.o){cur=ld().find(x=>x.id===t.dataset.o);fill()}
 else if(t.dataset.p)pdf(ld().find(x=>x.id===t.dataset.p));
-else if(t.dataset.d){if(confirm("¿Borrar este formulario?")){sv(ld().filter(x=>x.id!==t.dataset.d));menu()}}
+else if(t.dataset.d){if(confirm("¿Borrar este formulario de este dispositivo?")){sv(ld().filter(x=>x.id!==t.dataset.d));menu()}}
 else if(t.id==="fBack"){save(prog());cur=null;menu()}
 else if(t.id==="fPdf"){save(prog());pdf(cur)}
 else if(t.id==="fEnd")fin()};
 const auto=ev=>{if(!cur||!ev.target.closest("#fBody"))return;const a=prog();clearTimeout(tm);tm=setTimeout(()=>save(a),600)};
 vf.addEventListener("input",auto);vf.addEventListener("change",auto);
-$("#vDra .hero").insertAdjacentHTML("afterend",`<button type="button" class="card fcard" id="openForms"><div><b>Llenar formulario</b> <span class="tag co">Piloto</span><p class="mu">Elige la visita y llena el cuestionario en pantalla.</p></div><span class="sp"></span><span class="chev" style="transform:rotate(-90deg)">${ic("chev")}</span></button>`);
+$("#vDra .hero").insertAdjacentHTML("afterend",`<button type="button" class="card fcard" id="openForms"><div><b>Llenar formulario</b> <span class="tag co">Piloto</span><p class="mu">Elige la visita y llena el cuestionario en pantalla. Guarda borradores y genera el PDF.</p></div><span class="sp"></span><span class="chev" style="transform:rotate(-90deg)">${ic("chev")}</span></button>`);
 $("#openForms").onclick=()=>{$("#vDra").hidden=true;vf.hidden=false;cur=null;menu();scrollTo({top:0,behavior:"smooth"})};
 document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click",()=>{vf.hidden=true}));
 })();
 </script>
-
 <script>
-// ===== Ajustes por secciones + Retroalimentación + Gesto de deslizar =====
+// ===== Ajustes por secciones + Retroalimentación corregida + Gesto de deslizar =====
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
 const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
@@ -1642,16 +1826,20 @@ const back='<button type="button" class="ghost sback">‹ Volver a Ajustes</butt
 vs.innerHTML=`<div id="setHub">
 <div class="card hero"><h2>Ajustes</h2><p id="meTxt"></p></div>
 <div class="set-grid">
-  <div class="set-col"><div class="slab">Cuenta y seguridad</div>
+  <div class="set-col">
+    <div class="slab">Cuenta y seguridad</div>
     <div class="card sgrp">${row("pass","lock","Contraseña","Cambia tu contraseña de acceso")}${row("user","user","Nombre de usuario","Cambia el usuario con el que ingresas")}</div>
   </div>
-  <div class="set-col"><div class="slab">Preferencias</div>
-    <div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos")}${row("theme","palette","Apariencia","Modo día o noche y temas")}</div>
+  <div class="set-col">
+    <div class="slab">Preferencias</div>
+    <div class="card sgrp">${row("notif","bell","Notificaciones","Correo, calendario y avisos del dispositivo")}${row("theme","palette","Apariencia","Modo día o noche y temas de color")}</div>
   </div>
-  <div class="set-col"><div class="slab">Soporte</div>
-    <div class="card sgrp">${row("feed","chat","Retroalimentación","Envíanos tu opinión o reporta un error")}</div>
+  <div class="set-col">
+    <div class="slab">Soporte y mejora</div>
+    <div class="card sgrp">${row("feed","chat","Retroalimentación o reporte de error","Envíanos tu opinión o cuéntanos qué falla")}</div>
   </div>
-  <div class="set-col"><div class="slab">Aplicación y sesión</div>
+  <div class="set-col">
+    <div class="slab">Aplicación y sesión</div>
     <div class="card sgrp" id="setApp"></div>
   </div>
 </div>
@@ -1662,13 +1850,13 @@ vs.innerHTML=`<div id="setHub">
 <input type="password" id="pw1" placeholder="Nueva contraseña" autocomplete="new-password" style="margin-top:8px">
 <input type="password" id="pw2" placeholder="Repite la nueva" autocomplete="new-password" style="margin-top:8px">
 <button type="button" class="btn" id="pwBtn" style="margin-top:12px">Guardar contraseña</button>
-<p class="mu s">Los cambios de contraseña quedan registrados.</p></div></div>
+<p class="mu s">Los cambios de contraseña quedan registrados para el administrador.</p></div></div>
 <div class="spg" id="pg-user" hidden>${back}
 <div class="card"><b>Nombre de usuario</b><p class="mu">Escribe el nuevo usuario y confirma con tu contraseña.</p>
 <input type="text" id="nu1" placeholder="Nuevo usuario (ej. nombre.rol)" autocapitalize="none" style="margin-top:12px">
 <input type="password" id="nu2" placeholder="Tu contraseña, para confirmar" autocomplete="current-password" style="margin-top:12px">
 <button type="button" class="btn" id="nuBtn" style="margin-top:12px">Cambiar usuario</button>
-<p class="mu s">Los cambios de usuario quedan registrados.</p></div></div>
+<p class="mu s">Los cambios de usuario quedan registrados para el administrador.</p></div></div>
 <div class="spg" id="pg-feed" hidden>${back}
 <div class="card"><div class="fbhead"><div class="fbico">${ic("chat")}</div><h3>Opiniones y sugerencias</h3><p class="mu">Ayúdanos a mejorar nexo. Cuéntanos qué te gusta, qué falla o qué te gustaría ver en la app.</p></div>
 <div class="tabs2" id="fbType" style="margin:14px 0 0"><button type="button" data-ft="sug" class="on">Sugerencia</button><button type="button" data-ft="bug">Reportar un error</button></div>
@@ -1677,7 +1865,11 @@ vs.innerHTML=`<div id="setHub">
 <label class="f" style="margin-top:12px">Medio de contacto <small class="mu">(opcional)</small></label>
 <input type="text" id="fbContact" placeholder="WhatsApp, correo, Instagram…" autocapitalize="none">
 <button type="button" class="btn" id="fbSend" style="margin-top:14px">Enviar sugerencia</button>
-<p class="mu s" style="text-align:center">Se envía directo al equipo.</p></div></div>
+<div class="row" style="margin-top:10px;justify-content:center;gap:8px">
+  <a class="ghost" id="fbGmail" href="#" target="_blank" rel="noopener">Abrir en Gmail Web</a>
+  <button type="button" class="ghost" id="fbMailApp">Abrir app de Correo</button>
+</div>
+<p class="mu s" style="text-align:center">Se envía directo al equipo o mediante tu aplicación de correo preferida.</p></div></div>
 <div class="spg" id="pg-notif" hidden>${back}</div>
 <div class="spg" id="pg-theme" hidden>${back}<div class="card" id="modeCard"><b>Modo</b><p class="mu">Elige cómo se ve la app: automático, de día o de noche.</p></div></div>`;
 $("#pg-notif").append($("#cfg"));
@@ -1688,6 +1880,7 @@ mk($("#bInst"),"down","Instalar app","Agrégala a tu pantalla de inicio");
 mk($("#bOut"),"out","Cerrar sesión","Salir de tu cuenta","danger");
 $("#bCfg")?.remove();$("#bSwitch")?.remove();
 $("#bTheme").style.display="none";$("#bMenu").style.display="none";
+
 const pages=["pass","user","notif","theme","feed"];
 const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
 function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p!==id);
@@ -1705,21 +1898,31 @@ $("#bBell").onclick=()=>openSet("notif");
 {const r=render;render=function(){if(!vs.hidden)return;return r.apply(this,arguments)};const a=applyDraTab;applyDraTab=function(){if(!vs.hidden)return;return a.apply(this,arguments)}}
 
 let fbT="sug";
+function buildFbMail(){
+  const t=$("#fbText").value.trim(),c=$("#fbContact").value.trim(),bug=fbT==="bug",
+  subj=bug?"[nexo] Reporte de error":"[nexo] Sugerencia",
+  body=(t||"(Escribe aquí tu mensaje)")+"\n\n"+(c?"Contacto: "+c+"\n":"")+"—\nUsuario: "+(ME?ME.user+" ("+(role==="dra"?"investigadora":"asistente")+")":"-")+"\nPantalla: "+innerWidth+"x"+innerHeight+"\nFecha: "+new Date().toLocaleString("es-CR");
+  return {t,c,subj,body,mailto:"mailto:leo1403b.v@gmail.com?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body),gmail:"https://mail.google.com/mail/?view=cm&fs=1&to=leo1403b.v@gmail.com&su="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body)};
+}
 $("#fbType").onclick=e=>{const t=e.target.closest("[data-ft]");if(!t)return;fbT=t.dataset.ft;document.querySelectorAll("#fbType button").forEach(b=>b.classList.toggle("on",b===t));$("#fbSend").textContent=fbT==="bug"?"Enviar reporte":"Enviar sugerencia";$("#fbText").placeholder=fbT==="bug"?"Describe qué pasó, en qué pantalla y qué esperabas que ocurriera…":"Escribe tu comentario aquí…"};
+$("#fbGmail").onclick=e=>{const m=buildFbMail();if(!m.t){e.preventDefault();return toast("Escribe tu comentario primero","err")}$("#fbGmail").href=m.gmail};
+$("#fbMailApp").onclick=()=>{const m=buildFbMail();if(!m.t)return toast("Escribe tu comentario primero","err");window.location.href=m.mailto};
 $("#fbSend").onclick=async()=>{
-  const t=$("#fbText").value.trim(),c=$("#fbContact").value.trim();
-  if(!t)return toast("Escribe tu comentario","err");
+  const m=buildFbMail();if(!m.t)return toast("Escribe tu comentario","err");
   const b=$("#fbSend");b.disabled=true;b.textContent="Enviando…";
-  const ok=await post({action:"feedback",tipo:fbT,texto:t,contacto:c,meta:innerWidth+"x"+innerHeight});
+  // 1) Intenta enviarlo directo desde el servidor de Apps Script (no depende de tener app de correo configurada)
+  const ok=await post({action:"feedback",tipo:fbT,texto:m.t,contacto:m.c,meta:innerWidth+"x"+innerHeight});
   b.disabled=false;b.textContent=fbT==="bug"?"Enviar reporte":"Enviar sugerencia";
-  if(ok){$("#fbText").value="";$("#fbContact").value="";toast("¡Gracias! Tu mensaje fue enviado")}
-  else{
-    const subj=fbT==="bug"?"[nexo] Reporte de error":"[nexo] Sugerencia";
-    const body=t+"\n\n"+(c?"Contacto: "+c+"\n":"")+"—\nUsuario: "+(ME?ME.user:"-");
+  if(ok){
+    $("#fbText").value="";$("#fbContact").value="";
+    toast("¡Gracias! Tu mensaje fue enviado directamente");
+  }else{
+    // 2) Respaldo inmediato: redirige con window.location.href al cliente de correo
     toast("Abriendo tu aplicación de correo…");
-    window.location.href="mailto:leo1403b.v@gmail.com?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+    window.location.href=m.mailto;
   }
 };
+
 $("#pwBtn").onclick=async()=>{const a=$("#pw0").value,b=$("#pw1").value;
 if(b!==$("#pw2").value)return toast("Las contraseñas nuevas no coinciden","err");
 if(b.length<10||!/[A-Za-z]/.test(b)||!/[0-9]/.test(b))return toast("Mínimo 10 caracteres, con letras y números","err");
@@ -1732,10 +1935,10 @@ if(d?.ok){ME={...ME,user:d.user};localStorage.setItem("ms_me",JSON.stringify(ME)
 $("#fabNew").onclick=()=>{const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0};
 {const nv=$("#nav"),nvd=$("#navDra"),set=()=>{const h=(nv&&!nv.hidden?nv.offsetHeight:nvd&&!nvd.hidden?nvd.offsetHeight:62);document.documentElement.style.setProperty("--navH",h+"px")};if(window.ResizeObserver){const ro=new ResizeObserver(set);if(nv)ro.observe(nv);if(nvd)ro.observe(nvd)}set()}
 
-// Deslizar entre pestañas
+// ===== Deslizar entre pestañas (izquierda/derecha) =====
 {let sx=0,sy=0,st=0,on=false;
-const blocked=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){if(e.matches&&e.matches("input,textarea,select,[contenteditable],[data-noswipe],#alertForm,.dlg,#toast,.fab-menu"))return true;const o=getComputedStyle(e).overflowX;if((o==="auto"||o==="scroll")&&e.scrollWidth>e.clientWidth+2)return true}return false};
-const free=()=>{const vf=document.getElementById("vForm");return (vs.hidden||!$("#setHub").hidden)&&$("#alertForm").hidden&&!$(".dlg")&&!document.querySelector(".fab-menu.show")&&$("#app")&&!$("#app").hidden&&(!vf||vf.hidden)};
+const blocked=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){if(e.matches&&e.matches("input,textarea,select,[contenteditable],[data-noswipe],#alertForm,.dlg,#toast"))return true;const o=getComputedStyle(e).overflowX;if((o==="auto"||o==="scroll")&&e.scrollWidth>e.clientWidth+2)return true}return false};
+const free=()=>{const vf=document.getElementById("vForm");return (vs.hidden||!$("#setHub").hidden)&&$("#alertForm").hidden&&!$(".dlg")&&$("#app")&&!$("#app").hidden&&(!vf||vf.hidden)};
 addEventListener("touchstart",e=>{on=false;if(e.touches.length!==1||!free()||blocked(e.target))return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();on=true},{passive:true});
 addEventListener("touchend",e=>{if(!on)return;on=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
 if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.5||Date.now()-st>700||!free())return;
@@ -1743,7 +1946,7 @@ const L=role==="dra"?["alertas","visitas","avance","historial","ajustes"]:["aler
 if(i<0||n<0||n>=L.length)return;
 const g=L[n],b=document.querySelector(g==="ajustes"?(role==="dra"?"#navDra [data-act=settings]":"#nav [data-act=settings]"):role==="dra"?`#navDra [data-dratab="${g}"]`:`#nav [data-tab="${g}"]`);if(b)b.click()},{passive:true})}
 
-// Arranca la sesión al final
+// Arranca la sesión al final, cuando todos los módulos (Formularios y Ajustes) ya están listos
 syncRole();
 if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 })();
