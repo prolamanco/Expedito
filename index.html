@@ -1820,8 +1820,9 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click"
 <script>
 <!-- ... existing code ... -->
 </script>
+<!-- ... existing code ... -->
 <script>
-// ===== Ajustes por secciones + Gestión de Usuarios + Retroalimentación + Gesto de deslizar =====
+// ===== Ajustes por secciones + Gestión de Usuarios (Dra.) + Correo de Invitación =====
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
 const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
@@ -1867,6 +1868,7 @@ vs.innerHTML=`<div id="setHub">
   <div id="uCreateBox" class="card" hidden style="margin:12px 0 0;background:var(--soft);padding:14px">
     <b style="font-size:14px">Crear nuevo usuario</b>
     <input type="text" id="cuName" placeholder="Nombre visible (ej. María)" style="margin-top:8px">
+    <input type="text" id="cuEmail" inputmode="email" placeholder="Correo electrónico (donde recibirá la contraseña)" autocapitalize="none" style="margin-top:8px">
     <input type="text" id="cuUser" placeholder="Usuario para ingresar (se generará automáticamente)" autocapitalize="none" style="margin-top:8px">
     <select id="cuRole" style="margin-top:8px"><option value="asistente">Rol: Asistente</option><option value="investigadora">Rol: Investigadora (Jefa)</option></select>
     <div class="row" style="margin-top:8px;flex-wrap:nowrap">
@@ -1965,13 +1967,15 @@ $("#uNewBtn").onclick=()=>{
 $("#cuCancel").onclick=()=>{$("#uCreateBox").hidden=true};
 $("#cuSave").onclick=async()=>{
   const name=$("#cuName").value.trim(),newUser=$("#cuUser").value.trim().toLowerCase(),roleVal=$("#cuRole").value,pass=$("#cuPass").value.trim(),mustChange=$("#cuMust").checked;
+  const email=$("#cuEmail").value.trim().toLowerCase();
   if(!name||!newUser||!pass)return toast("Completa nombre, usuario y contraseña","err");
+  if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Si indicas un correo, asegúrate de que sea válido","err");
   const b=$("#cuSave");b.disabled=true;b.textContent="Creando…";
-  const d=await api({action:"adminUsers",op:"create",name,newUser,role:roleVal,pass,mustChange});
+  const d=await api({action:"adminUsers",op:"create",name,newUser,email,role:roleVal,pass,mustChange});
   b.disabled=false;b.textContent="Crear cuenta";
   if(d&&d.ok){
     toast("Usuario "+newUser+" creado");
-    $("#cuName").value=$("#cuUser").value=$("#cuPass").value="";$("#uCreateBox").hidden=true;
+    $("#cuName").value=$("#cuEmail").value=$("#cuUser").value=$("#cuPass").value="";$("#uCreateBox").hidden=true;
     loadTeamUsers();
   }else toast(d?.error||"No se pudo crear","err");
 };
@@ -2079,3 +2083,4 @@ if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 </script>
 </body>
 </html>
+```eof
