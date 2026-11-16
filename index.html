@@ -150,7 +150,7 @@ nav button.fab.on{background:none}nav button.fab.on::after{display:none}
 #printArea table{width:100%;border-collapse:collapse}#printArea td{border:1px solid #999;padding:3px 5px;vertical-align:top}#printArea .c1{width:34px;font-weight:700}#printArea .c2{width:38%}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-.alert-form{display:grid;gap:12px}.alert-form textarea{min-height:82px}.alert-card{border-left:5px solid var(--co)}.alert-card.done{border-left:6px solid #2e9e5b;background:color-mix(in srgb,#2e9e5b 12%,var(--card))}.fabplus{font-size:23px!important;font-weight:800!important;background:var(--pr)!important;color:white!important;min-width:48px;max-width:54px;flex:1.1!important}
+.alert-form{display:grid;gap:12px}.alert-form textarea{min-height:82px}.alert-card{border-left:5px solid var(--co)!important}.alert-card.done{border-left:6px solid #2e9e5b!important;background:color-mix(in srgb,#2e9e5b 15%,var(--card))!important}.fabplus{font-size:23px!important;font-weight:800!important;background:var(--pr)!important;color:white!important;min-width:48px;max-width:54px;flex:1.1!important}
 #cfg{position:relative}.settings-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}.settings-section{border-top:1px solid var(--bd);padding-top:12px;margin-top:12px}
 .form-select{display:grid;gap:6px}.form-select select{padding:13px 14px;border-radius:14px}
 nav button{min-height:58px}nav button.on{box-shadow:0 2px 8px color-mix(in srgb,var(--pr) 7%,transparent)}
@@ -915,10 +915,30 @@ const d=new Date(),z=n=>String(n).padStart(2,"0");
 const rec={action:"add",id:"REG-"+Date.now(),timestamp:`${z(d.getDate())}/${z(d.getMonth()+1)}/${d.getFullYear()} ${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`,
 expediente:$("#exp").value.trim().toUpperCase(),esNuevo:$("#nuevo").checked,estadoParticipante:est,fechaVisita:act?$("#fecha").value:"",horaVisita:act&&$("#fecha").value?$("#hora").value:"",completos:!act||document.querySelector("[name=comp]:checked").value==="SÍ",formularios:fm,notas:$("#notas").value.trim(),estado:"Pendiente",usuario:"Dra",fechaLlegada:$("#llegada").value,calendar:cal,calEmail:cm};
 const b=$("#send");b.disabled=true;b.textContent="Enviando…";
-await post(rec);await load();
-const ok=DB.some(r=>r.id===rec.id);
-toast(ok?"✓ Reporte enviado y confirmado en la hoja":"No se pudo confirmar el envío. Revisa la conexión e inténtalo de nuevo",ok?"":"err");
-if(ok){$("#fDra").reset();$("#forms").hidden=false;$("#exp").focus()}b.disabled=false;b.textContent="Enviar reporte"};
+        await post(rec);await load();
+        const ok=DB.some(r=>r.id===rec.id);
+        
+        // --- INYECTAR EN AVANCES SI ES NUEVO ---
+        if(ok){
+           const mMatch = /^CRM[-\s]?0*(\d{1,3})$/i.exec(ex);
+           if(mMatch){
+             const p2 = pad2(parseInt(mMatch[1], 10));
+             const delK = "DEL|N|"+p2;
+             if(isDel(delK)) avDelPut(delK,"0"); // Restaura si estaba borrado
+             
+             // Agrega las filas vacías a AVD para que la tabla las dibuje
+             AVD["BD|CRM"+p2] = {v: avV(AVS.bd,"CRM"+p2), n: ""};
+             AVD["RM|CR-M-"+p2] = {v: avV(AVS.rm,"CR-M-"+p2), n: ""};
+             avPut(AVS.bd, "CRM"+p2, AVD["BD|CRM"+p2].v, "");
+             avPut(AVS.rm, "CR-M-"+p2, AVD["RM|CR-M-"+p2].v, "");
+             
+             sig="force"; if(typeof renderAvDra==="function") renderAvDra(1);
+           }
+        }
+        // ----------------------------------------
+        
+        toast(ok?"✓ Registro enviado y confirmado en la hoja":"No se pudo confirmar el envío. Revisa la conexión e inténtalo de nuevo",ok?"":"err");
+        if(ok){$("#fDra").reset();$("#forms").hidden=false;$("#exp").focus()}b.disabled=false;b.textContent="Enviar registro"};
 
 function chk(r){return r.completos?"":'<p class="mu s"><span class="tag co">⚠ Formularios incompletos</span></p>'}
 function trk(r,edit){if(!/^(Pendiente|Completado)$/.test(r.estado))return"";return[["bd","Base de datos"],["rc","RedCap"]].map(([k,nm])=>{const e=r[k+"E"],p=r[k+"R"];return edit?`<div class="trk"><b>${nm}</b><select data-a="s" data-k="${k}" data-id="${esc(r.id)}">${["Sin iniciar","En proceso","Finalizado"].map(o=>`<option${o===e?" selected":""}>${o}</option>`).join("")}</select><input type="text" placeholder="¿Quién lo hace?" value="${esc(p)}" data-a="w" data-k="${k}" data-id="${esc(r.id)}"></div>`:`<p class="mu s">${nm}: <b>${e}</b>${p?" · "+esc(p):""}</p>`}).join("")}
