@@ -150,7 +150,7 @@ nav button.fab.on{background:none}nav button.fab.on::after{display:none}
 #printArea table{width:100%;border-collapse:collapse}#printArea td{border:1px solid #999;padding:3px 5px;vertical-align:top}#printArea .c1{width:34px;font-weight:700}#printArea .c2{width:38%}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-.alert-form{display:grid;gap:12px}.alert-form textarea{min-height:82px}.alert-card{border-left:4px solid var(--co)}.alert-card.done{border-left-color:#2e9e5b}.fabplus{font-size:23px!important;font-weight:800!important;background:var(--pr)!important;color:white!important;min-width:48px;max-width:54px;flex:1.1!important}
+.alert-form{display:grid;gap:12px}.alert-form textarea{min-height:82px}.alert-card{border-left:5px solid var(--co)}.alert-card.done{border-left:6px solid #2e9e5b;background:color-mix(in srgb,#2e9e5b 12%,var(--card))}.fabplus{font-size:23px!important;font-weight:800!important;background:var(--pr)!important;color:white!important;min-width:48px;max-width:54px;flex:1.1!important}
 #cfg{position:relative}.settings-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}.settings-section{border-top:1px solid var(--bd);padding-top:12px;margin-top:12px}
 .form-select{display:grid;gap:6px}.form-select select{padding:13px 14px;border-radius:14px}
 nav button{min-height:58px}nav button.on{box-shadow:0 2px 8px color-mix(in srgb,var(--pr) 7%,transparent)}
@@ -1201,46 +1201,92 @@ document.body.appendChild(o);if(!ro)setTimeout(()=>t.focus(),60)})}
 window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(!f||f.hidden||f.classList.contains("out"))return;f.classList.add("out");setTimeout(()=>{f.classList.remove("out");f.hidden=true},340)};function closeForm(){hideAlertForm()}
 {const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
-addEventListener("online",flushQ);
-document.addEventListener("click",async e=>{const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");if(!t)return;const ed=role==="asis",d=t.dataset;
-if(d.cs){chSend(t.closest(".chat"),d.cs);return}
-if(d.avd){avMode=d.avd;renderAvDra(1);return}
-if(d.rs){rcSub=d.rs;sig="";render();renderAvDra(1);return}
-const m=AVS[avMode==="bd"?"bd":rcSub];
-if(d.ab!==undefined){
-  // Si la Dra. toca "Se retiró" (G), o si un asistente lo toca cuando ya estaba seleccionado, abre el desglose detallado
-  if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return}
-  if(ed){AB=d.ab;sig="";render()}
-  return;
-}
-if(d.add){
-  if(!ed)return;
-  const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);
-  if(!x||x<1||x>999)return;
-  const p2=pad2(x), delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");
+  if(!t)return;
+  const ed=role==="asis",d=t.dataset;
   
-  if(isDel(delK)) avDelPut(delK,"0"); // Si estaba borrado, lo restaura
+  if(d.cs){chSend(t.closest(".chat"),d.cs);return;}
+  if(d.avd){avMode=d.avd;renderAvDra(1);return;}
+  if(d.rs){rcSub=d.rs;sig="force";render();renderAvDra(1);return;}
   
-  // Forzar un valor vacío inicial en el diccionario para que avNums lo cuente sí o sí
-  if(m.pre==="RB"){
-    AVD["RB|"+p2] = {v: avV(AVS.rb,p2), n: ""};
-    avPut(AVS.rb, p2, AVD["RB|"+p2].v, "");
-  }else{
-    AVD["BD|CRM"+p2] = {v: avV(AVS.bd,"CRM"+p2), n: ""};
-    AVD["RM|CR-M-"+p2] = {v: avV(AVS.rm,"CR-M-"+p2), n: ""};
-    avPut(AVS.bd, "CRM"+p2, AVD["BD|CRM"+p2].v, "");
-    avPut(AVS.rm, "CR-M-"+p2, AVD["RM|CR-M-"+p2].v, "");
+  const m=AVS[avMode==="bd"?"bd":rcSub];
+  if(d.ab!==undefined){
+    if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return;}
+    if(ed){AB=d.ab;sig="force";render();}
+    return;
   }
   
-  sig=""; render(); 
-  toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado para todos");
-  return;
-}
-if(d.restore){if(!ed)return;const L=delList(m);if(!L.length)return;const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');if(!r)return;avDelPut(r,"0");sig="";render();toast("Expediente restaurado para todos");return}
-const tr=t.closest("tr");if(!tr)return;const id=tr.firstChild.dataset.an;
-if(d.an!==undefined&&ed&&AB==="DEL"){const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;const ok=await confirmDlg("¿Eliminar "+id+" para todos?",m.pre==="RB"?"Se quitará de la tabla RedCap · Bebés en todos los usuarios. Podrás restaurarlo con el botón Restaurar.":"Se quitará de Base de datos y de RedCap · Madres en todos los usuarios. Podrás restaurarlo con el botón Restaurar.","Eliminar");AB="V";if(ok){avDelPut(k,"1");toast("Expediente "+id+" eliminado para todos")}sig="";render();return}
-if(d.an!==undefined){if(!m.notes)return;const raw=(avRec(m,id)||{}).n||"",cur=raw==="[ELIMINADO]"?"":raw;if(!ed){await ask("Observaciones de "+id,cur||"Sin observaciones",1);return}const n=await ask("Observaciones de "+id,cur,0,"Escribe una observación…");if(n===null)return;avPut(m,id,avV(m,id),n.trim().slice(0,300));sig="";render();return}
-if(ed&&AB==="DEL")return;if(ed){const v=avV(m,id);v[+d.ac]=AB==="-"?"":AB;avPut(m,id,v,null);sig="";render()}});
+  // LOGICA PARA AGREGAR EXPEDIENTE NUEVO
+  if(d.add){
+    if(!ed)return;
+    const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);
+    if(!x||x<1||x>999)return;
+    const p2=pad2(x), delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;
+    
+    if(isDel(delK)) avDelPut(delK,"0"); // Restaura si estaba eliminado
+    
+    if(m.pre==="RB"){
+      AVD["RB|"+p2] = {v: avV(AVS.rb,p2), n: ""};
+      avPut(AVS.rb, p2, AVD["RB|"+p2].v, "");
+    }else{
+      AVD["BD|CRM"+p2] = {v: avV(AVS.bd,"CRM"+p2), n: ""};
+      AVD["RM|CR-M-"+p2] = {v: avV(AVS.rm,"CR-M-"+p2), n: ""};
+      avPut(AVS.bd, "CRM"+p2, AVD["BD|CRM"+p2].v, "");
+      avPut(AVS.rm, "CR-M-"+p2, AVD["RM|CR-M-"+p2].v, "");
+    }
+    
+    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+    toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado");
+    return;
+  }
+  
+  // LOGICA PARA RESTAURAR ELIMINADOS
+  if(d.restore){
+    if(!ed)return;
+    const L=delList(m);if(!L.length)return;
+    const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');
+    if(!r)return;
+    avDelPut(r,"0");
+    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+    toast("Expediente restaurado");
+    return;
+  }
+  
+  const tr=t.closest("tr");if(!tr)return;const id=tr.firstChild.dataset.an;
+  
+  // LOGICA PARA ELIMINAR EXPEDIENTE
+  if(d.an!==undefined&&ed&&AB==="DEL"){
+    const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;
+    const ok=await confirmDlg("¿Eliminar "+id+" para todos?",m.pre==="RB"?"Se quitará de la tabla RedCap · Bebés en todos los usuarios.":"Se quitará de Base de datos y de RedCap · Madres en todos los usuarios.","Eliminar");
+    AB="V";
+    if(ok){
+      avDelPut(k,"1");
+      toast("Expediente "+id+" eliminado");
+    }
+    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+    return;
+  }
+  
+  if(d.an!==undefined){
+    if(!m.notes)return;
+    const raw=(avRec(m,id)||{}).n||"",cur=raw==="[ELIMINADO]"?"":raw;
+    if(!ed){await ask("Observaciones de "+id,cur||"Sin observaciones",1);return;}
+    const n=await ask("Observaciones de "+id,cur,0,"Escribe una observación…");
+    if(n===null)return;
+    avPut(m,id,avV(m,id),n.trim().slice(0,300));
+    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+    return;
+  }
+  
+  if(ed&&AB==="DEL")return;
+  if(ed){
+    const v=avV(m,id);
+    v[+d.ac]=AB==="-"?"":AB;
+    avPut(m,id,v,null);
+    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+  }
+});
 
 // ---- Movimiento estilo iOS y estabilidad en la primera carga ----
 {const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;let lastT=null,lastN=0,busy=false;
@@ -1754,7 +1800,7 @@ function render(){
   if(HD){$("#aH").textContent=HD[0];$("#aP").textContent=HD[1]}
   $("#vAsis").hidden=tab==="nueva";
   $("#avTabs").hidden=tab!=="avance";
-  $("#stats").hidden=(tab==="avance"||tab==="visitas");
+  $("#stats").hidden=(tab!=="alertas");
   $("#hsTabs").hidden=tab!=="historial";
   {const ha=tab==="historial"&&hsMode==="al";$("#list").hidden=ha;$("#asAlerts").hidden=!ha;$("#alT").hidden=$("#alertsList").hidden=tab==="nueva";if(tab==="historial")renderAlerts()}
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
@@ -2173,3 +2219,4 @@ if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 </script>
 </body>
 </html>
+```eof
