@@ -1475,8 +1475,8 @@ function openVisitDetailSheet(id,kind="visita"){
     <div id="evEditBox" hidden class="card" style="margin:0;padding:12px;background:var(--soft)">
       <label class="f">Reprogramar fecha y hora</label>
       <div class="row" style="flex-wrap:nowrap;margin-bottom:8px">
-        <input type="date" id="evNewDate" value="${esc(r.fechaVisita||fStr)}" style="flex:2">
-        <input type="time" id="evNewTime" value="${esc(r.horaVisita||"")}" style="flex:1">
+        <input type="date" id="evNewDate" value="${esc(fStr)}" style="flex:2">
+        <input type="time" id="evNewTime" value="${esc(hStr)}" style="flex:1">
       </div>
       <input type="text" id="evNewNote" placeholder="Nota de la visita (opcional)" value="${esc(r.notas||"")}" style="margin-bottom:8px">
       <button type="button" class="btn" id="evSaveBtn" style="padding:11px">Guardar cambios</button>
@@ -1497,23 +1497,36 @@ function openVisitDetailSheet(id,kind="visita"){
       const nf=o.querySelector("#evNewDate").value,nh=o.querySelector("#evNewTime").value,nn=o.querySelector("#evNewNote").value.trim();
       if(!nf)return toast("Selecciona una fecha","err");
       const btn=o.querySelector("#evSaveBtn");btn.disabled=true;btn.textContent="Guardando…";
-      // Actualiza correctamente según sea fechaLlegada o fechaVisita
-      if(kind==="llegada"){r.fechaLlegada=nf;r.notas=nn;}else{r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn;}
+      
+      let updObj = {notas:nn};
+      if(kind==="llegada"){r.fechaLlegada=nf;r.notas=nn; updObj.fechaLlegada=nf;}
+      else{r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn; updObj.fechaVisita=nf;updObj.horaVisita=nh;}
+      
       calSel=nf;
-      const updObj=kind==="llegada"?{fechaLlegada:nf,notas:nn}:{fechaVisita:nf,horaVisita:nh,notas:nn};
       const ok=await post({action:"updateStatus",id:r.id,...updObj});
-      toast(ok?"Visita reprogramada":"Error al guardar",ok?"":"err");
-      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra();return;
+      toast(ok?"Fecha reprogramada":"Error al guardar",ok?"":"err");
+      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra(1);
+      
+      // Actualización silenciosa sin parpadeo
+      const cell = document.querySelector(`.cal-cell[data-cdate="${calSel}"]`);
+      if(cell) cell.click();
+      return;
     }
     if(e.target.closest("#evBtnDel")){
       const okC=await confirmDlg("¿Quitar esta visita del calendario?","El expediente "+r.expediente+" seguirá registrado pero ya no tendrá esta fecha asignada.","Quitar fecha");
       if(!okC)return;
-      // Elimina la fecha correspondiente
-      if(kind==="llegada"){r.fechaLlegada="";}else{r.fechaVisita="";r.horaVisita="";}
-      const updObj=kind==="llegada"?{fechaLlegada:""}:{fechaVisita:"",horaVisita:""};
+      
+      let updObj = {};
+      if(kind==="llegada"){r.fechaLlegada=""; updObj.fechaLlegada="";}
+      else{r.fechaVisita="";r.horaVisita=""; updObj.fechaVisita="";updObj.horaVisita="";}
+      
       const ok=await post({action:"updateStatus",id:r.id,...updObj});
       toast(ok?"Fecha quitada del calendario":"Error de conexión",ok?"":"err");
-      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra();
+      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra(1);
+      
+      // Actualización silenciosa sin parpadeo
+      const cell = document.querySelector(`.cal-cell[data-cdate="${calSel}"]`);
+      if(cell) cell.click();
     }
   };
   document.body.appendChild(o);
