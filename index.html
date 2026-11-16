@@ -1448,7 +1448,7 @@ function openDayPopup(iso){
   };
 }
 
-// Hoja de detalle de una visita (con barra inferior Editar, Calendario, Compartir, Quitar como el video 00:04)
+// Hoja de detalle de una visita (con barra inferior Editar, Calendario, Compartir, Quitar)
 function openVisitDetailSheet(id,kind="visita"){
   const r=DB.find(x=>x.id===id);if(!r)return;
   const fStr=kind==="llegada"?r.fechaLlegada:r.fechaVisita;
@@ -1497,18 +1497,23 @@ function openVisitDetailSheet(id,kind="visita"){
       const nf=o.querySelector("#evNewDate").value,nh=o.querySelector("#evNewTime").value,nn=o.querySelector("#evNewNote").value.trim();
       if(!nf)return toast("Selecciona una fecha","err");
       const btn=o.querySelector("#evSaveBtn");btn.disabled=true;btn.textContent="Guardando…";
-      r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn;calSel=nf;
-      const ok=await post({action:"updateStatus",id:r.id,fechaVisita:nf,horaVisita:nh,notas:nn});
+      // Actualiza correctamente según sea fechaLlegada o fechaVisita
+      if(kind==="llegada"){r.fechaLlegada=nf;r.notas=nn;}else{r.fechaVisita=nf;r.horaVisita=nh;r.notas=nn;}
+      calSel=nf;
+      const updObj=kind==="llegada"?{fechaLlegada:nf,notas:nn}:{fechaVisita:nf,horaVisita:nh,notas:nn};
+      const ok=await post({action:"updateStatus",id:r.id,...updObj});
       toast(ok?"Visita reprogramada":"Error al guardar",ok?"":"err");
-      close();sig="";render();renderCalDra();return;
+      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra();return;
     }
     if(e.target.closest("#evBtnDel")){
-      const okC=await confirmDlg("¿Quitar esta visita del calendario?","El expediente "+r.expediente+" seguirá registrado pero ya no tendrá esta fecha de visita asignada.","Quitar fecha");
+      const okC=await confirmDlg("¿Quitar esta visita del calendario?","El expediente "+r.expediente+" seguirá registrado pero ya no tendrá esta fecha asignada.","Quitar fecha");
       if(!okC)return;
-      r.fechaVisita="";r.horaVisita="";
-      const ok=await post({action:"updateStatus",id:r.id,fechaVisita:"",horaVisita:""});
+      // Elimina la fecha correspondiente
+      if(kind==="llegada"){r.fechaLlegada="";}else{r.fechaVisita="";r.horaVisita="";}
+      const updObj=kind==="llegada"?{fechaLlegada:""}:{fechaVisita:"",horaVisita:""};
+      const ok=await post({action:"updateStatus",id:r.id,...updObj});
       toast(ok?"Fecha quitada del calendario":"Error de conexión",ok?"":"err");
-      close();sig="";render();renderCalDra();
+      close();sig="";render();if(typeof renderCalDra==="function")renderCalDra();
     }
   };
   document.body.appendChild(o);
@@ -2083,3 +2088,4 @@ if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 </script>
 </body>
 </html>
+```eof
