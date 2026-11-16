@@ -1638,15 +1638,64 @@ document.addEventListener("click",e=>{
     });
     return;
   }
-  const cell=e.target.closest("[data-cdate]");
+const cell=e.target.closest("[data-cdate]");
   if(cell){
     const iso=cell.dataset.cdate;
     const [y,m]=iso.split("-").map(Number);
     const sameSel=calSel===iso;
     calSel=iso;
-    if(y!==calY||m-1!==calM){calY=y;calM=m-1}
+    
+    // Si cambia de mes, sí debe recargar el calendario entero
+    if(y!==calY||m-1!==calM){
+      calY=y;calM=m-1;
+      sig="";render();if(typeof renderCalDra==="function")renderCalDra(1);
+      return;
+    }
+    
+    // Si abre la tarjeta emergente del día
     if(!calCompact||sameSel){openDayPopup(iso);return}
-    sig="";render();renderCalDra(1);return;
+    
+    // --- SOLUCIÓN DEL PARPADEO ---
+    // 1. Quitar selección anterior y marcar solo el día nuevo
+    document.querySelectorAll(".cal-cell").forEach(c => c.classList.toggle("sel", c.dataset.cdate === iso));
+    
+    // 2. Reconstruir solo el panel de las citas de abajo, sin borrar todo el calendario
+    const [sy,sm,sd] = iso.split("-").map(Number);
+    const selDt = new Date(sy,sm-1,sd);
+    const q = document.getElementById("q") ? document.getElementById("q").value.trim().toLowerCase() : "";
+    const evMap = typeof calEventsMap==="function" ? calEventsMap(q) : {};
+    const selEvs = evMap[iso] || [];
+    const splitHTML = `
+      <div class="cal-shdr">
+        <b>${sd}</b><span>${DIAS_C[selDt.getDay()]} · ${MESES[sm-1]} ${sy}</span>
+        <span class="sp"></span>
+        <button type="button" class="ghost" data-cal-daycard="${iso}">Ver tarjeta del día</button>
+      </div>
+      <div class="cal-tline">
+        ${selEvs.length?selEvs.map(e=>`<div class="cal-titem" data-cal-ev="${esc(e.id)}" data-cal-kind="${e.kind}">
+          <div class="cal-ttime">${esc(e.time||"Todo el día")}</div>
+          <div class="cal-tbar ${e.cls}"></div>
+          <div class="cal-tbody">
+            <b>${esc(e.title)} ${e.r.esNuevo?'<span class="tag lime" style="font-size:9.5px;padding:1px 6px">NUEVA</span>':""}</b>
+            <p>${esc(e.sub)}</p>
+          </div>
+        </div>`).join(""):`<div class="empty" style="padding:14px 10px 4px">No hay visitas programadas para este día.</div>`}
+      </div>
+      <button type="button" class="cal-add-bar" data-cal-add="${iso}">
+        <span>${typeof fmtAddLabel==="function"?fmtAddLabel(iso):"Añadir visita"}</span>
+        <i>＋</i>
+      </button>
+    `;
+    
+    // Inyectar el nuevo contenido sin recargar la pantalla
+    document.querySelectorAll(".cal-split").forEach(el => el.innerHTML = splitHTML);
+    document.querySelectorAll(".cal-full-add .cal-add-bar").forEach(el => {
+       el.dataset.calAdd = iso;
+       el.querySelector("span").textContent = typeof fmtAddLabel==="function"?fmtAddLabel(iso):"Añadir visita";
+    });
+    
+    sig=""; // Reinicia la firma para no bloquear otras actualizaciones futuras
+    return;
   }
   const dc=e.target.closest("[data-cal-daycard]");
   if(dc){openDayPopup(dc.dataset.calDaycard);return}
