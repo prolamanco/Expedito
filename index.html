@@ -10,6 +10,75 @@
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
+/* Contenedor de la tabla con posición relativa para contener el lápiz */
+.ag {
+  position: relative !important;
+  overflow: auto;
+  max-height: 72vh;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--bd) 70%, transparent);
+  margin: 14px 0 22px;
+  -webkit-overflow-scrolling: touch;
+  background: color-mix(in srgb, var(--sf) 60%, transparent);
+  backdrop-filter: var(--gb);
+}
+
+/* Botón del lápiz integrado dentro de la tabla */
+.fab-toolbox {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: linear-gradient(135deg, var(--pr), var(--fu));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 22px -4px color-mix(in srgb, var(--pr) 55%, transparent), 0 4px 10px #0003;
+  cursor: pointer;
+  transition: transform .3s var(--spring);
+}
+.fab-toolbox:active { transform: scale(0.9); }
+.fab-toolbox svg { width: 22px; height: 22px; stroke-width: 2.2; }
+
+/* Menú desplegable del lápiz */
+.toolbox-menu {
+  position: absolute;
+  right: 18px;
+  top: 74px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--sf) 95%, transparent);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid color-mix(in srgb, var(--bd) 80%, transparent);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px -8px #0005;
+  animation: menuPop .3s var(--spring) both;
+  transform-origin: top right;
+}
+.toolbox-menu[hidden] { display: none !important; }
+.toolbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 0;
+  background: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--tx);
+  cursor: pointer;
+  text-align: left;
+}
+.toolbox-item:hover { background: color-mix(in srgb, var(--pr) 12%, transparent); }
+.toolbox-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #0002; flex: none; }
 :root{--bg:#f7f3f8;--card:#ffffffb8;--glass:#ffffffa6;--tx:#2a1d2e;--mu:#7a6b80;--bd:#eadff0;--pr:#92228C;--fu:#A93E7E;--li:#B8C14C;--co:#E67F52;--soft:#f4e8f3}
 :root[data-t=dark]{--bg:#130f15;--card:#1d1820a8;--glass:#130f15b3;--tx:#f3ecf5;--mu:#a597ab;--bd:#2e2634;--soft:#2a1d2c;--pr:#b23fab}
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1438,9 +1507,6 @@ function agH(k,ed){
   ` : "")
   + `<table><tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}</table></div>`;
 }
-function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
-sub=avMode==="rc"?`<div class="tabs2" style="margin-bottom:10px">${[["rm","Madres"],["rb","Bebés"]].map(([x,t])=>`<button type="button" data-rs="${x}" class="${rcSub===x?"on":""}">${t}</button>`).join("")}</div>`:"";
-return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chH(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b> · ${HN[avMode==="bd"?"bd":"rm"].split(" ")[0]==="Base"?"Base de datos":"RedCap"}</summary>${avH(it)}</details>`:""}</div>`}
 function renderAvDra(f){
   if(role!=="dra"||draTab!=="avance")return;
   if(!f&&document.activeElement?.matches("#avDra input,#avDra textarea"))return;
@@ -2480,6 +2546,28 @@ if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 })();
 </script>
 <script>
+document.addEventListener("click", e => {
+  const fab = e.target.closest("#fabToolboxBtn");
+  const menu = document.getElementById("toolboxMenu");
+  if (!menu) return;
+  if (fab) {
+    menu.hidden = !menu.hidden;
+    return;
+  }
+  if (!e.target.closest(".toolbox-menu")) {
+    menu.hidden = true;
+  }
+});
+<script>
+// Enlazar correctamente los botones de Ajustes para que abran sin fallar
+document.querySelectorAll("nav [data-act=settings], #navDra [data-act=settings]").forEach(b => {
+  b.addEventListener("click", e => {
+    e.preventDefault();
+    if (typeof openSet === "function") openSet();
+  });
+});
+
+// Control de apertura y cierre del menú del lápiz flotante
 document.addEventListener("click", e => {
   const fab = e.target.closest("#fabToolboxBtn");
   const menu = document.getElementById("toolboxMenu");
