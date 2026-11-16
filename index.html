@@ -108,6 +108,7 @@ nav button.on::after{content:"";position:absolute;bottom:3px;width:16px;height:3
 .af{background:var(--bg);box-shadow:none!important;margin:0 0 8px}.alert-form{max-width:680px}
 @media (min-width:820px){
 .wrap{max-width:1060px;padding-left:28px;padding-right:112px}
+header{margin:0;border-radius:0 0 26px 26px;border-left:1px solid var(--bd);border-right:1px solid var(--bd)}
 nav{left:auto;right:22px;top:50%;bottom:auto;transform:translateY(-50%);width:78px;flex-direction:column;border-radius:30px}
 nav button{padding:12px 2px}
 #fDra{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}#fDra>.card{margin:0}#fDra>.btn,#forms{grid-column:1/-1}
@@ -1212,7 +1213,29 @@ if(d.ab!==undefined){
   if(ed){AB=d.ab;sig="";render()}
   return;
 }
-if(d.add){if(!ed)return;const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);if(!x||x<1||x>999)return;const p2=pad2(x),delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;if(isDel(delK))avDelPut(delK,"0");if(m.pre==="RB"){avPut(AVS.rb,p2,avV(AVS.rb,p2),"")}else{avPut(AVS.bd,"CRM"+p2,avV(AVS.bd,"CRM"+p2),"");avPut(AVS.rm,"CR-M-"+p2,avV(AVS.rm,"CR-M-"+p2),"")}sig="";render();toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado para todos");return}
+if(d.add){
+  if(!ed)return;
+  const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);
+  if(!x||x<1||x>999)return;
+  const p2=pad2(x), delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;
+  
+  if(isDel(delK)) avDelPut(delK,"0"); // Si estaba borrado, lo restaura
+  
+  // Forzar un valor vacío inicial en el diccionario para que avNums lo cuente sí o sí
+  if(m.pre==="RB"){
+    AVD["RB|"+p2] = {v: avV(AVS.rb,p2), n: ""};
+    avPut(AVS.rb, p2, AVD["RB|"+p2].v, "");
+  }else{
+    AVD["BD|CRM"+p2] = {v: avV(AVS.bd,"CRM"+p2), n: ""};
+    AVD["RM|CR-M-"+p2] = {v: avV(AVS.rm,"CR-M-"+p2), n: ""};
+    avPut(AVS.bd, "CRM"+p2, AVD["BD|CRM"+p2].v, "");
+    avPut(AVS.rm, "CR-M-"+p2, AVD["RM|CR-M-"+p2].v, "");
+  }
+  
+  sig=""; render(); 
+  toast("Expediente "+(m.pre==="RB"?p2:"CRM"+p2)+" agregado para todos");
+  return;
+}
 if(d.restore){if(!ed)return;const L=delList(m);if(!L.length)return;const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');if(!r)return;avDelPut(r,"0");sig="";render();toast("Expediente restaurado para todos");return}
 const tr=t.closest("tr");if(!tr)return;const id=tr.firstChild.dataset.an;
 if(d.an!==undefined&&ed&&AB==="DEL"){const num=pad2(parseInt(String(id).match(/(\d+)$/)[1],10)),k=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+num;const ok=await confirmDlg("¿Eliminar "+id+" para todos?",m.pre==="RB"?"Se quitará de la tabla RedCap · Bebés en todos los usuarios. Podrás restaurarlo con el botón Restaurar.":"Se quitará de Base de datos y de RedCap · Madres en todos los usuarios. Podrás restaurarlo con el botón Restaurar.","Eliminar");AB="V";if(ok){avDelPut(k,"1");toast("Expediente "+id+" eliminado para todos")}sig="";render();return}
@@ -2150,3 +2173,4 @@ if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 </script>
 </body>
 </html>
+```eof
