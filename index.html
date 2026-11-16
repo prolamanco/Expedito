@@ -1818,7 +1818,10 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.addEventListener("click"
 })();
 </script>
 <script>
-// ===== Ajustes por secciones + Gestión de usuarios (Dra.) + Retroalimentación + Gesto de deslizar =====
+<!-- ... existing code ... -->
+</script>
+<script>
+// ===== Ajustes por secciones + Gestión de Usuarios + Retroalimentación + Gesto de deslizar =====
 (()=>{
 const vs=document.createElement("section");vs.id="vSet";vs.hidden=true;$("#vDra").after(vs);
 const row=(id,ico,t,sub)=>`<button type="button" class="srow" data-go="${id}"><span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span><span class="chev">${ic("chev")}</span></button>`;
@@ -1864,10 +1867,13 @@ vs.innerHTML=`<div id="setHub">
   <div id="uCreateBox" class="card" hidden style="margin:12px 0 0;background:var(--soft);padding:14px">
     <b style="font-size:14px">Crear nuevo usuario</b>
     <input type="text" id="cuName" placeholder="Nombre visible (ej. María)" style="margin-top:8px">
-    <input type="text" id="cuUser" placeholder="Usuario para ingresar (ej. maria.asistente)" autocapitalize="none" style="margin-top:8px">
+    <input type="text" id="cuUser" placeholder="Usuario para ingresar (se generará automáticamente)" autocapitalize="none" style="margin-top:8px">
     <select id="cuRole" style="margin-top:8px"><option value="asistente">Rol: Asistente</option><option value="investigadora">Rol: Investigadora (Jefa)</option></select>
-    <input type="text" id="cuPass" placeholder="Contraseña inicial (mín. 10 caracteres, letras y números)" autocapitalize="none" style="margin-top:8px">
-    <label class="opt" style="background:var(--sf)"><input type="checkbox" id="cuMust"><span>Pedirle que cambie la contraseña al entrar</span></label>
+    <div class="row" style="margin-top:8px;flex-wrap:nowrap">
+      <input type="text" id="cuPass" placeholder="Contraseña inicial" autocapitalize="none" style="margin:0;flex:1">
+      <button type="button" class="ib" id="cuGenPass" title="Generar nueva contraseña" style="flex:none;width:44px;height:44px;font-size:22px;font-weight:bold;line-height:1">↻</button>
+    </div>
+    <label class="opt" style="background:var(--sf);margin-top:8px"><input type="checkbox" id="cuMust" checked><span>Pedirle que cambie la contraseña al entrar</span></label>
     <div class="row" style="margin-top:10px;justify-content:flex-end">
       <button type="button" class="ghost" id="cuCancel">Cancelar</button>
       <button type="button" class="btn" id="cuSave" style="width:auto;padding:10px 18px">Crear cuenta</button>
@@ -1902,6 +1908,7 @@ $("#bTheme").style.display="none";$("#bMenu").style.display="none";
 const pages=["pass","user","team","notif","theme","feed"];
 const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
 
+// ----- Lógica de Gestión de Usuarios -----
 async function loadTeamUsers(){
   const box=$("#uList");if(!box)return;
   box.innerHTML='<p class="mu s">Cargando usuarios…</p>';
@@ -1933,7 +1940,28 @@ async function loadTeamUsers(){
   </div>`).join("");
 }
 
-$("#uNewBtn").onclick=()=>{$("#uCreateBox").hidden=!$("#uCreateBox").hidden};
+function genRandomPass(){
+  const c="abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let p="";for(let i=0;i<12;i++)p+=c.charAt(Math.floor(Math.random()*c.length));
+  return p;
+}
+
+$("#cuName").addEventListener("input", e => {
+  const nm = e.target.value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  const rl = $("#cuRole").value;
+  if(nm) $("#cuUser").value = nm + "." + rl;
+  else $("#cuUser").value = "";
+});
+$("#cuRole").addEventListener("change", e => {
+  const nm = $("#cuName").value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  if(nm) $("#cuUser").value = nm + "." + e.target.value;
+});
+$("#cuGenPass").onclick = () => { $("#cuPass").value = genRandomPass(); };
+
+$("#uNewBtn").onclick=()=>{
+  $("#uCreateBox").hidden=!$("#uCreateBox").hidden;
+  if(!$("#uCreateBox").hidden && !$("#cuPass").value) $("#cuPass").value = genRandomPass();
+};
 $("#cuCancel").onclick=()=>{$("#uCreateBox").hidden=true};
 $("#cuSave").onclick=async()=>{
   const name=$("#cuName").value.trim(),newUser=$("#cuUser").value.trim().toLowerCase(),roleVal=$("#cuRole").value,pass=$("#cuPass").value.trim(),mustChange=$("#cuMust").checked;
@@ -1980,6 +2008,7 @@ $("#uList").onclick=async e=>{
     if(d&&d.ok){toast("Usuario eliminado");loadTeamUsers()}else toast(d?.error||"No se pudo eliminar","err");
   }
 };
+// ---------------------------------------------
 
 function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p!==id);
 if(id==="team")loadTeamUsers();
