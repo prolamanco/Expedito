@@ -799,6 +799,11 @@ svg.prog-ring {
   cursor: default !important;
   pointer-events: auto !important;
 }
+.ag-dial-backdrop[hidden],
+.ag-dial-backdrop.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
 .ag-dial-items {
   position: absolute !important;
   right: 14px !important;
@@ -816,6 +821,16 @@ svg.prog-ring {
   border: 1px solid color-mix(in srgb, #ffffff 40%, transparent) !important;
   box-shadow: 0 12px 36px -8px #1d0f2425 !important;
   animation: pillSlideUp 0.25s var(--spring) both !important;
+}
+.ag-dial-items[hidden],
+.ag-dial-items.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+.ag-active-pill[hidden],
+.ag-active-pill.hidden {
+  display: none !important;
+  pointer-events: none !important;
 }
 /* Cápsula de vidrio sin bordes toscos */
 .ag-dial-pill {

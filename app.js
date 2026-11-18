@@ -574,8 +574,8 @@ function agH(k,ed){
       </table>
     </div>
     ${ed?`
-      <div class="ag-dial-backdrop" id="agDialBackdrop" ${agEditOpen?"":"hidden"}></div>
-      <div class="ag-dial-items" id="agDialItems" ${agEditOpen?"":"hidden"}>
+      <div class="ag-dial-backdrop" id="agDialBackdrop" ${agEditOpen?"":'hidden style="display:none;"'}></div>
+      <div class="ag-dial-items" id="agDialItems" ${agEditOpen?"":'hidden style="display:none;"'}>
         ${m.st.map((s,idx)=>`<button type="button" class="ag-dial-pill ${AB===s[0]?"on":""}" data-ab="${s[0]}" style="--del:${idx*0.025}s"><span class="ag-dial-dot" style="background:${s[2]}"></span><span>${s[1]}</span>${AB===s[0]?'<span class="ag-dial-check">✓</span>':""}</button>`).join("")}
         <div class="ag-dial-sep"></div>
         <button type="button" class="ag-dial-pill ${AB==="-"?"on":""}" data-ab="-" style="--del:${m.st.length*0.025}s"><span class="ag-dial-dot" style="background:var(--bd)">🧹</span><span>Borrar celda</span>${AB==="-"?'<span class="ag-dial-check">✓</span>':""}</button>
@@ -583,7 +583,7 @@ function agH(k,ed){
         <button type="button" class="ag-dial-pill del ${AB==="DEL"?"on":""}" data-ab="DEL" style="--del:${(m.st.length+2)*0.025}s"><span class="ag-dial-dot del">🗑</span><span>Eliminar expediente</span>${AB==="DEL"?'<span class="ag-dial-check">✓</span>':""}</button>
         ${delList(m).length?`<button type="button" class="ag-dial-pill" data-restore="1" style="--del:${(m.st.length+3)*0.025}s"><span class="ag-dial-dot">↩</span><span>Restaurar (${delList(m).length})</span></button>`:""}
       </div>
-      <div class="ag-active-pill" id="agActivePill" ${(!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-")?"":"hidden"}><i style="background:${curBg}"></i><span>${curSt}</span></div>
+      <div class="ag-active-pill" id="agActivePill" ${(!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-")?"":'hidden style="display:none;"'}><i style="background:${curBg}"></i><span>${curSt}</span></div>
       <button type="button" class="ag-fab-pencil ${agEditOpen?"open":""}" id="agFabPencil" title="Opciones de edición">
         ${ic("pencil")}
         <span class="ag-fab-badge-indicator" id="agFabBadge" style="background:${curBg};${(!agEditOpen&&curBg!=="transparent")?"":"display:none"}"></span>
@@ -620,20 +620,20 @@ document.addEventListener("click",async e=>{
     agEditOpen=!agEditOpen;
     const p=document.getElementById("agFabPencil"),d=document.getElementById("agDialItems"),b=document.getElementById("agDialBackdrop"),a=document.getElementById("agActivePill"),bg=document.getElementById("agFabBadge");
     if(p)p.classList.toggle("open",agEditOpen);
-    if(d)d.hidden=!agEditOpen;
-    if(b)b.hidden=!agEditOpen;
-    if(a)a.hidden=agEditOpen||!AB||AB==="DEL"||AB==="-";
-    if(bg)bg.style.display=(agEditOpen||bg.style.background==="transparent")?"none":"block";
+    if(d){d.hidden=!agEditOpen;d.style.display=agEditOpen?"flex":"none";}
+    if(b){b.hidden=!agEditOpen;b.style.display=agEditOpen?"block":"none";}
+    if(a){a.hidden=agEditOpen||!AB||AB==="DEL"||AB==="-";a.style.display=(!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-")?"flex":"none";}
+    if(bg)bg.style.display=(agEditOpen||!curBg||curBg==="transparent")?"none":"block";
     return;
   }
   if(e.target.closest("#agDialBackdrop")){
     agEditOpen=false;
     const p=document.getElementById("agFabPencil"),d=document.getElementById("agDialItems"),b=document.getElementById("agDialBackdrop"),a=document.getElementById("agActivePill"),bg=document.getElementById("agFabBadge");
     if(p)p.classList.remove("open");
-    if(d)d.hidden=true;
-    if(b)b.hidden=true;
-    if(a)a.hidden=!AB||AB==="DEL"||AB==="-";
-    if(bg)bg.style.display=(bg.style.background==="transparent")?"none":"block";
+    if(d){d.hidden=true;d.style.display="none";}
+    if(b){b.hidden=true;b.style.display="none";}
+    if(a){a.hidden=!AB||AB==="DEL"||AB==="-";a.style.display=(AB&&AB!=="DEL"&&AB!=="-")?"flex":"none";}
+    if(bg)bg.style.display=(!curBg||curBg==="transparent")?"none":"block";
     return;
   }
   const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");
