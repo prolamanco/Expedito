@@ -238,7 +238,7 @@ return `<div class="card sum"><div class="row"><b>${nm}</b><span class="sp"></sp
 document.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{avMode=b.dataset.av;document.querySelectorAll("[data-av]").forEach(x=>x.classList.toggle("on",x===b));sig="";render()});
 
 // ---- Avances v2: Base de datos / RedCap / General + comentarios + sincronización multiusuario ----
-let AVD={},AVT={},COM=[],AB="V",agEditOpen=false,rcSub="rm",AGX=[0],comLoaded=false;
+let AVD={},AVT={},COM=[],AB="V",agEditOpen=false,rcSub="rm",AGX=[0],AGY=[0],comLoaded=false;
 const GR="#cfd8e3",SEED={"BD|CRM01":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM02":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM03":["V,V,V,V,V,A,R,V,V,V,A,V,A",""],"BD|CRM04":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM05":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM06":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM07":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM08":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM09":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM10":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM11":["V,V,V,V,V,A,V,V,V,V,A,R,A",""],"BD|CRM12":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM13":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM14":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM15":["V,V,G,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM16":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM17":["V,V,V,V,V,A,R,V,R,R,A,R,A",""],"BD|CRM18":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM19":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM20":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM21":["V,V,G,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM22":["V,R,V,V,V,A,N,N,N,N,A,N,A",""],"BD|CRM23":["R,V,N,N,N,A,N,N,N,N,A,N,A",""],"BD|CRM24":[",,,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM25":[",,,,,A,,,,,A,,A",""],"BD|CRM26":[",,,,,A,,,,,A,,A",""],"RM|CR-M-01":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-02":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-03":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, falta registrar el perímetro al nacer en el apartado 2.11 del Cuestionario 2."],"RM|CR-M-04":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-05":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-06":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-07":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-08":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-09":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-10":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-11":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal del formulario N.º 4 y del formulario N.º 7. También se requiere revisar y completar los datos correspondientes al formulario N.º 8."],"RM|CR-M-12":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-13":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-14":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-15":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-16":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-17":["V,V,V,V,V,R,R,R","Están pendientes los resultados de composición corporal de los formularios N.º 4 y N.º 8. En el formulario N.º 6 falta el peso final del embarazo. En el formulario N.º 7 falta el número de frasco. En el formulario N.º 8 se deben completar los datos sobre líquidos entre la medición basal y la posdosi"],"RM|CR-M-18":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, se debe corregir el código de la persona entrevistadora en el Cuestionario 2."],"RM|CR-M-19":["V,V,V,V,V,R,S,S","Falta registrar el número de frasco y la hora de la última ingesta de alimentos. También están pendientes los resultados de composición corporal del formulario N.º 4 y el número de frasco correspondiente."],"RM|CR-M-20":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. En el formulario N.º 4 falta el número de frasco y están pendientes los resultados de composición corporal correspondientes."],"RM|CR-M-21":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-22":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-23":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-24":["V,V,R,V,S,S,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8.  Falta registrar el peso al inicio del control prenatal en el formulario de recolección N.º 1."],"RM|CR-M-25":["V,V,V,V,V,R,S,S","El expediente cuenta con información hasta la tercera visita. En el formulario N.º 4 se deben completar o verificar el número de frasco, la hora de consumo de líquidos, la muestra de saliva posdosis y la hora de obtención de la muestra."],"RM|CR-M-26":["V,V,V,V,S,S,S,S","El expediente cuenta con información hasta la primera visita. Se requieren las firmas correspondientes en el formulario N.º 2."],"RB|01":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|02":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|03":["V,R,V,V,R","Datos del niño: Falta el perimetro cefálico al nacer (centímetros)"],"RB|04":["V,S,S,S,S","Retiro "],"RB|05":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|06":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|07":["V,S,S,S,S","Retiro"],"RB|08":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|09":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|10":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|11":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|12":["V,S,S,S,S","Retiro"],"RB|13":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|14":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|15":["V,S,S,S,S","Retiro"],"RB|16":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|17":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|18":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|None":[",,,,",""]},
 RC=[["V","Completo","#a9d18e"],["R","Incompleto","#ff4d4d"],["S","Incompleto (sin datos guardados)","#ff9f43"],["X","Por verificar","#ffd966"]],
 avIds=(p,n)=>Array.from({length:n},(_,i)=>p+String(i+1).padStart(2,"0")),
@@ -512,6 +512,37 @@ function renderProgressRing(pct, complete, total, incomplete, inProgress, title,
     </div>
   </div>`;
 }
+function updateProgressCardAndStats(m){
+  const ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),
+  rows=avRows(m).map(id=>({id,v:avV(m,id)})),
+  sOf=v=>v.every((x,i)=>!req[i]||x==="V")?"f":v.some(x=>x==="R"||x==="S")?"i":"p",t={f:0,i:0,p:0},cnt={},expCnt={};
+  rows.forEach(r=>{
+    t[sOf(r.v)]++;
+    const seenInRow=new Set();
+    r.v.forEach(x=>{cnt[x]=(cnt[x]||0)+1;if(x)seenInRow.add(x)});
+    seenInRow.forEach(x=>expCnt[x]=(expCnt[x]||0)+1);
+  });
+  const pct=rows.length?Math.round(t.f/rows.length*100):0;
+  const pctEl=document.querySelector(".prog-pct");
+  if(pctEl)pctEl.textContent=pct+"%";
+  const fillEl=document.querySelector(".prog-ring-fill");
+  if(fillEl){
+    const c=238.76;
+    fillEl.style.strokeDashoffset=Math.max(0,(c*(1-pct/100)).toFixed(1));
+  }
+  const mEls=document.querySelectorAll(".cal-prog-info .prog-metric-txt");
+  if(mEls&&mEls.length>=3){
+    mEls[0].innerHTML=`<b>${t.f}</b> completos de ${rows.length}`;
+    mEls[1].innerHTML=`<b>${t.i}</b> con formularios incompletos`;
+    mEls[2].innerHTML=`<b>${t.p}</b> expedientes en proceso`;
+  }
+  m.st.forEach(s=>{
+    const isG=s[0]==="G";
+    const numShow=isG?(expCnt.G||0)+" exp.":(cnt[s[0]]||0);
+    const btn=document.querySelector(`.lg button[data-ab="${s[0]}"]`);
+    if(btn)btn.innerHTML=`${s[1]} · ${numShow}${isG?" ⓘ":""}`;
+  });
+}
 function agH(k,ed){
   const m=AVS[k],ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),
   rows=avRows(m).map(id=>{const rawN=(avRec(m,id)||{}).n||"";return{id,v:avV(m,id),n:rawN==="[ELIMINADO]"?"":rawN}}),
@@ -523,7 +554,7 @@ function agH(k,ed){
     seenInRow.forEach(x=>expCnt[x]=(expCnt[x]||0)+1);
   });
   const pct=rows.length?Math.round(t.f/rows.length*100):0,col=x=>(m.st.find(s=>s[0]===x)||[])[2]||"transparent";
-  setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>a.scrollLeft=AGX[0]),0);
+  setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>{a.scrollLeft=AGX[0]||0;a.scrollTop=AGY[0]||0;}),0);
 
   const curSt=(m.st.find(s=>s[0]===AB)||[])[1]||(AB==="-"?"Borrar":AB==="DEL"?"Eliminar":"Editar");
   const curBg=(m.st.find(s=>s[0]===AB)||[])[2]||(AB==="DEL"?"#e5484d":"transparent");
@@ -543,21 +574,19 @@ function agH(k,ed){
       </table>
     </div>
     ${ed?`
-      ${agEditOpen?`
-        <div class="ag-dial-backdrop" id="agDialBackdrop"></div>
-        <div class="ag-dial-items" id="agDialItems">
-          ${m.st.map((s,idx)=>`<button type="button" class="ag-dial-pill ${AB===s[0]?"on":""}" data-ab="${s[0]}" style="--del:${idx*0.025}s"><span class="ag-dial-dot" style="background:${s[2]}"></span><span>${s[1]}</span>${AB===s[0]?'<span class="ag-dial-check">✓</span>':""}</button>`).join("")}
-          <div class="ag-dial-sep"></div>
-          <button type="button" class="ag-dial-pill ${AB==="-"?"on":""}" data-ab="-" style="--del:${m.st.length*0.025}s"><span class="ag-dial-dot" style="background:var(--bd)">🧹</span><span>Borrar celda</span>${AB==="-"?'<span class="ag-dial-check">✓</span>':""}</button>
-          <button type="button" class="ag-dial-pill" data-add="1" style="--del:${(m.st.length+1)*0.025}s"><span class="ag-dial-dot plus">＋</span><span>Agregar expediente</span></button>
-          <button type="button" class="ag-dial-pill del ${AB==="DEL"?"on":""}" data-ab="DEL" style="--del:${(m.st.length+2)*0.025}s"><span class="ag-dial-dot del">🗑</span><span>Eliminar expediente</span>${AB==="DEL"?'<span class="ag-dial-check">✓</span>':""}</button>
-          ${delList(m).length?`<button type="button" class="ag-dial-pill" data-restore="1" style="--del:${(m.st.length+3)*0.025}s"><span class="ag-dial-dot">↩</span><span>Restaurar (${delList(m).length})</span></button>`:""}
-        </div>
-      `:""}
-      ${!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-"?`<div class="ag-active-pill"><i style="background:${curBg}"></i><span>${curSt}</span></div>`:""}
+      <div class="ag-dial-backdrop" id="agDialBackdrop" ${agEditOpen?"":"hidden"}></div>
+      <div class="ag-dial-items" id="agDialItems" ${agEditOpen?"":"hidden"}>
+        ${m.st.map((s,idx)=>`<button type="button" class="ag-dial-pill ${AB===s[0]?"on":""}" data-ab="${s[0]}" style="--del:${idx*0.025}s"><span class="ag-dial-dot" style="background:${s[2]}"></span><span>${s[1]}</span>${AB===s[0]?'<span class="ag-dial-check">✓</span>':""}</button>`).join("")}
+        <div class="ag-dial-sep"></div>
+        <button type="button" class="ag-dial-pill ${AB==="-"?"on":""}" data-ab="-" style="--del:${m.st.length*0.025}s"><span class="ag-dial-dot" style="background:var(--bd)">🧹</span><span>Borrar celda</span>${AB==="-"?'<span class="ag-dial-check">✓</span>':""}</button>
+        <button type="button" class="ag-dial-pill" data-add="1" style="--del:${(m.st.length+1)*0.025}s"><span class="ag-dial-dot plus">＋</span><span>Agregar expediente</span></button>
+        <button type="button" class="ag-dial-pill del ${AB==="DEL"?"on":""}" data-ab="DEL" style="--del:${(m.st.length+2)*0.025}s"><span class="ag-dial-dot del">🗑</span><span>Eliminar expediente</span>${AB==="DEL"?'<span class="ag-dial-check">✓</span>':""}</button>
+        ${delList(m).length?`<button type="button" class="ag-dial-pill" data-restore="1" style="--del:${(m.st.length+3)*0.025}s"><span class="ag-dial-dot">↩</span><span>Restaurar (${delList(m).length})</span></button>`:""}
+      </div>
+      <div class="ag-active-pill" id="agActivePill" ${(!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-")?"":"hidden"}><i style="background:${curBg}"></i><span>${curSt}</span></div>
       <button type="button" class="ag-fab-pencil ${agEditOpen?"open":""}" id="agFabPencil" title="Opciones de edición">
         ${ic("pencil")}
-        ${!agEditOpen&&curBg!=="transparent"?`<span class="ag-fab-badge-indicator" style="background:${curBg}"></span>`:""}
+        <span class="ag-fab-badge-indicator" id="agFabBadge" style="background:${curBg};${(!agEditOpen&&curBg!=="transparent")?"":"display:none"}"></span>
       </button>
     `:""}
   </div>`;
@@ -574,7 +603,7 @@ function renderAvDra(f){
   $("#avDra").innerHTML=avPage(0,[]);
 }
 document.body.appendChild($("#toast"));
-document.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("ag"))AGX[0]=e.target.scrollLeft},true);
+document.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("ag")){AGX[0]=e.target.scrollLeft;AGY[0]=e.target.scrollTop;}},true);
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.target.matches&&e.target.matches(".composer textarea")){e.preventDefault();const b=e.target.closest(".chat");chSend(b,b.querySelector("[data-cs]").dataset.cs)}if(e.key==="Escape"&&!$("#alertForm").hidden)closeForm()});
 document.addEventListener("input",e=>{const t=e.target;if(!t.matches||!t.matches(".composer textarea"))return;CHD[t.dataset.k]=t.value;t.style.height="auto";t.style.height=Math.min(t.scrollHeight,120)+"px";t.closest(".composer").querySelector(".send").disabled=!t.value.trim()});
 function ask(title,val,ro,ph){return new Promise(res=>{const o=document.createElement("div");o.className="dlg";o.innerHTML='<div class="dlg-p" role="dialog" aria-modal="true"><b></b><textarea rows="3" maxlength="300"></textarea><div class="dlg-a"><button type="button" class="ghost" data-x></button>'+(ro?"":'<button type="button" class="btn" data-ok>Guardar</button>')+'</div></div>';
@@ -589,11 +618,23 @@ async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");f
 document.addEventListener("click",async e=>{
   if(e.target.closest("#agFabPencil")){
     agEditOpen=!agEditOpen;
-    sig="force";render();renderAvDra(1);return;
+    const p=document.getElementById("agFabPencil"),d=document.getElementById("agDialItems"),b=document.getElementById("agDialBackdrop"),a=document.getElementById("agActivePill"),bg=document.getElementById("agFabBadge");
+    if(p)p.classList.toggle("open",agEditOpen);
+    if(d)d.hidden=!agEditOpen;
+    if(b)b.hidden=!agEditOpen;
+    if(a)a.hidden=agEditOpen||!AB||AB==="DEL"||AB==="-";
+    if(bg)bg.style.display=(agEditOpen||bg.style.background==="transparent")?"none":"block";
+    return;
   }
   if(e.target.closest("#agDialBackdrop")){
     agEditOpen=false;
-    sig="force";render();renderAvDra(1);return;
+    const p=document.getElementById("agFabPencil"),d=document.getElementById("agDialItems"),b=document.getElementById("agDialBackdrop"),a=document.getElementById("agActivePill"),bg=document.getElementById("agFabBadge");
+    if(p)p.classList.remove("open");
+    if(d)d.hidden=true;
+    if(b)b.hidden=true;
+    if(a)a.hidden=!AB||AB==="DEL"||AB==="-";
+    if(bg)bg.style.display=(bg.style.background==="transparent")?"none":"block";
+    return;
   }
   const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");
   if(!t)return;
@@ -606,7 +647,20 @@ document.addEventListener("click",async e=>{
   const m=AVS[avMode==="bd"?"bd":rcSub];
   if(d.ab!==undefined){
     if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return;}
-    if(ed){AB=d.ab;agEditOpen=false;sig="force";render();}
+    if(ed){
+      AB=d.ab;
+      agEditOpen=false;
+      const p=document.getElementById("agFabPencil"),dial=document.getElementById("agDialItems"),b=document.getElementById("agDialBackdrop"),a=document.getElementById("agActivePill"),bg=document.getElementById("agFabBadge");
+      if(p)p.classList.remove("open");
+      if(dial)dial.hidden=true;
+      if(b)b.hidden=true;
+      const curSt=(m.st.find(s=>s[0]===AB)||[])[1]||(AB==="-"?"Borrar":AB==="DEL"?"Eliminar":"Editar");
+      const curBg=(m.st.find(s=>s[0]===AB)||[])[2]||(AB==="DEL"?"#e5484d":"transparent");
+      if(a){a.hidden=!AB||AB==="DEL"||AB==="-";a.querySelector("i").style.background=curBg;a.querySelector("span").textContent=curSt}
+      if(bg){bg.style.background=curBg;bg.style.display=(curBg==="transparent")?"none":"block"}
+      document.querySelectorAll(".ag-dial-pill, .lg button").forEach(btn=>{if(btn.dataset.ab!==undefined)btn.classList.toggle("on",btn.dataset.ab===AB)});
+      document.querySelectorAll(".ag").forEach(tbl=>{tbl.classList.toggle("del",AB==="DEL")});
+    }
     return;
   }
   
@@ -618,7 +672,7 @@ document.addEventListener("click",async e=>{
     if(!x||x<1||x>999)return;
     const p2=pad2(x), delK=(m.pre==="RB"?"DEL|RB|":"DEL|N|")+p2;
     
-    if(isDel(delK)) avDelPut(delK,"0"); // Restaura si estaba eliminado
+    if(isDel(delK)) avDelPut(delK,"0");
     
     if(m.pre==="RB"){
       AVD["RB|"+p2] = {v: avV(AVS.rb,p2), n: ""};
@@ -675,11 +729,15 @@ document.addEventListener("click",async e=>{
   }
   
   if(ed&&AB==="DEL")return;
-  if(ed){
+  if(ed&&d.ac!==undefined){
     const v=avV(m,id);
-    v[+d.ac]=AB==="-"?"":AB;
+    const newColor=AB==="-"?"":AB;
+    if(v[+d.ac]===newColor)return;
+    v[+d.ac]=newColor;
     avPut(m,id,v,null);
-    sig="force"; render(); if(typeof renderAvDra==="function") renderAvDra(1);
+    t.style.background=col(newColor);
+    updateProgressCardAndStats(m);
+    return;
   }
 });
 
@@ -1206,6 +1264,7 @@ function render(){
   const q=$("#q").value.toLowerCase().trim(),s=JSON.stringify(DB)+tab+q+avMode+hsMode+JSON.stringify(AVD)+JSON.stringify(COM)+rcSub+AB+calY+"-"+calM+"-"+calSel+"-"+calCompact;
   if(s===sig)return;
   if(document.activeElement?.matches("#list input,#list select,#list textarea"))return;
+  const _prevAg=document.querySelector(".ag");if(_prevAg){AGX[0]=_prevAg.scrollLeft;AGY[0]=_prevAg.scrollTop;}
   sig=s;
   document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
   const nue=DB.filter(r=>r.estado==="Pendiente"&&r.esNuevo).length,vis=DB.filter(r=>r.fechaVisita).length;
