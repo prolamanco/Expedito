@@ -512,6 +512,7 @@ function renderProgressRing(pct, complete, total, incomplete, inProgress, title,
     </div>
   </div>`;
 }
+const stCol=(m,x)=>(m&&m.st&&m.st.find(s=>s[0]===x)||[])[2]||"transparent";
 function updateProgressCardAndStats(m){
   const ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),
   rows=avRows(m).map(id=>({id,v:avV(m,id)})),
@@ -553,7 +554,7 @@ function agH(k,ed){
     r.v.forEach(x=>{cnt[x]=(cnt[x]||0)+1;if(x)seenInRow.add(x)});
     seenInRow.forEach(x=>expCnt[x]=(expCnt[x]||0)+1);
   });
-  const pct=rows.length?Math.round(t.f/rows.length*100):0,col=x=>(m.st.find(s=>s[0]===x)||[])[2]||"transparent";
+  const pct=rows.length?Math.round(t.f/rows.length*100):0,col=x=>stCol(m,x);
   setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>{a.scrollLeft=AGX[0]||0;a.scrollTop=AGY[0]||0;}),0);
 
   const curSt=(m.st.find(s=>s[0]===AB)||[])[1]||(AB==="-"?"Borrar":AB==="DEL"?"Eliminar":"Editar");
@@ -735,8 +736,8 @@ document.addEventListener("click",async e=>{
     if(v[+d.ac]===newColor)return;
     v[+d.ac]=newColor;
     avPut(m,id,v,null);
-    t.style.background=col(newColor);
-    updateProgressCardAndStats(m);
+    t.style.background=stCol(m,newColor);
+    try{updateProgressCardAndStats(m);}catch(err){}
     return;
   }
 });
