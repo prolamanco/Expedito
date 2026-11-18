@@ -14,7 +14,7 @@ let TOK=localStorage.getItem("ms_tok")||"",ME=null;try{ME=JSON.parse(localStorag
 
 function toast(m,t){const d=document.createElement("div");if(t==="err")d.className="err";d.textContent=m;$("#toast").appendChild(d);setTimeout(()=>d.remove(),4000)}
 
-const IC={chat:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
+const IC={pencil:'<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',chat:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',bell:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/>',
 belloff:'<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0M3 3l18 18"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',
@@ -238,7 +238,7 @@ return `<div class="card sum"><div class="row"><b>${nm}</b><span class="sp"></sp
 document.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{avMode=b.dataset.av;document.querySelectorAll("[data-av]").forEach(x=>x.classList.toggle("on",x===b));sig="";render()});
 
 // ---- Avances v2: Base de datos / RedCap / General + comentarios + sincronización multiusuario ----
-let AVD={},AVT={},COM=[],AB="V",rcSub="rm",AGX=[0],comLoaded=false;
+let AVD={},AVT={},COM=[],AB="V",agEditOpen=false,rcSub="rm",AGX=[0],comLoaded=false;
 const GR="#cfd8e3",SEED={"BD|CRM01":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM02":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM03":["V,V,V,V,V,A,R,V,V,V,A,V,A",""],"BD|CRM04":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM05":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM06":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM07":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM08":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM09":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM10":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM11":["V,V,V,V,V,A,V,V,V,V,A,R,A",""],"BD|CRM12":["V,V,V,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM13":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM14":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM15":["V,V,G,G,G,G,R,G,G,G,G,G,G",""],"BD|CRM16":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM17":["V,V,V,V,V,A,R,V,R,R,A,R,A",""],"BD|CRM18":["V,V,V,V,V,A,V,V,V,V,A,V,A",""],"BD|CRM19":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM20":["V,V,V,V,R,A,N,N,N,N,A,N,A",""],"BD|CRM21":["V,V,G,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM22":["V,R,V,V,V,A,N,N,N,N,A,N,A",""],"BD|CRM23":["R,V,N,N,N,A,N,N,N,N,A,N,A",""],"BD|CRM24":[",,,G,G,G,G,G,G,G,G,G,G",""],"BD|CRM25":[",,,,,A,,,,,A,,A",""],"BD|CRM26":[",,,,,A,,,,,A,,A",""],"RM|CR-M-01":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-02":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-03":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, falta registrar el perímetro al nacer en el apartado 2.11 del Cuestionario 2."],"RM|CR-M-04":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-05":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-06":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-07":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-08":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-09":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-10":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-11":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal del formulario N.º 4 y del formulario N.º 7. También se requiere revisar y completar los datos correspondientes al formulario N.º 8."],"RM|CR-M-12":["V,V,V,V,S,S,S,S","La participante se retiró durante la segunda visita."],"RM|CR-M-13":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-14":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-15":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-16":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal correspondientes a los formularios N.º 4, N.º 7 y N.º 8."],"RM|CR-M-17":["V,V,V,V,V,R,R,R","Están pendientes los resultados de composición corporal de los formularios N.º 4 y N.º 8. En el formulario N.º 6 falta el peso final del embarazo. En el formulario N.º 7 falta el número de frasco. En el formulario N.º 8 se deben completar los datos sobre líquidos entre la medición basal y la posdosi"],"RM|CR-M-18":["V,V,V,V,V,R,V,R","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. Además, se debe corregir el código de la persona entrevistadora en el Cuestionario 2."],"RM|CR-M-19":["V,V,V,V,V,R,S,S","Falta registrar el número de frasco y la hora de la última ingesta de alimentos. También están pendientes los resultados de composición corporal del formulario N.º 4 y el número de frasco correspondiente."],"RM|CR-M-20":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. En el formulario N.º 4 falta el número de frasco y están pendientes los resultados de composición corporal correspondientes."],"RM|CR-M-21":["V,V,V,S,S,S,S,S","La participante se retiró durante la primera visita."],"RM|CR-M-22":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-23":["V,V,V,V,V,R,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8. "],"RM|CR-M-24":["V,V,R,V,S,S,S,S","Están pendientes los resultados de composición corporal de los formularios N.º 4, N.º 7 y N.º 8.  Falta registrar el peso al inicio del control prenatal en el formulario de recolección N.º 1."],"RM|CR-M-25":["V,V,V,V,V,R,S,S","El expediente cuenta con información hasta la tercera visita. En el formulario N.º 4 se deben completar o verificar el número de frasco, la hora de consumo de líquidos, la muestra de saliva posdosis y la hora de obtención de la muestra."],"RM|CR-M-26":["V,V,V,V,S,S,S,S","El expediente cuenta con información hasta la primera visita. Se requieren las firmas correspondientes en el formulario N.º 2."],"RB|01":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|02":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|03":["V,R,V,V,R","Datos del niño: Falta el perimetro cefálico al nacer (centímetros)"],"RB|04":["V,S,S,S,S","Retiro "],"RB|05":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|06":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|07":["V,S,S,S,S","Retiro"],"RB|08":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|09":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|10":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|11":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|12":["V,S,S,S,S","Retiro"],"RB|13":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|14":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|15":["V,S,S,S,S","Retiro"],"RB|16":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|17":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|18":["V,V,V,V,R","Agua corporal total por deuterio (3 meses posparto): faltan los resultados de composición corporal."],"RB|None":[",,,,",""]},
 RC=[["V","Completo","#a9d18e"],["R","Incompleto","#ff4d4d"],["S","Incompleto (sin datos guardados)","#ff9f43"],["X","Por verificar","#ffd966"]],
 avIds=(p,n)=>Array.from({length:n},(_,i)=>p+String(i+1).padStart(2,"0")),
@@ -448,16 +448,70 @@ async function chSend(box, k) {
     toast("No se pudo enviar el comentario", "err");
   }
 }
+function renderGeneralProgressRing(pc, T, bdn){
+  const c = 238.76;
+  const off = Math.max(0, (c * (1 - (pc || 0) / 100)).toFixed(1));
+  return `<div class="cal-prog-card">
+    <div class="cal-prog-ring-wrap">
+      <svg class="prog-ring" viewBox="0 0 100 100">
+        <circle class="prog-ring-bg" cx="50" cy="50" r="38"></circle>
+        <circle class="prog-ring-fill" cx="50" cy="50" r="38" stroke-dasharray="${c}" stroke-dashoffset="${off}"></circle>
+      </svg>
+      <div class="cal-prog-center">
+        <span class="prog-pct">${pc}%</span>
+        <span class="prog-sub">IGUALDAD</span>
+      </div>
+    </div>
+    <div class="cal-prog-info">
+      <div class="prog-title">Igualdad Base de datos ↔ RedCap</div>
+      <p class="mu s" style="margin:2px 0 6px">RedCap lleva <b>${T.ok}</b> de los <b>${bdn}</b> formularios que ya están en la Base de datos física.</p>
+      <div class="prog-metrics">
+        <div class="prog-metric"><span class="pdot" style="background:#a9d18e"></span><span class="prog-metric-txt"><b>${T.ok}</b> en ambos sistemas</span></div>
+        <div class="prog-metric"><span class="pdot" style="background:#ffd966"></span><span class="prog-metric-txt"><b>${T.fa}</b> falta pasar a RedCap</span></div>
+        <div class="prog-metric"><span class="pdot" style="background:#ff7a7a"></span><span class="prog-metric-txt"><b>${T.so}</b> solo en RedCap</span></div>
+        <div class="prog-metric"><span class="pdot" style="background:#d9d2dd"></span><span class="prog-metric-txt"><b>${T.pe}</b> pendientes en ambos</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+
 function genH(){const T={ok:0,fa:0,so:0,pe:0},per=PR.map(()=>({b:0,r:0})),gap={},rev={};
 const NS=avNums(),RBS=new Set(avRows(AVS.rb));for(const n of NS){const e="CRM"+pad2(n),p2=pad2(n),bv=avV(AVS.bd,e),mv=avV(AVS.rm,"CR-M-"+p2),kv=RBS.has(p2)?avV(AVS.rb,p2):[];
 PR.forEach((p,i)=>{const b=bv[p[1]],r=(p[2]==="rm"?mv:kv)[p[3]];if(b==="G"||b==="P")return;const bd=b==="V",rc=r==="V";per[i].b+=bd;per[i].r+=rc;
 if(bd&&rc)T.ok++;else if(bd){T.fa++;(gap[e]=gap[e]||[]).push(p[0])}else if(rc){T.so++;(rev[e]=rev[e]||[]).push(p[0])}else T.pe++})}
-const tot=T.ok+T.fa+T.so+T.pe,bdn=T.ok+T.fa,pc=bdn?Math.round(T.ok/bdn*100):0,seg=(x,c)=>`<i style="width:${tot?x/tot*100:0}%;background:${c}"></i>`,
+const bdn=T.ok+T.fa,pc=bdn?Math.round(T.ok/bdn*100):0,
 lg=(x,c,t)=>`<button type="button" style="background:${c};color:#222">${t} · ${x}</button>`,ls=o=>Object.keys(o).sort().map(e=>`<p class="mu s"><b>${e}</b> · ${o[e].join(", ")}</p>`).join("");
-return `<div class="gn"><div class="card sum"><div class="row"><b>Igualdad Base de datos ↔ RedCap</b><span class="sp"></span><span class="mu">${pc}%</span></div><p class="mu s" style="margin-top:6px">RedCap lleva ${T.ok} de los ${bdn} formularios que ya están en la Base de datos (lo que está en físico).</p><div class="bar stk">${seg(T.ok,"#a9d18e")}${seg(T.fa,"#ffd966")}${seg(T.so,"#ff7a7a")}${seg(T.pe,"#d9d2dd")}</div><div class="lg">${lg(T.ok,"#a9d18e","En ambos")}${lg(T.fa,"#ffd966","Falta pasar a RedCap")}${lg(T.so,"#ff7a7a","Solo en RedCap")}${lg(T.pe,"#d9d2dd","Pendiente en ambos")}</div></div>`
+return `<div class="gn">`
++renderGeneralProgressRing(pc, T, bdn)
++`<div class="lg">${lg(T.ok,"#a9d18e","En ambos")}${lg(T.fa,"#ffd966","Falta pasar a RedCap")}${lg(T.so,"#ff7a7a","Solo en RedCap")}${lg(T.pe,"#d9d2dd","Pendiente en ambos")}</div>`
 +`<div class="card"><b>Por formulario</b><p class="mu s"><span style="color:var(--pr)">■</span> Base de datos · <span style="color:#2f9e8f">■</span> RedCap</p>${PR.map((p,i)=>`<div class="pf"><span>${p[0]}</span><div><div class="bar" style="height:6px;margin:0"><i style="width:${per[i].b/NS.length*100}%"></i></div><div class="bar" style="height:6px;margin:3px 0 0"><i style="width:${per[i].r/NS.length*100}%;background:#2f9e8f"></i></div></div><small>${per[i].b} · ${per[i].r}</small></div>`).join("")}</div>`
 +`<div class="card"><b>Falta pasar a RedCap</b><div class="gl">${ls(gap)||'<p class="mu s">Todo lo que está en la Base de datos ya está en RedCap.</p>'}</div>${Object.keys(rev).length?`<b style="display:block;margin-top:12px">Está en RedCap pero no en la Base de datos</b><div class="gl">${ls(rev)}</div>`:""}</div></div>`}
 
+function renderProgressRing(pct, complete, total, incomplete, inProgress, title, subText){
+  const c = 238.76;
+  const off = Math.max(0, (c * (1 - (pct || 0) / 100)).toFixed(1));
+  const sub = subText || "COMPLETOS";
+  return `<div class="cal-prog-card">
+    <div class="cal-prog-ring-wrap">
+      <svg class="prog-ring" viewBox="0 0 100 100">
+        <circle class="prog-ring-bg" cx="50" cy="50" r="38"></circle>
+        <circle class="prog-ring-fill" cx="50" cy="50" r="38" stroke-dasharray="${c}" stroke-dashoffset="${off}"></circle>
+      </svg>
+      <div class="cal-prog-center">
+        <span class="prog-pct">${pct}%</span>
+        <span class="prog-sub">${sub}</span>
+      </div>
+    </div>
+    <div class="cal-prog-info">
+      <div class="prog-title">${esc(title || "Base de datos")}</div>
+      <div class="prog-metrics">
+        <div class="prog-metric"><span class="pdot" style="background:#22c55e"></span><span class="prog-metric-txt"><b>${complete}</b> completos de ${total}</span></div>
+        <div class="prog-metric"><span class="pdot" style="background:#ef4444"></span><span class="prog-metric-txt"><b>${incomplete}</b> con formularios incompletos</span></div>
+        <div class="prog-metric"><span class="pdot" style="background:#eab308"></span><span class="prog-metric-txt"><b>${inProgress}</b> expedientes en proceso</span></div>
+      </div>
+    </div>
+  </div>`;
+}
 function agH(k,ed){
   const m=AVS[k],ord=m.ord||m.cols.map((_,i)=>i),req=m.cols.map(c=>!c[2]),
   rows=avRows(m).map(id=>{const rawN=(avRec(m,id)||{}).n||"";return{id,v:avV(m,id),n:rawN==="[ELIMINADO]"?"":rawN}}),
@@ -470,14 +524,43 @@ function agH(k,ed){
   });
   const pct=rows.length?Math.round(t.f/rows.length*100):0,col=x=>(m.st.find(s=>s[0]===x)||[])[2]||"transparent";
   setTimeout(()=>document.querySelectorAll(".ag").forEach(a=>a.scrollLeft=AGX[0]),0);
-  return `<div class="card sum"><div class="row"><b>${m.t}</b><span class="sp"></span><span class="mu">${t.f} de ${rows.length} completos · ${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div><p class="mu s" style="margin-top:8px">Con incompletos: ${t.i} · En proceso: ${t.p}</p></div>`
+
+  const curSt=(m.st.find(s=>s[0]===AB)||[])[1]||(AB==="-"?"Borrar":AB==="DEL"?"Eliminar":"Editar");
+  const curBg=(m.st.find(s=>s[0]===AB)||[])[2]||(AB==="DEL"?"#e5484d":"transparent");
+
+  return renderProgressRing(pct,t.f,rows.length,t.i,t.p,m.t)
   +`<div class="lg">${m.st.map(s=>{
     const isG=s[0]==="G";
     const numShow=isG?(expCnt.G||0)+" exp.":(cnt[s[0]]||0);
     return `<button type="button" data-ab="${s[0]}" ${isG?'data-ret-info="1" title="Toca para ver cuáles expedientes se retiraron"':""} class="${ed&&AB===s[0]?"on":""}" style="background:${s[2]};color:${isG?"#fff":"#222"}">${s[1]} · ${numShow}${isG?" ⓘ":""}</button>`;
-  }).join("")}${ed?`<button type="button" data-ab="-" class="${AB==="-"?"on":""}" style="background:var(--soft);color:var(--tx)">Borrar</button><button type="button" data-add="1" style="background:var(--soft);color:var(--pr)">＋ Agregar expediente</button><button type="button" data-ab="DEL" class="${AB==="DEL"?"on":""}" style="background:#e5484d1f;color:#e5484d">🗑 Eliminar expediente</button>${delList(m).length?`<button type="button" data-restore="1" style="background:var(--soft);color:var(--tx)">↩ Restaurar (${delList(m).length})</button>`:""}`:""}</div>`
-  +(ed&&AB==="DEL"?'<p class="mu s" style="margin-top:8px;color:#e5484d">Modo eliminar: toca el número del expediente que quieras quitar de la tabla para todos los usuarios.</p>':ed?'<p class="mu s" style="margin-top:8px">Elige un color y toca las celdas para pintarlas. Toca «Se retiró» otra vez para ver el resumen de retiros.'+(m.notes?" Toca el expediente para ver o escribir observaciones.":"")+"</p>":'<p class="mu s" style="margin-top:8px">💡 Toca el indicador gris <b>«Se retiró»</b> para ver cuáles expedientes se retiraron y a partir de qué formulario.</p>')
-  +`<div class="ag${ed?" ed":""}${ed&&AB==="DEL"?" del":""}"><table><tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}</table></div>`;
+  }).join("")}</div>`
+  +(ed&&AB==="DEL"?'<p class="mu s" style="margin-top:8px;color:#e5484d">Modo eliminar: toca el número del expediente que quieras quitar de la tabla para todos los usuarios.</p>':ed?'<p class="mu s" style="margin-top:8px">Elige una opción con el lápiz flotante o toca los indicadores para pintar celdas. Toca «Se retiró» para ver el resumen de retiros.'+(m.notes?" Toca el expediente para ver o escribir observaciones.":"")+"</p>":'<p class="mu s" style="margin-top:8px">💡 Toca el indicador gris <b>«Se retiró»</b> para ver cuáles expedientes se retiraron y a partir de qué formulario.</p>')
+  +`<div class="ag-stage">
+    <div class="ag${ed?" ed":""}${ed&&AB==="DEL"?" del":""}">
+      <table>
+        <tr><th></th>${ord.map(i=>`<th class="${m.cols[i][2]?"mic":""}" style="background:${m.cols[i][1]}">${m.cols[i][0]}</th>`).join("")}</tr>
+        ${rows.map(r=>`<tr><td data-an="${r.id}">${r.id}${r.n?" 💬":""}</td>${ord.map(i=>`<td data-ac="${i}" class="${m.cols[i][2]?"mic":""}" style="background:${col(r.v[i])}"></td>`).join("")}</tr>`).join("")}
+      </table>
+    </div>
+    ${ed?`
+      ${agEditOpen?`
+        <div class="ag-dial-backdrop" id="agDialBackdrop"></div>
+        <div class="ag-dial-items" id="agDialItems">
+          ${m.st.map((s,idx)=>`<button type="button" class="ag-dial-pill ${AB===s[0]?"on":""}" data-ab="${s[0]}" style="--del:${idx*0.025}s"><span class="ag-dial-dot" style="background:${s[2]}"></span><span>${s[1]}</span>${AB===s[0]?'<span class="ag-dial-check">✓</span>':""}</button>`).join("")}
+          <div class="ag-dial-sep"></div>
+          <button type="button" class="ag-dial-pill ${AB==="-"?"on":""}" data-ab="-" style="--del:${m.st.length*0.025}s"><span class="ag-dial-dot" style="background:var(--bd)">🧹</span><span>Borrar celda</span>${AB==="-"?'<span class="ag-dial-check">✓</span>':""}</button>
+          <button type="button" class="ag-dial-pill" data-add="1" style="--del:${(m.st.length+1)*0.025}s"><span class="ag-dial-dot plus">＋</span><span>Agregar expediente</span></button>
+          <button type="button" class="ag-dial-pill del ${AB==="DEL"?"on":""}" data-ab="DEL" style="--del:${(m.st.length+2)*0.025}s"><span class="ag-dial-dot del">🗑</span><span>Eliminar expediente</span>${AB==="DEL"?'<span class="ag-dial-check">✓</span>':""}</button>
+          ${delList(m).length?`<button type="button" class="ag-dial-pill" data-restore="1" style="--del:${(m.st.length+3)*0.025}s"><span class="ag-dial-dot">↩</span><span>Restaurar (${delList(m).length})</span></button>`:""}
+        </div>
+      `:""}
+      ${!agEditOpen&&AB&&AB!=="DEL"&&AB!=="-"?`<div class="ag-active-pill"><i style="background:${curBg}"></i><span>${curSt}</span></div>`:""}
+      <button type="button" class="ag-fab-pencil ${agEditOpen?"open":""}" id="agFabPencil" title="Opciones de edición">
+        ${ic("pencil")}
+        ${!agEditOpen&&curBg!=="transparent"?`<span class="ag-fab-badge-indicator" style="background:${curBg}"></span>`:""}
+      </button>
+    `:""}
+  </div>`;
 }
 function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
 sub=avMode==="rc"?`<div class="tabs2" style="margin-bottom:10px">${[["rm","Madres"],["rb","Bebés"]].map(([x,t])=>`<button type="button" data-rs="${x}" class="${rcSub===x?"on":""}">${t}</button>`).join("")}</div>`:"";
@@ -504,6 +587,14 @@ window.hideAlertForm=function(){const f=document.getElementById("alertForm");if(
 {const f=$("#alertForm");document.body.appendChild(f);f.insertAdjacentHTML("afterbegin",'<button type="button" class="ib" id="fx" aria-label="Cerrar">✕</button>');$("#fx").onclick=closeForm;document.addEventListener("click",e=>{if(e.target===document.body&&!f.hidden)closeForm()})}
 async function flushQ(){const q=JSON.parse(localStorage.getItem("ms_q")||"{}");for(const k of Object.keys(q)){if(await post({action:"setAvance",clave:k,valores:q[k].v.join(","),notas:q[k].n})){delete q[k];localStorage.setItem("ms_q",JSON.stringify(q))}else break}}
 document.addEventListener("click",async e=>{
+  if(e.target.closest("#agFabPencil")){
+    agEditOpen=!agEditOpen;
+    sig="force";render();renderAvDra(1);return;
+  }
+  if(e.target.closest("#agDialBackdrop")){
+    agEditOpen=false;
+    sig="force";render();renderAvDra(1);return;
+  }
   const t=e.target.closest("[data-avd],[data-rs],[data-ab],[data-ac],[data-an],[data-cs],[data-add],[data-restore],[data-ret-info]");
   if(!t)return;
   const ed=role==="asis",d=t.dataset;
@@ -515,12 +606,13 @@ document.addEventListener("click",async e=>{
   const m=AVS[avMode==="bd"?"bd":rcSub];
   if(d.ab!==undefined){
     if(d.ab==="G"&&(!ed||AB==="G")){showRetiradosDlg();return;}
-    if(ed){AB=d.ab;sig="force";render();}
+    if(ed){AB=d.ab;agEditOpen=false;sig="force";render();}
     return;
   }
   
   // LOGICA PARA AGREGAR EXPEDIENTE NUEVO
   if(d.add){
+    agEditOpen=false;
     if(!ed)return;
     const x=parseInt(await ask(m.pre==="RB"?"Número del bebé (ej. 20)":"Número del expediente (ej. 27 para CRM27)","",0,"Número"),10);
     if(!x||x<1||x>999)return;
@@ -545,6 +637,7 @@ document.addEventListener("click",async e=>{
   
   // LOGICA PARA RESTAURAR ELIMINADOS
   if(d.restore){
+    agEditOpen=false;
     if(!ed)return;
     const L=delList(m);if(!L.length)return;
     const r=await dlgBox("Restaurar expedientes",'<div class="rlist">'+L.map(x=>'<button type="button" class="srow" data-r="'+x.k+'"><span class="stx"><b>'+x.lab+'</b></span><span class="chev">'+ic("chev")+'</span></button>').join("")+'</div><div class="dlg-a"><button type="button" class="ghost" data-r="">Cerrar</button></div>');

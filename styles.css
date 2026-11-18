@@ -538,3 +538,366 @@ body.modal-open{overflow:hidden!important}
 :focus{outline:none}
 :focus-visible{outline:2.5px solid color-mix(in srgb,var(--pr) 70%,transparent);outline-offset:2px;border-radius:8px}
   
+
+
+/* ===== TARJETA DE PROGRESO CIRCULAR MODERNA (GRANDE Y LEGIBLE) ===== */
+.cal-prog-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  background: color-mix(in srgb, var(--sf) 75%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bd) 65%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 10px 32px -12px #1d0f2420, inset 0 1px 0 #ffffff40;
+  backdrop-filter: blur(20px) saturate(1.7);
+  -webkit-backdrop-filter: blur(20px) saturate(1.7);
+}
+.cal-prog-ring-wrap {
+  position: relative !important;
+  width: 112px !important;
+  height: 112px !important;
+  min-width: 112px !important;
+  min-height: 112px !important;
+  flex: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+svg.prog-ring {
+  width: 112px !important;
+  height: 112px !important;
+  min-width: 112px !important;
+  min-height: 112px !important;
+  flex: none !important;
+  display: block !important;
+  overflow: visible !important;
+}
+.prog-ring-bg {
+  stroke: color-mix(in srgb, var(--bd) 75%, transparent);
+  stroke-width: 7;
+  fill: none;
+}
+.prog-ring-fill {
+  stroke: var(--pr);
+  stroke-width: 7.5;
+  stroke-linecap: round;
+  fill: none;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.9s var(--ios);
+}
+.cal-prog-center {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  pointer-events: none !important;
+}
+.cal-prog-center .prog-pct {
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: var(--tx) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.03em !important;
+}
+.cal-prog-center .prog-sub {
+  font-size: 8.5px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--mu) !important;
+  margin-top: 4px !important;
+  line-height: 1 !important;
+}
+.cal-prog-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.prog-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--tx);
+  letter-spacing: -0.02em;
+}
+.prog-desc {
+  font-size: 13px;
+  color: var(--mu);
+  line-height: 1.35;
+}
+.prog-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+.prog-metric {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--tx);
+}
+.prog-metric-txt {
+  line-height: 1.25;
+}
+.pdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+@media (max-width: 480px) {
+  .cal-prog-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px 18px;
+  }
+  .prog-metrics {
+    align-items: center;
+  }
+}
+
+/* ===== INMOVILIZACIÓN DE ENCABEZADOS Y COLUMNA EN LA TABLA ===== */
+.ag-stage {
+  position: relative !important;
+  margin: 14px 0 24px !important;
+}
+.ag {
+  overflow: auto !important;
+  max-height: 70vh !important;
+  position: relative !important;
+  border-radius: 22px !important;
+  border: 1px solid color-mix(in srgb, var(--bd) 65%, transparent) !important;
+  margin: 0 !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-shadow: 0 10px 32px -12px #1d0f2428 !important;
+}
+.ag table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 11.5px !important;
+  min-width: 100% !important;
+}
+.ag th {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
+  padding: 8px 6px !important;
+  min-width: 62px !important;
+  font-size: 10.5px !important;
+  line-height: 1.15 !important;
+  color: #222 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important;
+}
+.ag th:first-child {
+  position: sticky !important;
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 30 !important;
+  background: var(--soft) !important;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1) !important;
+}
+.ag td:first-child {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 10 !important;
+  background: var(--soft) !important;
+  font-weight: 800 !important;
+  padding: 0 10px !important;
+  min-width: 82px !important;
+  color: var(--tx) !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.05) !important;
+}
+
+/* ===== LÁPIZ FLOTANTE ANCLADO EXCLUSIVAMENTE A LA CUADRÍCULA ===== */
+.ag-fab-pencil {
+  position: absolute !important;
+  right: 18px !important;
+  bottom: 18px !important;
+  z-index: 45 !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  border: 1px solid color-mix(in srgb, #ffffff 40%, transparent) !important;
+  background: linear-gradient(135deg, var(--pr), var(--fu)) !important;
+  color: #fff !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 26px -4px color-mix(in srgb, var(--pr) 65%, transparent), 0 3px 10px #0003 !important;
+  transition: transform 0.35s var(--spring), background 0.25s, box-shadow 0.25s !important;
+}
+.ag-fab-pencil:active {
+  transform: scale(0.9) !important;
+}
+.ag-fab-pencil.open {
+  background: var(--tx) !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 8px 22px -4px #0005 !important;
+}
+.ag-fab-pencil svg {
+  width: 23px !important;
+  height: 23px !important;
+  stroke-width: 2.3 !important;
+  transition: transform 0.3s var(--spring) !important;
+}
+.ag-fab-badge-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 2px solid var(--sf);
+  box-shadow: 0 2px 6px #0004;
+}
+
+/* Píldora de herramienta activa al lado del lápiz */
+.ag-active-pill {
+  position: absolute !important;
+  right: 76px !important;
+  bottom: 24px !important;
+  z-index: 44 !important;
+  background: color-mix(in srgb, var(--sf) 92%, transparent);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid color-mix(in srgb, var(--bd) 70%, transparent);
+  border-radius: 999px;
+  padding: 6px 12px 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tx);
+  box-shadow: 0 8px 24px -6px #0003;
+  animation: pop 0.3s var(--spring);
+}
+.ag-active-pill i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* ===== MENÚ DESPLEGABLE VERTICAL: CÁPSULAS DE VIDRIO SUTIL (SPEED DIAL) ===== */
+.ag-dial-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 41 !important;
+  background: transparent !important;
+  cursor: default !important;
+  pointer-events: auto !important;
+}
+.ag-dial-items {
+  position: absolute !important;
+  right: 14px !important;
+  bottom: 74px !important;
+  z-index: 46 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 7px !important;
+  padding: 12px 10px !important;
+  border-radius: 28px !important;
+  background: color-mix(in srgb, var(--sf) 65%, transparent) !important;
+  backdrop-filter: blur(28px) saturate(1.7) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.7) !important;
+  border: 1px solid color-mix(in srgb, #ffffff 40%, transparent) !important;
+  box-shadow: 0 12px 36px -8px #1d0f2425 !important;
+  animation: pillSlideUp 0.25s var(--spring) both !important;
+}
+/* Cápsula de vidrio sin bordes toscos */
+.ag-dial-pill {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 16px 8px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, #ffffff 50%, var(--bd)) !important;
+  background: color-mix(in srgb, var(--sf) 82%, transparent) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  box-shadow: 0 8px 24px -6px #1d0f2425, inset 0 1px 0 #ffffff60 !important;
+  color: var(--tx) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: transform 0.22s var(--spring), background 0.2s, box-shadow 0.2s !important;
+  animation: pillSlideUp 0.3s var(--spring) both !important;
+  animation-delay: var(--del, 0s) !important;
+}
+.ag-dial-pill:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  background: color-mix(in srgb, var(--sf) 95%, transparent) !important;
+  box-shadow: 0 10px 28px -6px #1d0f2435 !important;
+}
+.ag-dial-pill:active {
+  transform: scale(0.95) !important;
+}
+.ag-dial-pill.on {
+  border-color: var(--pr) !important;
+  background: color-mix(in srgb, var(--pr) 18%, var(--sf)) !important;
+  color: var(--pr) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pr) 30%, transparent), 0 8px 20px -4px #1d0f2430 !important;
+}
+.ag-dial-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  box-shadow: 0 1px 3px #0002;
+}
+.ag-dial-dot.plus {
+  background: color-mix(in srgb, var(--pr) 15%, transparent);
+  color: var(--pr);
+}
+.ag-dial-dot.del {
+  background: #e5484d1a;
+  color: #e5484d;
+}
+.ag-dial-pill.del {
+  color: #e5484d !important;
+}
+.ag-dial-pill.del.on {
+  background: #e5484d !important;
+  color: #fff !important;
+  border-color: #e5484d !important;
+}
+.ag-dial-check {
+  font-size: 13px;
+  font-weight: 800;
+  margin-left: 2px;
+}
+.ag-dial-sep {
+  height: 1px;
+  width: 100%;
+  background: color-mix(in srgb, var(--bd) 60%, transparent);
+  margin: 3px 0;
+}
+
+@keyframes pillSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
