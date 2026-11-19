@@ -448,6 +448,121 @@ async function chSend(box, k) {
     toast("No se pudo enviar el comentario", "err");
   }
 }
+
+/* Tarjeta compacta para abrir el chat en pantalla completa inmersiva */
+function chPreviewCard(k) {
+  const L = COM.filter(c => c.h === k);
+  const lastMsg = L.length ? L[L.length - 1] : null;
+  const name = HN[k] || "Equipo";
+  return `<div class="card chat-launcher-card" data-open-chat="${k}">
+    <div class="chat-launcher-info">
+      <div class="avatar">${name.split(" ")[0].slice(0,2).toUpperCase()}</div>
+      <div class="chat-launcher-text">
+        <div class="chat-launcher-title">
+          <b>Comentarios · ${name}</b>
+          <span class="chat-launcher-badge">${L.length}</span>
+        </div>
+        <p class="chat-launcher-preview">${lastMsg ? esc(lastMsg.t) : "Sin comentarios aún · Toca para abrir el chat"}</p>
+      </div>
+    </div>
+    <button type="button" class="chat-launcher-btn" data-open-chat="${k}">
+      Abrir chat <span class="chev">${ic("chev")}</span>
+    </button>
+  </div>`;
+}
+
+/* ===== CONTROLADOR DE SUBVIEWS INMERSIVAS Y GESTOS ESTILO iOS ===== */
+let activeSubviewOnBack = null;
+function openSubview(title, subtitle, contentHtml, onBackFn) {
+  const container = document.getElementById("subviewContainer");
+  const titleEl = document.getElementById("subviewTitle");
+  const subEl = document.getElementById("subviewSubtitle");
+  const bodyEl = document.getElementById("subviewBody");
+  if (!container || !bodyEl) return;
+
+  activeSubviewOnBack = onBackFn || null;
+  if (titleEl) titleEl.textContent = title || "Detalle";
+  if (subEl) {
+    subEl.textContent = subtitle || "";
+    subEl.style.display = subtitle ? "block" : "none";
+  }
+  bodyEl.innerHTML = contentHtml || "";
+
+  container.hidden = false;
+  requestAnimationFrame(() => {
+    document.body.classList.add("in-subview");
+  });
+
+  try {
+    history.pushState({ subview: true }, "");
+  } catch(e) {}
+}
+
+function closeSubview() {
+  if (!document.body.classList.contains("in-subview")) return;
+  document.body.classList.remove("in-subview");
+  
+  const container = document.getElementById("subviewContainer");
+  setTimeout(() => {
+    if (container && !document.body.classList.contains("in-subview")) {
+      container.hidden = true;
+      const bodyEl = document.getElementById("subviewBody");
+      if (bodyEl) bodyEl.innerHTML = "";
+    }
+    if (typeof activeSubviewOnBack === "function") {
+      activeSubviewOnBack();
+      activeSubviewOnBack = null;
+    }
+  }, 350);
+}
+
+// Botón de Volver en cabecera y lanzador de chat
+document.addEventListener("click", e => {
+  if (e.target.closest("#subviewBackBtn")) {
+    closeSubview();
+    return;
+  }
+  const chatLaunch = e.target.closest("[data-open-chat]");
+  if (chatLaunch) {
+    const k = chatLaunch.dataset.openChat;
+    const name = HN[k] || "Equipo";
+    openSubview("Comentarios", name, chH(k), () => {
+      const launcher = document.querySelector(`.chat-launcher-card[data-open-chat="${k}"]`);
+      if (launcher) launcher.outerHTML = chPreviewCard(k);
+    });
+    return;
+  }
+});
+
+// Soporte para botón físico/hardware Atrás del celular
+window.addEventListener("popstate", e => {
+  if (document.body.classList.contains("in-subview")) {
+    closeSubview();
+  }
+});
+
+// Gesto táctil "Swipe Back" (deslizar de izquierda a derecha para volver)
+{
+  let touchStartX = 0, touchStartY = 0;
+  window.addEventListener("touchstart", e => {
+    if (e.touches && e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener("touchend", e => {
+    if (!touchStartX) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (touchStartX < 90 && dx > 70 && dy < 60) {
+      if (document.body.classList.contains("in-subview")) {
+        closeSubview();
+      }
+    }
+    touchStartX = 0;
+  }, { passive: true });
+}
 function renderGeneralProgressRing(pc, T, bdn){
   const c = 238.76;
   const off = Math.max(0, (c * (1 - (pc || 0) / 100)).toFixed(1));
@@ -594,7 +709,7 @@ function agH(k,ed){
 }
 function avPage(ed,it){const k=avMode==="bd"?"bd":avMode==="rc"?rcSub:"gn",top=ed?"":`<div class="tabs2">${[["bd","Base de datos"],["rc","RedCap"],["gn","General"]].map(([x,t])=>`<button type="button" data-avd="${x}" class="${avMode===x?"on":""}">${t}</button>`).join("")}</div>`,
 sub=avMode==="rc"?`<div class="tabs2" style="margin-bottom:10px">${[["rm","Madres"],["rb","Bebés"]].map(([x,t])=>`<button type="button" data-rs="${x}" class="${rcSub===x?"on":""}">${t}</button>`).join("")}</div>`:"";
-return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chH(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b> · ${HN[avMode==="bd"?"bd":"rm"].split(" ")[0]==="Base"?"Base de datos":"RedCap"}</summary>${avH(it)}</details>`:""}</div>`}
+return `<div class="avw">${top}${sub}${avMode==="gn"?genH():agH(k,ed)}${chPreviewCard(k)}${ed&&avMode!=="gn"?`<details class="card" style="margin-top:12px"><summary><b>Registros por procesar</b> · ${HN[avMode==="bd"?"bd":"rm"].split(" ")[0]==="Base"?"Base de datos":"RedCap"}</summary>${avH(it)}</details>`:""}</div>`}
 function renderAvDra(f){
   if(role!=="dra"||draTab!=="avance")return;
   if(!f&&document.activeElement?.matches("#avDra input,#avDra textarea"))return;
@@ -1316,3 +1431,57 @@ $("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve
 document.querySelectorAll("[data-ic]").forEach(e=>e.insertAdjacentHTML("afterbegin",ic(e.dataset.ic)));
 $("#bMenu").onclick=e=>{e.stopPropagation();$("#menu").hidden=!$("#menu").hidden};
 addEventListener("click",()=>{$("#menu").hidden=true});
+
+
+/* ===== MEJORA MÓVIL 4: Auto-ocultar barra al hacer scroll en celular ===== */
+{
+  let lastScrollY = 0;
+  let navHideTimer = null;
+  const isMobile = () => window.innerWidth < 820;
+
+  window.addEventListener("scroll", () => {
+    if (!isMobile() || document.body.classList.contains("in-subview")) return;
+    const y = window.scrollY;
+    const delta = y - lastScrollY;
+
+    if (delta > 12 && y > 80) {
+      // Scroll ABAJO rápido: ocultar barra
+      document.body.classList.add("nav-hidden");
+    } else if (delta < -8) {
+      // Scroll ARRIBA: mostrar barra
+      document.body.classList.remove("nav-hidden");
+    }
+
+    lastScrollY = y;
+  }, { passive: true });
+
+  // Mostrar barra al tocar la pantalla (para cuando no hay scroll)
+  window.addEventListener("touchstart", () => {
+    if (navHideTimer) clearTimeout(navHideTimer);
+  }, { passive: true });
+
+  // Si está arriba del todo, siempre mostrar barra
+  window.addEventListener("scrollend", () => {
+    if (window.scrollY < 40) {
+      document.body.classList.remove("nav-hidden");
+    }
+  }, { passive: true });
+}
+
+/* ===== MEJORA MÓVIL 2: Tarjeta de progreso colapsable (tocar para expandir/colapsar) ===== */
+document.addEventListener("click", e => {
+  const card = e.target.closest(".cal-prog-card");
+  if (!card || window.innerWidth >= 820) return;
+  card.classList.toggle("compact");
+});
+
+// Inicializar anillos de progreso como compactos en móvil
+{
+  const obs = new MutationObserver(() => {
+    if (window.innerWidth >= 820) return;
+    document.querySelectorAll(".cal-prog-card:not(.compact-init)").forEach(c => {
+      c.classList.add("compact", "compact-init");
+    });
+  });
+  obs.observe(document.body, { childList: true, subtree: true });
+}

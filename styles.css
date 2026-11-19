@@ -916,3 +916,368 @@ svg.prog-ring {
     transform: translateY(0) scale(1);
   }
 }
+
+
+/* ===== NAVEGACIÓN INMERSIVA (SUBVIEWS / PANTALLAS SECUNDARIAS ESTILO iOS) ===== */
+.subview-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+  overflow: hidden;
+}
+
+body.in-subview .subview-panel:not([hidden]) {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Al entrar a una subsección, la barra inferior y los botones flotantes se ocultan suavemente */
+body.in-subview nav {
+  transform: translate(-50%, 160%) scale(0.92) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease !important;
+}
+
+body.in-subview #fabNew,
+body.in-subview #fabDra {
+  transform: scale(0) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.25s ease, opacity 0.25s ease !important;
+}
+
+.subview-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--sf) 85%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid var(--bd);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.subview-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--pr) 12%, transparent);
+  color: var(--pr);
+  font-weight: 700;
+  font-size: 13.5px;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+  flex: none;
+}
+
+.subview-back-btn:active {
+  transform: scale(0.94);
+  background: color-mix(in srgb, var(--pr) 22%, transparent);
+}
+
+.subview-title-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.subview-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subview-subtitle {
+  color: var(--mu);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subview-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subview-body .chat {
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.subview-body .chat .msgs {
+  flex: 1;
+  max-height: none;
+  min-height: 250px;
+}
+
+/* Tarjeta lanzadora de chat compacta en la tabla (para no saturar la vista) */
+.chat-launcher-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px !important;
+  margin-top: 14px !important;
+  background: color-mix(in srgb, var(--sf) 90%, transparent) !important;
+  border: 1px solid var(--bd) !important;
+  border-radius: 18px !important;
+  cursor: pointer;
+  transition: transform 0.2s var(--spring), box-shadow 0.2s, background 0.2s;
+}
+
+.chat-launcher-card:hover {
+  background: var(--sf) !important;
+  box-shadow: 0 6px 20px -4px rgba(0,0,0,0.08) !important;
+}
+
+.chat-launcher-card:active {
+  transform: scale(0.98);
+}
+
+.chat-launcher-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.chat-launcher-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-launcher-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-launcher-title b {
+  font-size: 13.5px;
+  letter-spacing: -0.2px;
+}
+
+.chat-launcher-badge {
+  background: color-mix(in srgb, var(--pr) 15%, transparent);
+  color: var(--pr);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 99px;
+}
+
+.chat-launcher-preview {
+  margin: 0;
+  color: var(--mu);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.chat-launcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 12px;
+  border-radius: 99px;
+  background: var(--soft);
+  color: var(--pr);
+  font-weight: 700;
+  font-size: 12px;
+  border: 0;
+  cursor: pointer;
+  flex: none;
+}
+
+
+/* ===== MEJORA MÓVIL 1: Hero Cards compactas en celular ===== */
+@media (max-width: 819px) {
+  .card.hero {
+    padding: 14px 18px !important;
+    border-radius: 20px !important;
+    margin-bottom: 12px !important;
+  }
+  .card.hero h2 {
+    font-size: 17px !important;
+    margin-bottom: 2px !important;
+  }
+  .card.hero p {
+    font-size: 12px !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+    opacity: .7 !important;
+  }
+}
+
+/* ===== MEJORA MÓVIL 2: Anillo de progreso compacto colapsable ===== */
+.cal-prog-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 819px) {
+  .cal-prog-card {
+    cursor: pointer;
+    padding: 12px 16px !important;
+  }
+  /* Estado colapsado por defecto en celular */
+  .cal-prog-card.compact .cal-prog-ring-wrap {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  .cal-prog-card.compact .prog-pct {
+    font-size: 11px !important;
+  }
+  .cal-prog-card.compact .prog-sub {
+    display: none !important;
+  }
+  .cal-prog-card.compact .cal-prog-info {
+    flex-direction: row !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+  }
+  .cal-prog-card.compact .cal-prog-info .prog-metric {
+    flex: none !important;
+  }
+  .cal-prog-card.compact .cal-prog-info .prog-metric-txt {
+    font-size: 12px !important;
+  }
+}
+
+/* ===== MEJORA MÓVIL 3: Tabs2 compactas (Segmented Control Apple) ===== */
+@media (max-width: 819px) {
+  .tabs2 {
+    padding: 3px !important;
+    margin-bottom: 10px !important;
+    gap: 3px !important;
+  }
+  .tabs2 button {
+    padding: 8px 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+  .stats {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+  .stats button {
+    padding: 10px 2px !important;
+    border-radius: 16px !important;
+  }
+  .stats b {
+    font-size: 18px !important;
+  }
+  .stats span {
+    font-size: 10px !important;
+  }
+}
+
+/* ===== MEJORA MÓVIL 4: Auto-ocultar barra de navegación al hacer scroll ===== */
+@media (max-width: 819px) {
+  body nav {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease !important;
+  }
+  body.nav-hidden nav {
+    transform: translateX(-50%) translateY(140%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  body.nav-hidden #fabNew,
+  body.nav-hidden #fabDra {
+    transform: translateY(100px) scale(0.8) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: transform 0.3s ease, opacity 0.3s ease !important;
+  }
+
+  /* Extra padding inferior en wrap para compensar barra oculta */
+  body.nav-hidden .wrap {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ===== MEJORA MÓVIL 5: Formulario Alerta/Reporte en pantalla completa ===== */
+@media (max-width: 819px) {
+  #alertForm:not([hidden]) {
+    border-radius: 0 !important;
+    max-height: 100dvh !important;
+    height: 100dvh !important;
+    top: 0 !important;
+    padding-top: calc(16px + env(safe-area-inset-top)) !important;
+  }
+}
+
+/* ===== Leyenda (.lg) compacta en celular ===== */
+@media (max-width: 819px) {
+  .lg {
+    gap: 5px !important;
+    margin: 8px 0 4px !important;
+  }
+  .lg button {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* ===== Tabla de avances ocupa más alto en celular ===== */
+@media (max-width: 819px) {
+  .ag {
+    margin: 8px 0 14px !important;
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+  .ag-stage {
+    min-height: 50vh;
+  }
+}
+
+/* ===== Búsqueda #q más delgada en celular ===== */
+@media (max-width: 819px) {
+  #q {
+    padding: 10px 14px !important;
+    margin-bottom: 10px !important;
+    font-size: 13px !important;
+    border-radius: 14px !important;
+  }
+}
+
+/* ===== Wrap reduce padding inferior cuando no hay barra ===== */
+@media (max-width: 819px) {
+  .wrap {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+  }
+}
