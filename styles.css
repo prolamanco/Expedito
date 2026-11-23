@@ -1456,12 +1456,12 @@ body.in-subview #fabDra {
   backdrop-filter: blur(28px) saturate(1.8) !important;
   -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
   box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.28), 0 0 0 1px color-mix(in srgb, #fff 15%, transparent) !important;
-  display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
   transform-origin: top right !important;
 }
 #menu:not([hidden]) {
+  display: flex !important;
   animation: menuSpring 0.35s cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 @keyframes menuSpring {
@@ -1505,7 +1505,6 @@ body.in-subview #fabDra {
 /* 3. Segmented Controls / Pestañas Concéntricas (.tabs2) */
 /* PC: Inner 14px + Padding 6px = Outer 20px */
 .tabs2 {
-  display: flex !important;
   gap: 6px !important;
   padding: 6px !important;
   border-radius: 20px !important;
@@ -1514,6 +1513,9 @@ body.in-subview #fabDra {
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   margin-bottom: 14px !important;
+}
+.tabs2:not([hidden]) {
+  display: flex !important;
 }
 .tabs2 button {
   flex: 1 !important;
@@ -1875,4 +1877,17 @@ header {
     border: var(--glass-border) !important;
     box-shadow: var(--glass-specular), 0 32px 84px -16px rgba(0, 0, 0, 0.52) !important;
   }
+}
+
+
+/* ===== REGLA ESTRICTA DE VISIBILIDAD: ELEMENTOS OCULTOS NUNCA SE MUESTRAN ===== */
+[hidden],
+.tabs2[hidden],
+#avTabs[hidden],
+#hsTabs[hidden],
+#stats[hidden],
+#menu[hidden],
+.card[hidden],
+section[hidden] {
+  display: none !important;
 }
