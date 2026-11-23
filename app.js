@@ -428,7 +428,7 @@ function chH(k) {
   const d = CHD[k] || "";
   return `<div class="card chat">
     <div class="chat-hdr">
-      <div class="avatar">${HN[k].split(" ")[0].slice(0,2).toUpperCase()}</div>
+      <div class="avatar chat-ico-avatar">${ic("chat")}</div>
       <div><b>${HN[k]}</b><small>${L.length} ${L.length===1?"mensaje":"mensajes"} · compartido entre todos</small></div>
     </div>
     <div class="msgs" data-k="${k}">${html || ""}</div>
@@ -464,7 +464,7 @@ function chPreviewCard(k) {
   const name = HN[k] || "Equipo";
   return `<div class="card chat-launcher-card" data-open-chat="${k}">
     <div class="chat-launcher-info">
-      <div class="avatar">${name.split(" ")[0].slice(0,2).toUpperCase()}</div>
+      <div class="avatar chat-ico-avatar">${ic("chat")}</div>
       <div class="chat-launcher-text">
         <div class="chat-launcher-title">
           <b>Comentarios · ${name}</b>

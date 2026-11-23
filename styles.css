@@ -1420,3 +1420,302 @@ body.in-subview #fabDra {
   width: 78px;
   border-radius: 8px;
 }
+
+
+/* ==========================================================================
+   SISTEMA DE DISEÑO CONCÉNTRICO & ANIMACIONES UNIFICADAS (Outer = Inner + Padding)
+   Regla matemática: Radio Exterior = Radio Interior + Padding
+   Ejemplo: Inner 16px + Padding 8px = Outer 24px
+   ========================================================================== */
+
+/* 1. Icono de Chat en Avances y Tarjetas (reemplaza 'BA' por icono SVG) */
+.avatar.chat-ico-avatar {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, var(--pr), var(--fu)) !important;
+  color: #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--pr) 35%, transparent) !important;
+  flex: none !important;
+}
+.avatar.chat-ico-avatar svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #ffffff !important;
+  stroke-width: 2.2 !important;
+}
+
+/* 2. Menú Contextual Concéntrico: Inner 16px + Padding 8px = Outer 24px */
+#menu {
+  padding: 8px !important;
+  border-radius: 24px !important;
+  border: 1px solid color-mix(in srgb, var(--bd) 75%, transparent) !important;
+  background: color-mix(in srgb, var(--sf) 92%, transparent) !important;
+  backdrop-filter: blur(28px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+  box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.28), 0 0 0 1px color-mix(in srgb, #fff 15%, transparent) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  transform-origin: top right !important;
+}
+#menu:not([hidden]) {
+  animation: menuSpring 0.35s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+@keyframes menuSpring {
+  0% { opacity: 0; transform: scale(0.88) translateY(-10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.mi {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 11px 14px !important;
+  border-radius: 16px !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: var(--tx) !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+  transition: background 0.18s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.18s ease !important;
+}
+.mi:hover {
+  background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+  color: var(--pr) !important;
+}
+.mi:active {
+  transform: scale(0.96) !important;
+}
+.mi svg {
+  width: 19px !important;
+  height: 19px !important;
+  stroke-width: 2.2 !important;
+  flex: none !important;
+  color: var(--pr) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+.mi:hover svg {
+  transform: scale(1.12) !important;
+}
+
+/* 3. Segmented Controls / Pestañas Concéntricas (.tabs2) */
+/* PC: Inner 14px + Padding 6px = Outer 20px */
+.tabs2 {
+  display: flex !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  border-radius: 20px !important;
+  background: color-mix(in srgb, var(--sf) 75%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--bd) 60%, transparent) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  margin-bottom: 14px !important;
+}
+.tabs2 button {
+  flex: 1 !important;
+  border: 0 !important;
+  padding: 10px 8px !important;
+  border-radius: 14px !important;
+  color: var(--mu) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease !important;
+}
+.tabs2 button.on {
+  background: var(--pr) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--pr) 32%, transparent) !important;
+}
+.tabs2 button:active {
+  transform: scale(0.96) !important;
+}
+@media (max-width: 819px) {
+  /* Celular: Inner 12px + Padding 4px = Outer 16px */
+  .tabs2 {
+    padding: 4px !important;
+    gap: 4px !important;
+    border-radius: 16px !important;
+  }
+  .tabs2 button {
+    padding: 8px 4px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 4. Tarjeta Lanzadora de Chat Concéntrica: Inner 12px + Padding 12px = Outer 24px */
+.chat-launcher-card {
+  padding: 12px 16px !important;
+  border-radius: 24px !important;
+  background: color-mix(in srgb, var(--sf) 88%, transparent) !important;
+  border: 1px solid var(--bd) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.2s !important;
+}
+.chat-launcher-card:hover {
+  background: var(--sf) !important;
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.1) !important;
+}
+.chat-launcher-card:active {
+  transform: scale(0.97) !important;
+}
+.chat-launcher-card .avatar {
+  border-radius: 12px !important;
+}
+.chat-launcher-btn {
+  padding: 8px 14px !important;
+  border-radius: 12px !important;
+  background: var(--soft) !important;
+  color: var(--pr) !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s !important;
+}
+.chat-launcher-btn:active {
+  transform: scale(0.94) !important;
+}
+
+/* 5. Tarjetas Principales (.card): Inner 14px + Padding 14px = Outer 28px */
+.card {
+  border-radius: 28px !important;
+  padding: 16px 18px !important;
+  border: 1px solid color-mix(in srgb, var(--bd) 65%, transparent) !important;
+  background: color-mix(in srgb, var(--sf) 70%, transparent) !important;
+  box-shadow: 0 4px 22px -6px rgba(0, 0, 0, 0.06), 0 0 0 1px color-mix(in srgb, #fff 12%, transparent) !important;
+}
+.card.hero {
+  border-radius: 28px !important;
+  padding: 22px 24px !important;
+}
+@media (max-width: 819px) {
+  .card {
+    border-radius: 26px !important;
+    padding: 14px 16px !important;
+  }
+  .card.hero {
+    border-radius: 24px !important;
+    padding: 16px 18px !important;
+  }
+}
+
+/* Componentes internos dentro de tarjetas: R_inner uniforme de 14px (12px en móvil) */
+input[type=text], input[type=password], input[type=date], input[type=search], textarea, select {
+  border-radius: 14px !important;
+}
+.btn {
+  border-radius: 14px !important;
+}
+.ghost {
+  border-radius: 12px !important;
+}
+.vd {
+  border-radius: 16px !important;
+  padding: 10px 14px !important;
+}
+.ret-item {
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+}
+.tip {
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+}
+.opt {
+  border-radius: 14px !important;
+}
+.sw {
+  border-radius: 18px !important;
+}
+.stats button {
+  border-radius: 20px !important;
+  padding: 12px 6px !important;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, box-shadow 0.2s !important;
+}
+
+/* 6. Diálogos y Modales Concéntricos (.dlg-p): Inner 14px + Padding 20px = Outer 34px */
+@media (min-width: 820px) {
+  .dlg-p, #alertForm:not([hidden]) {
+    padding: 22px 24px !important;
+    border-radius: 36px !important;
+    box-shadow: 0 28px 72px -12px rgba(0, 0, 0, 0.42), 0 0 0 1px color-mix(in srgb, #fff 15%, transparent) !important;
+  }
+  #draFormModal .dlg-p {
+    border-radius: 36px !important;
+  }
+}
+@media (max-width: 819px) {
+  .dlg-p, #alertForm:not([hidden]) {
+    border-radius: 32px 32px 0 0 !important;
+    padding: 22px 18px calc(22px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* 7. Subview Inmersiva: Cabecera y Botón Volver Concéntricos */
+@media (min-width: 820px) {
+  .subview-card {
+    border-radius: 32px !important;
+    overflow: hidden !important;
+  }
+  .subview-card .subview-header {
+    border-radius: 32px 32px 0 0 !important;
+    padding: 16px 20px !important;
+  }
+}
+@media (max-width: 819px) {
+  .subview-card {
+    border-radius: 0 !important;
+  }
+  .subview-header {
+    border-radius: 0 !important;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px !important;
+  }
+}
+.subview-back-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 14px !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+  color: var(--pr) !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s !important;
+}
+.subview-back-btn:active {
+  transform: scale(0.95) !important;
+  background: color-mix(in srgb, var(--pr) 22%, transparent) !important;
+}
+
+/* 8. Speed Dial Pills Concéntricas: Inner dot 20px (R=10) + Padding 10px = Outer 20px */
+.ag-dial-pill {
+  padding: 8px 16px 8px 10px !important;
+  border-radius: 20px !important;
+}
+.ag-dial-dot {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 10px !important;
+}
+
+/* 9. Microinteracción Spring Universal al presionar */
+.btn:active, .ib:active, .ghost:active, .sw:active, .chip:active, .stats button:active, 
+.tabs2 button:active, .subview-back-btn:active, .mi:active, .acts button:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
