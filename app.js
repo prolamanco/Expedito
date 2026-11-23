@@ -909,7 +909,7 @@ const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábad
 const DIAS_C=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
 const isoToday=()=>{const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}}-${z(d.getDate())}`.replace("}}","}")};
 function todayStr(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
-let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim="";
+let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim=""; if(typeof renderDesktopDashboard==="function")renderDesktopDashboard();
 
 function fmt12(hm){
   if(!hm)return"Todo el día";
@@ -1376,6 +1376,108 @@ let asisCarouselList = [];
 let asisCarouselIdx = 0;
 let isCarouselOpen = false;
 
+function exportDBtoCSV(){
+  if(!DB || !DB.length) return toast("No hay expedientes para exportar", "err");
+  const headers = ["Expediente", "Estado", "Estado Participante", "Formularios", "Fecha Visita", "Hora Visita", "BD Estado", "BD Responsable", "RC Estado", "RC Responsable", "Fecha Creación", "Notas"];
+  const rows = DB.map(r => [
+    `"${(r.expediente || "").replace(/"/g, '""')}"`,
+    `"${(r.estado || "").replace(/"/g, '""')}"`,
+    `"${(r.estadoParticipante || "").replace(/"/g, '""')}"`,
+    `"${((r.formularios || []).join(", ")).replace(/"/g, '""')}"`,
+    `"${(r.fechaVisita || "").replace(/"/g, '""')}"`,
+    `"${(r.horaVisita || "").replace(/"/g, '""')}"`,
+    `"${(r.bdE || "").replace(/"/g, '""')}"`,
+    `"${(r.bdR || "").replace(/"/g, '""')}"`,
+    `"${(r.rcE || "").replace(/"/g, '""')}"`,
+    `"${(r.rcR || "").replace(/"/g, '""')}"`,
+    `"${(r.timestamp || "").replace(/"/g, '""')}"`,
+    `"${(r.notas || "").replace(/"/g, '""')}"`
+  ]);
+  const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `nexo-expedientes-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast("Reporte CSV descargado con éxito");
+}
+
+function renderDesktopDashboard(){
+  if(window.innerWidth < 1024) return;
+  const pend = DB.filter(r => r.estado === "Pendiente").length;
+  const nue = DB.filter(r => r.estado === "Pendiente" && r.esNuevo).length;
+  
+  const pendEl = document.getElementById("deskKpiPend");
+  if(pendEl) pendEl.textContent = pend;
+  const newTagEl = document.getElementById("deskKpiNewTag");
+  if(newTagEl) newTagEl.textContent = `+${nue} Nuevos`;
+
+  const tot = DB.length || 1;
+  const bdFin = DB.filter(r => r.bdE === "Finalizado").length;
+  const rcFin = DB.filter(r => r.rcE === "Finalizado").length;
+  const bdPct = Math.round((bdFin / tot) * 100);
+  const rcPct = Math.round((rcFin / tot) * 100);
+
+  const sBdPct = document.getElementById("deskStatBdPct");
+  const bBd = document.getElementById("deskBarBd");
+  const sBdD = document.getElementById("deskStatBdDetail");
+  if(sBdPct) sBdPct.textContent = bdPct + "%";
+  if(bBd) bBd.style.width = bdPct + "%";
+  if(sBdD) sBdD.textContent = `${bdFin} de ${tot} finalizados`;
+
+  const sRcPct = document.getElementById("deskStatRcPct");
+  const bRc = document.getElementById("deskBarRc");
+  const sRcD = document.getElementById("deskStatRcDetail");
+  if(sRcPct) sRcPct.textContent = rcPct + "%";
+  if(bRc) bRc.style.width = rcPct + "%";
+  if(sRcD) sRcD.textContent = `${rcFin} de ${tot} finalizados`;
+
+  // Próximas visitas en panel derecho
+  const vListEl = document.getElementById("deskVisitsList");
+  if(vListEl){
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming = DB.filter(r => r.fechaVisita && r.fechaVisita >= today)
+                       .sort((a, b) => a.fechaVisita.localeCompare(b.fechaVisita))
+                       .slice(0, 5);
+    if(upcoming.length){
+      vListEl.innerHTML = upcoming.map(r => `
+        <div class="desk-visit-item" data-cal-ev="${esc(r.id)}" data-cal-kind="asis" title="Ver detalle de la visita">
+          <div class="desk-visit-icon">📅</div>
+          <div class="desk-visit-info">
+            <b>Exp. ${esc(r.expediente)}</b>
+            <small>${esc(r.fechaVisita)}${r.horaVisita ? ' · ' + esc(r.horaVisita) : ''}</small>
+          </div>
+          ${dtag(r.fechaVisita)}
+        </div>
+      `).join("");
+    } else {
+      vListEl.innerHTML = `<div class="desk-empty-state">No hay visitas agendadas para los próximos días</div>`;
+    }
+  }
+
+  // Alertas recientes en panel derecho
+  const aListEl = document.getElementById("deskAlertsList");
+  if(aListEl){
+    const alertsSlice = (ALERTS || []).slice(-4).reverse();
+    if(alertsSlice.length){
+      aListEl.innerHTML = alertsSlice.map(a => `
+        <div class="desk-alert-item" title="Ver alerta">
+          <div class="desk-alert-top">
+            <b>Exp. ${esc(a.expediente)}</b>
+            <span class="tag ${a.estado === "Corregida" ? "lime" : "co"}">${esc(a.estado)}</span>
+          </div>
+          <div class="desk-alert-desc">${esc(a.pregunta || a.observaciones || "Alerta de formulario")}</div>
+        </div>
+      `).join("");
+    } else {
+      aListEl.innerHTML = `<div class="desk-empty-state">Sin alertas pendientes</div>`;
+    }
+  }
+}
+
+
 function updateViewModeUI(){
   const btn = document.getElementById("btnViewMode");
   if(!btn) return;
@@ -1651,6 +1753,39 @@ if(cViewport){
   },{passive:true});
 }
 
+
+// Acciones rápidas y botones del Dashboard en Escritorio
+const bNewAl = document.getElementById("deskActNewAlert");
+if(bNewAl) bNewAl.onclick = () => {
+  const f = $("#alertForm");
+  if(f){ f.classList.remove("out"); f.hidden = false; f.scrollTop = 0; }
+};
+const bGoVis = document.getElementById("deskActVisitas");
+if(bGoVis) bGoVis.onclick = () => { tab = "visitas"; sig = ""; render(); };
+const bGoAv = document.getElementById("deskActAvance");
+if(bGoAv) bGoAv.onclick = () => { tab = "avance"; sig = ""; render(); };
+const bGoSch = document.getElementById("deskActSearch");
+if(bGoSch) bGoSch.onclick = () => {
+  const qInput = document.getElementById("q");
+  if(qInput){ qInput.focus(); qInput.scrollIntoView({ behavior: "smooth", block: "center" }); }
+};
+const bLinkVis = document.getElementById("deskLinkVisitas");
+if(bLinkVis) bLinkVis.onclick = () => { tab = "visitas"; sig = ""; render(); };
+const bLinkAl = document.getElementById("deskLinkAlerts");
+if(bLinkAl) bLinkAl.onclick = () => {
+  tab = "historial"; hsMode = "al"; sig = ""; render();
+};
+
+const bDeskCsv = document.getElementById("btnDeskCSV");
+if(bDeskCsv) bDeskCsv.onclick = exportDBtoCSV;
+const bHeaderCsv = document.getElementById("btnDeskHeaderCSV");
+if(bHeaderCsv) bHeaderCsv.onclick = exportDBtoCSV;
+
+window.addEventListener("resize", () => {
+  if(window.innerWidth >= 1024 && typeof renderDesktopDashboard === "function") {
+    renderDesktopDashboard();
+  }
+});
 window.addEventListener("keydown",(e)=>{
   if(!isCarouselOpen)return;
   if(e.key==="Escape")closeAsisCarousel();
@@ -1664,7 +1799,7 @@ $("#alertForms").innerHTML=G.map(g=>`<details class="card grp af"><summary><b>${
 $("#alertForms").onchange=()=>document.querySelectorAll("#alertForms details").forEach(d=>{const n=d.querySelectorAll("[name=af]:checked").length,e=d.querySelector("[data-af]");e.textContent=n+"/"+d.querySelectorAll("[name=af]").length;e.classList.toggle("on",n>0)});
 $("#alertForm").addEventListener("reset",()=>setTimeout(()=>$("#alertForms").onchange()));
 let alertsLoaded=false;
-async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"});if(Array.isArray(d))ALERTS=d;alertsLoaded=true;renderAlerts()}catch(e){}}
+async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"});if(Array.isArray(d))ALERTS=d;alertsLoaded=true;renderAlerts();if(typeof renderDesktopDashboard==="function")renderDesktopDashboard()}catch(e){}}
 
 function renderAlerts(){if(role!=="dra"&&role!=="asis")return;const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;if(!alertsLoaded&&!ALERTS.length){host.innerHTML=skAlerts(3);return;}let list=ALERTS.slice().reverse();if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));const s=JSON.stringify(list)+"|"+role+"|"+draTab+"|"+tab+"|"+hsMode;if(s===sigAlert&&host.innerHTML)return;sigAlert=s;host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';}
 $("#cancelAlert").onclick=()=>hideAlertForm();

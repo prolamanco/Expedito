@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=2.8">
+<link rel="stylesheet" href="styles.css?v=2.9">
 </head>
 <body>
 <div id="toast"></div>
@@ -48,6 +48,7 @@
   <header>
     <div><h1><svg class="wm" viewBox="0 0 424 100" role="img" aria-label="nexo" fill="none" stroke="currentColor" stroke-width="22"><defs><clipPath id="wmcH"><rect x="-20" y="0" width="140" height="100"/></clipPath></defs><path d="M11 0V100M11 47a36 36 0 0 1 72 0V100"/><path transform="translate(104 0)" d="M11 50H89A39 39 0 1 0 80 75"/><g transform="translate(214 0)" clip-path="url(#wmcH)"><path d="M-3 -20L103 120M103 -20L-3 120"/></g><circle cx="374" cy="50" r="39"/></svg></h1><small><span class="dot" id="dot"></span><span id="who"></span></small></div>
     <span class="sp"></span>
+    <button type="button" class="btn ghost desk-btn-header-csv" id="btnDeskHeaderCSV" title="Exportar reporte CSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>Exportar CSV</span></button>
     <button class="ib" id="bBell" title="Avisos"></button>
     <button class="ib" id="bTheme" title="Tema"></button>
     <button class="ib" id="bMenu" title="Menú" data-ic="more"></button>
@@ -89,6 +90,105 @@
     <div class="swatches" id="sw"></div>
     <div class="tabs2" id="modeTabs" style="margin:12px 0 0"><button type="button" data-m="auto">Auto</button><button type="button" data-m="light">Día</button><button type="button" data-m="dark">Noche</button></div>
   </div>
+
+  <div class="desk-dashboard-layout" id="deskDashboardLayout">
+    <div class="desk-main-stage" id="deskMainStage">
+      <!-- WIDGETS SUPERIORES PARA ESCRITORIO (ESTILO DASHBOARD PANORÁMICO) -->
+      <div class="desk-kpi-row" id="deskKpiRow">
+        <!-- Widget 1: Resumen de Expedientes (Estilo "My Wallet") -->
+        <div class="card desk-kpi-card desk-kpi-main">
+          <div class="desk-kpi-top">
+            <div class="desk-kpi-pill">
+              <span class="desk-kpi-dot"></span>
+              <span class="desk-kpi-label">Expedientes Activos</span>
+            </div>
+            <span class="desk-kpi-tag" id="deskKpiNewTag">+0 Nuevos</span>
+          </div>
+          <div class="desk-kpi-metric-wrap">
+            <span class="desk-kpi-big" id="deskKpiPend">0</span>
+            <span class="desk-kpi-sub">pendientes de revisión</span>
+          </div>
+          <div class="desk-kpi-actions">
+            <button type="button" class="desk-act-btn" id="deskActNewAlert" title="Crear alerta de corrección">
+              <div class="desk-act-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></div>
+              <span>Alerta</span>
+            </button>
+            <button type="button" class="desk-act-btn" id="deskActVisitas" title="Ver calendario de visitas">
+              <div class="desk-act-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+              <span>Visitas</span>
+            </button>
+            <button type="button" class="desk-act-btn" id="deskActAvance" title="Ver avance de trabajo">
+              <div class="desk-act-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+              <span>Avance</span>
+            </button>
+            <button type="button" class="desk-act-btn" id="deskActSearch" title="Buscar en expedientes">
+              <div class="desk-act-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+              <span>Buscar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Widget 2: Métricas de Avance Global (Estilo "Total Income / Expenses") -->
+        <div class="card desk-kpi-card desk-kpi-progress">
+          <div class="desk-stat-item">
+            <div class="desk-stat-hdr">
+              <div class="desk-stat-label-wrap">
+                <span class="desk-stat-ico bd">BD</span>
+                <span class="desk-stat-name">Base de Datos</span>
+              </div>
+              <span class="desk-stat-pct" id="deskStatBdPct">0%</span>
+            </div>
+            <div class="desk-bar-track">
+              <div class="desk-bar-fill bd" id="deskBarBd" style="width:0%"></div>
+            </div>
+            <span class="desk-stat-detail mu s" id="deskStatBdDetail">0 finalizados</span>
+          </div>
+
+          <div class="desk-stat-item" style="margin-top:14px">
+            <div class="desk-stat-hdr">
+              <div class="desk-stat-label-wrap">
+                <span class="desk-stat-ico rc">RC</span>
+                <span class="desk-stat-name">RedCap</span>
+              </div>
+              <span class="desk-stat-pct" id="deskStatRcPct">0%</span>
+            </div>
+            <div class="desk-bar-track">
+              <div class="desk-bar-fill rc" id="deskBarRc" style="width:0%"></div>
+            </div>
+            <span class="desk-stat-detail mu s" id="deskStatRcDetail">0 finalizados</span>
+          </div>
+        </div>
+
+        <!-- Widget 3: Tarjeta Institucional de Prestigio (Estilo Tarjeta de Crédito Premium) -->
+        <div class="card desk-kpi-card desk-credit-card">
+          <div class="desk-card-ambient"></div>
+          <div class="desk-card-top-row">
+            <span class="desk-card-brand">nexo</span>
+            <div class="desk-card-chip-graphic">
+              <svg viewBox="0 0 32 24" fill="none" width="32" height="24">
+                <rect x="1" y="1" width="30" height="22" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.3"/>
+                <line x1="1" y1="9" x2="31" y2="9" stroke="currentColor" stroke-opacity="0.2"/>
+                <line x1="1" y1="15" x2="31" y2="15" stroke="currentColor" stroke-opacity="0.2"/>
+                <rect x="11" y="6" width="10" height="12" rx="2" stroke="currentColor" stroke-opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+          <div class="desk-card-mid">
+            <span class="desk-card-subhead">INVESTIGACIÓN Y SEGUIMIENTO</span>
+            <span class="desk-card-project">PROYECTO EXPEDITO</span>
+          </div>
+          <div class="desk-card-bottom-row">
+            <div>
+              <small class="desk-card-lbl">INSTITUTO</small>
+              <span class="desk-card-val">INISA · UCR</span>
+            </div>
+            <div class="desk-card-sync-pill">
+              <span class="desk-card-sync-dot"></span>
+              <span>Sincronizado</span>
+            </div>
+          </div>
+        </div>
+      </div>
   <section id="vDra" hidden>
     <div class="card hero"><h2>Registrar reporte</h2><p>Indica el expediente y los formularios que se llenaron.</p></div>
     <form id="fDra">
@@ -161,6 +261,45 @@
     <h3 id="alT" style="margin:18px 0 10px">Historial de alertas</h3><div id="alertsList"></div>
   </section>
   <section id="vCalDra" hidden></section>
+    </div><!-- /.desk-main-stage -->
+
+    <!-- PANEL LATERAL DERECHO (ESTILO "UPCOMING PAYMENTS" EN PC) -->
+    <aside class="desk-sidebar-right" id="deskSidebarRight">
+      <!-- Tarjeta de Próximas Visitas -->
+      <div class="card desk-panel-card">
+        <div class="desk-panel-hdr">
+          <div>
+            <h3 class="desk-panel-title">Próximas Visitas</h3>
+            <p class="desk-panel-sub">Agenda del equipo</p>
+          </div>
+          <button type="button" class="desk-panel-link" id="deskLinkVisitas">Ver todo</button>
+        </div>
+        <div class="desk-visits-list" id="deskVisitsList">
+          <div class="desk-empty-state">Cargando agenda…</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Alertas y Observaciones Recientes -->
+      <div class="card desk-panel-card" style="margin-top:16px">
+        <div class="desk-panel-hdr">
+          <div>
+            <h3 class="desk-panel-title">Alertas Recientes</h3>
+            <p class="desk-panel-sub">Dra. Lilliam y Asistentes</p>
+          </div>
+          <button type="button" class="desk-panel-link" id="deskLinkAlerts">Ver todas</button>
+        </div>
+        <div class="desk-alerts-list" id="deskAlertsList">
+          <div class="desk-empty-state">No hay alertas pendientes</div>
+        </div>
+      </div>
+
+      <!-- Botón Destacado Exportar CSV -->
+      <button type="button" class="btn desk-btn-export" id="btnDeskCSV">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>Exportar Reporte CSV</span>
+      </button>
+    </aside>
+  </div><!-- /.desk-dashboard-layout -->
 </div>
 
 <!-- PANEL SUBVIEW INMERSIVO ESTILO NATIVO iOS (AUTO-OCULTA LA BARRA Y SOPORTA GESTO ATRÁS) -->
@@ -225,7 +364,7 @@
 <button type="button" id="fabDra" aria-label="Nuevo reporte" title="Registrar reporte"><span data-ic="plus"></span></button>
 </div>
 <div id="printArea"></div>
-<script src="app.js?v=2.8"></script>
+<script src="app.js?v=2.9"></script>
 <script src="forms.js?v=2.4"></script>
 <script src="settings.js?v=2.4"></script>
 </body>

@@ -94,17 +94,16 @@ nav button.on::after{content:"";position:absolute;bottom:3px;width:16px;height:3
 .chip{transition:transform .2s}.chip:hover{transform:translateY(-1px)}
 #toast div{backdrop-filter:blur(10px);border-radius:16px}
 .af{background:var(--bg);box-shadow:none!important;margin:0 0 8px}.alert-form{max-width:680px}
-@media (min-width:820px){
-.wrap{max-width:1060px;padding-left:28px;padding-right:112px}
-header{margin:0;border-radius:0 0 26px 26px;border-left:1px solid var(--bd);border-right:1px solid var(--bd)}
-nav{left:auto;right:22px;top:50%;bottom:auto;transform:translateY(-50%);width:78px;flex-direction:column;border-radius:30px}
-nav button{padding:12px 2px}
-#fDra{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}#fDra>.card{margin:0}#fDra>.btn,#forms{grid-column:1/-1}
-#forms{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}#forms .card{margin:0}
-#list,#alertsList,#recent,#visList{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}#list .card,#alertsList .card,#recent .card{margin:0}
-.stats{max-width:520px}#list .empty{grid-column:1/-1}
+@media (min-width: 820px) and (max-width: 1023px) {
+  .wrap { max-width: 960px; padding-left: 28px; padding-right: 100px; }
+  header { margin: 0; border-radius: 0 0 26px 26px; border-left: 1px solid var(--bd); border-right: 1px solid var(--bd); }
+  nav { left: auto; right: 20px; top: 50%; bottom: auto; transform: translateY(-50%); width: 74px; flex-direction: column; border-radius: 30px; }
+  nav button { padding: 12px 2px; }
+  #fDra, #forms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  #list, #alertsList, #recent, #visList { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .stats { max-width: 520px; }
+  #list .empty { grid-column: 1 / -1; }
 }
-@media (min-width:1200px){.wrap{max-width:1280px}#list,#alertsList{grid-template-columns:repeat(3,1fr)}}
 .tabs2{display:flex;gap:6px;margin-bottom:12px;padding:5px;border:1px solid var(--bd);border-radius:99px;background:var(--card)}
 .tabs2 button{flex:1;border:0;background:none;padding:10px 6px;border-radius:99px;color:var(--mu);font-weight:700;font-size:13px;cursor:pointer;transition:background .25s,color .25s,transform .2s var(--spring)}.tabs2 button.on{background:var(--pr);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--pr) 30%,transparent)}
 .flow{display:flex;align-items:center;gap:6px;margin-top:18px}.st{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--mu);display:grid;justify-items:center;gap:8px}
@@ -2183,4 +2182,608 @@ section[hidden] {
 }
 #asisCarouselModal[hidden] {
   display: none !important;
+}
+
+/* ==========================================================================
+   DASHBOARD PANORÁMICO PARA ESCRITORIO / PC (>1024px)
+   Inspirado en la interfaz moderna estilo FinTech/SaaS con CSS Blur
+   ========================================================================== */
+
+/* 1. Fondo Atmosférico con Resplandor Difuminado en PC */
+@media (min-width: 1024px) {
+  body {
+    background-color: var(--bg) !important;
+    background-image: 
+      radial-gradient(ellipse 65% 42% at 50% -5%, color-mix(in srgb, var(--pr) 22%, transparent), transparent 75%),
+      radial-gradient(ellipse 45% 35% at 90% 12%, color-mix(in srgb, #3B82F6 14%, transparent), transparent 70%),
+      radial-gradient(ellipse 45% 35% at 10% 85%, color-mix(in srgb, var(--soft) 50%, transparent), transparent 70%) !important;
+    background-attachment: fixed !important;
+  }
+
+  /* Barra de Navegación Lateral Izquierda (Dock Flotante) */
+  nav, #nav, #navDra {
+    left: 20px !important;
+    right: auto !important;
+    top: 24px !important;
+    bottom: 24px !important;
+    transform: none !important;
+    width: 74px !important;
+    height: calc(100vh - 48px) !important;
+    border-radius: 28px !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 24px 8px !important;
+    gap: 14px !important;
+    position: fixed !important;
+    z-index: 50 !important;
+    background: var(--glass) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid color-mix(in srgb, #ffffff 45%, var(--bd)) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+  }
+
+  nav button, #nav button, #navDra button {
+    width: 56px !important;
+    height: 56px !important;
+    padding: 0 !important;
+    border-radius: 18px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: var(--mu) !important;
+    background: transparent !important;
+    gap: 4px !important;
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  nav button:hover, #nav button:hover, #navDra button:hover {
+    background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+    color: var(--pr) !important;
+    transform: translateY(-2px) scale(1.05) !important;
+  }
+
+  nav button.on, #nav button.on, #navDra button.on {
+    background: var(--pr) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--pr) 40%, transparent) !important;
+    transform: scale(1.04) !important;
+  }
+
+  nav button b, #nav button b, #navDra button b {
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  nav button b svg, #nav button b svg, #navDra button b svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* Contenedor Principal en Pantallas Grandes */
+  .wrap {
+    max-width: 1720px !important;
+    margin: 0 !important;
+    margin-left: 104px !important;
+    padding-left: 28px !important;
+    padding-right: 36px !important;
+    padding-bottom: 50px !important;
+  }
+
+  header {
+    border-radius: 24px !important;
+    margin: 20px 0 24px 0 !important;
+    padding: 14px 24px !important;
+    border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
+    background: var(--glass) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .desk-btn-header-csv {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border-radius: 99px !important;
+    border: 1px solid var(--bd) !important;
+    background: color-mix(in srgb, var(--soft) 60%, transparent) !important;
+    color: var(--tx) !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    margin-right: 8px !important;
+  }
+
+  .desk-btn-header-csv:hover {
+    border-color: var(--pr) !important;
+    color: var(--pr) !important;
+    background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* Estructura Grid de 2 Columnas para PC */
+  .desk-dashboard-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 340px !important;
+    gap: 24px !important;
+    align-items: start !important;
+  }
+
+  .desk-main-stage {
+    min-width: 0 !important;
+  }
+
+  /* 2. Fila Superior de KPIs (Widgets de Métricas) */
+  .desk-kpi-row {
+    display: grid !important;
+    grid-template-columns: 1.35fr 1fr 1.05fr !important;
+    gap: 18px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .desk-kpi-card {
+    border-radius: 24px !important;
+    padding: 22px !important;
+    margin: 0 !important;
+    background: var(--card) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  /* Widget 1: My Wallet (Expedientes Activos y Acciones Rápidas) */
+  .desk-kpi-main {
+    min-height: 175px !important;
+  }
+  .desk-kpi-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+  }
+  .desk-kpi-pill {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--mu) !important;
+  }
+  .desk-kpi-dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #22c55e !important;
+    box-shadow: 0 0 8px #22c55e !important;
+  }
+  .desk-kpi-tag {
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: var(--pr) !important;
+    background: color-mix(in srgb, var(--pr) 15%, transparent) !important;
+    padding: 3px 9px !important;
+    border-radius: 99px !important;
+  }
+  .desk-kpi-metric-wrap {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+  }
+  .desk-kpi-big {
+    font-size: 38px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--tx) !important;
+    line-height: 1 !important;
+  }
+  .desk-kpi-sub {
+    font-size: 13px !important;
+    color: var(--mu) !important;
+    font-weight: 600 !important;
+  }
+  .desk-kpi-actions {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+  }
+  .desk-act-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 4px !important;
+    background: color-mix(in srgb, var(--soft) 60%, transparent) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: 14px !important;
+    padding: 7px 4px !important;
+    cursor: pointer !important;
+    color: var(--tx) !important;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+  .desk-act-btn:hover {
+    transform: translateY(-2px) scale(1.04) !important;
+    background: color-mix(in srgb, var(--pr) 14%, transparent) !important;
+    border-color: var(--pr) !important;
+    color: var(--pr) !important;
+  }
+  .desk-act-btn:active {
+    transform: scale(0.95) !important;
+  }
+  .desk-act-icon {
+    width: 26px !important;
+    height: 26px !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+  .desk-act-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .desk-act-btn span {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Widget 2: Barras de Avance */
+  .desk-kpi-progress {
+    justify-content: center !important;
+  }
+  .desk-stat-item {
+    width: 100% !important;
+  }
+  .desk-stat-hdr {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 6px !important;
+  }
+  .desk-stat-label-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--tx) !important;
+  }
+  .desk-stat-ico {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 7px !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+  .desk-stat-ico.bd {
+    background: color-mix(in srgb, var(--pr) 18%, transparent) !important;
+    color: var(--pr) !important;
+  }
+  .desk-stat-ico.rc {
+    background: color-mix(in srgb, #3B82F6 18%, transparent) !important;
+    color: #3B82F6 !important;
+  }
+  .desk-stat-pct {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: var(--tx) !important;
+  }
+  .desk-bar-track {
+    height: 8px !important;
+    border-radius: 99px !important;
+    background: color-mix(in srgb, var(--soft) 90%, transparent) !important;
+    overflow: hidden !important;
+  }
+  .desk-bar-fill {
+    height: 100% !important;
+    border-radius: 99px !important;
+    transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .desk-bar-fill.bd {
+    background: linear-gradient(90deg, var(--pr), color-mix(in srgb, var(--pr) 75%, #a855f7)) !important;
+  }
+  .desk-bar-fill.rc {
+    background: linear-gradient(90deg, #3B82F6, #06B6D4) !important;
+  }
+  .desk-stat-detail {
+    display: block !important;
+    font-size: 11px !important;
+    margin-top: 4px !important;
+    color: var(--mu) !important;
+  }
+
+  /* Widget 3: Tarjeta Institucional (Estilo Tarjeta de Crédito Premium) */
+  .desk-credit-card {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--pr) 85%, #090d16), color-mix(in srgb, var(--pr) 38%, #1e1b4b)) !important;
+    color: #ffffff !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--pr) 28%, rgba(0, 0, 0, 0.16)) !important;
+  }
+  .desk-card-ambient {
+    position: absolute !important;
+    top: -30% !important;
+    right: -20% !important;
+    width: 150px !important;
+    height: 150px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 70%) !important;
+    pointer-events: none !important;
+  }
+  .desk-card-top-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+  }
+  .desk-card-brand {
+    font-size: 19px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
+    color: #ffffff !important;
+  }
+  .desk-card-chip-graphic {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .desk-card-mid {
+    margin-bottom: 14px !important;
+  }
+  .desk-card-subhead {
+    display: block !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    opacity: 0.75 !important;
+    margin-bottom: 2px !important;
+  }
+  .desk-card-project {
+    display: block !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    color: #ffffff !important;
+  }
+  .desk-card-bottom-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+  }
+  .desk-card-lbl {
+    display: block !important;
+    font-size: 9px !important;
+    opacity: 0.7 !important;
+    letter-spacing: 0.08em !important;
+  }
+  .desk-card-val {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+  }
+  .desk-card-sync-pill {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    backdrop-filter: blur(8px) !important;
+    padding: 3px 8px !important;
+    border-radius: 99px !important;
+  }
+  .desk-card-sync-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: #4ade80 !important;
+    box-shadow: 0 0 6px #4ade80 !important;
+  }
+
+  /* 3. Panel Lateral Derecho (Agenda y Alertas en PC) */
+  .desk-sidebar-right {
+    display: flex !important;
+    flex-direction: column !important;
+    position: sticky !important;
+    top: 96px !important;
+  }
+
+  .desk-panel-card {
+    border-radius: 24px !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    background: var(--card) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .desk-panel-hdr {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 14px !important;
+  }
+
+  .desk-panel-title {
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+    color: var(--tx) !important;
+  }
+
+  .desk-panel-sub {
+    font-size: 11.5px !important;
+    color: var(--mu) !important;
+    margin: 2px 0 0 !important;
+  }
+
+  .desk-panel-link {
+    background: none !important;
+    border: 0 !important;
+    color: var(--pr) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    transition: opacity 0.2s !important;
+  }
+  .desk-panel-link:hover {
+    opacity: 0.75 !important;
+    text-decoration: underline !important;
+  }
+
+  .desk-visit-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    background: color-mix(in srgb, var(--soft) 50%, transparent) !important;
+    margin-bottom: 8px !important;
+    cursor: pointer !important;
+    transition: background 0.18s, transform 0.15s !important;
+  }
+  .desk-visit-item:hover {
+    background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+    transform: translateX(3px) !important;
+  }
+  .desk-visit-icon {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+    background: color-mix(in srgb, var(--pr) 15%, transparent) !important;
+    color: var(--pr) !important;
+    display: grid !important;
+    place-items: center !important;
+    font-size: 15px !important;
+    flex-shrink: 0 !important;
+  }
+  .desk-visit-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .desk-visit-info b {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--tx) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .desk-visit-info small {
+    display: block !important;
+    font-size: 11px !important;
+    color: var(--mu) !important;
+    margin-top: 2px !important;
+  }
+
+  .desk-alert-item {
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    background: color-mix(in srgb, var(--soft) 50%, transparent) !important;
+    margin-bottom: 8px !important;
+    cursor: pointer !important;
+    transition: background 0.18s !important;
+  }
+  .desk-alert-item:hover {
+    background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
+  }
+  .desk-alert-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 3px !important;
+  }
+  .desk-alert-top b {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: var(--tx) !important;
+  }
+  .desk-alert-desc {
+    font-size: 11.5px !important;
+    color: var(--mu) !important;
+    line-height: 1.35 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  .desk-empty-state {
+    text-align: center !important;
+    font-size: 12px !important;
+    color: var(--mu) !important;
+    padding: 16px 8px !important;
+  }
+
+  /* Botón Destacado Exportar CSV */
+  .desk-btn-export {
+    width: 100% !important;
+    margin-top: 16px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, var(--pr), color-mix(in srgb, var(--pr) 75%, #0f172a)) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--pr) 30%, transparent) !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+  .desk-btn-export:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--pr) 42%, transparent) !important;
+  }
+  .desk-btn-export:active {
+    transform: scale(0.97) !important;
+  }
+
+  /* Cuadrícula multi-columna para las tarjetas en PC */
+  #list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  #list .empty {
+    grid-column: 1 / -1 !important;
+  }
+  #list .card {
+    margin: 0 !important;
+  }
+}
+
+/* Pantallas Extra Anchas (>1440px) */
+@media (min-width: 1440px) {
+  .desk-dashboard-layout {
+    grid-template-columns: minmax(0, 1fr) 380px !important;
+    gap: 28px !important;
+  }
+  .desk-kpi-row {
+    gap: 20px !important;
+  }
+}
+
+/* Asegurar que en móvil/tablet nada de esto rompa la pantalla */
+@media (max-width: 1023px) {
+  .desk-kpi-row,
+  .desk-sidebar-right,
+  .desk-btn-header-csv {
+    display: none !important;
+  }
 }
