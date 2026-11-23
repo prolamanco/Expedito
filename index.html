@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=2.7">
+<link rel="stylesheet" href="styles.css?v=2.8">
 </head>
 <body>
 <div id="toast"></div>
@@ -125,7 +125,13 @@
     <div class="card hero"><h2 id="aH">Expedientes por localizar</h2><p id="aP">Pendientes que registró la Dra. Lilliam.</p></div>
     <div class="tabs2" id="avTabs" hidden><button type="button" data-av="bd" class="on">Base de datos</button><button type="button" data-av="rc">RedCap</button><button type="button" data-av="gn">General</button></div>
     <div class="stats" id="stats"></div>
-    <input type="search" id="q" placeholder="🔍 Buscar expediente o formulario" style="margin-bottom:12px">
+    <div class="search-bar-row" id="searchRow">
+      <input type="search" id="q" placeholder="🔍 Buscar expediente o formulario">
+      <button type="button" id="btnViewMode" class="btn-view-mode" aria-label="Cambiar vista" title="Cambiar modo de vista">
+        <span class="view-ico-grid" data-ic="grid"></span>
+        <span class="view-ico-list" data-ic="list"></span>
+      </button>
+    </div>
     <div class="tabs2" id="hsTabs" hidden><button type="button" data-hs="exp" class="on">Expedientes</button><button type="button" data-hs="al">Alertas</button></div>
     <div id="list"></div><div id="asAlerts" hidden></div>
   </section>
@@ -174,6 +180,33 @@
   </div>
 </div>
 
+<!-- MODAL CARRUSEL INTERACTIVO DE EXPEDIENTES (SWIPEABLE SLIDER) -->
+<div id="asisCarouselModal" class="asis-carousel-modal" hidden>
+  <div class="asis-carousel-backdrop" id="asisCarouselBackdrop"></div>
+  <div class="asis-carousel-card" id="asisCarouselCard">
+    <div class="asis-carousel-hdr">
+      <button type="button" class="asis-carousel-btn-close" id="asisCarouselClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="asis-carousel-title-wrap">
+        <span class="asis-carousel-title" id="asisCarouselTitle">Expediente</span>
+        <span class="asis-carousel-counter" id="asisCarouselCounter" hidden></span>
+      </div>
+      <div class="asis-carousel-nav-arrows">
+        <button type="button" class="asis-carousel-arrow" id="asisCarouselPrev" aria-label="Anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="asis-carousel-arrow" id="asisCarouselNext" aria-label="Siguiente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="asis-carousel-viewport" id="asisCarouselViewport">
+      <div class="asis-carousel-track" id="asisCarouselTrack"></div>
+    </div>
+  </div>
+</div>
+
 <nav id="nav" hidden>
   <button data-tab="alertas"><b data-ic="bell"></b>Alertas <span id="cnt"></span></button>
   <button data-tab="visitas"><b data-ic="cal"></b>Visitas</button>
@@ -192,7 +225,7 @@
 <button type="button" id="fabDra" aria-label="Nuevo reporte" title="Registrar reporte"><span data-ic="plus"></span></button>
 </div>
 <div id="printArea"></div>
-<script src="app.js?v=2.7"></script>
+<script src="app.js?v=2.8"></script>
 <script src="forms.js?v=2.4"></script>
 <script src="settings.js?v=2.4"></script>
 </body>

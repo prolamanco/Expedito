@@ -23,7 +23,7 @@ sheet:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16
 sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
 down:'<path d="M12 3v12M7 11l5 5 5-5M5 21h14"/>',swap:'<path d="M17 3l4 4-4 4M21 7H8M7 21l-4-4 4-4M3 17h13"/>',
 out:'<path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>',
-cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',chev:'<path d="M6 9l6 6 6-6"/>',plus:'<path d="M12 5v14M5 12h14"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',palette:'<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="15.5" cy="10" r="1"/>'};
+cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',chev:'<path d="M6 9l6 6 6-6"/>',plus:'<path d="M12 5v14M5 12h14"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',palette:'<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="15.5" cy="10" r="1"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/>'};
 function ic(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>'}
 
 // ---- Efecto onda (ripple) al tocar cualquier botón interactivo ----
@@ -1370,6 +1370,135 @@ const cell=e.target.closest("[data-cdate]");
   if(ev){openVisitDetailSheet(ev.dataset.calEv,ev.dataset.calKind);return}
 });
 
+// ---- Vista asistentes y Modo de Visualización (Tarjetas delgadas / Carrusel) ----
+let asisViewMode = localStorage.getItem("ms_asis_view_mode") || "list";
+let asisCarouselList = [];
+let asisCarouselIdx = 0;
+let isCarouselOpen = false;
+
+function updateViewModeUI(){
+  const btn = document.getElementById("btnViewMode");
+  if(!btn) return;
+  const isList = (asisViewMode === "list");
+  btn.classList.toggle("is-list", isList);
+  btn.title = isList ? "Cambiar a tarjetas completas (Cuadros)" : "Cambiar a tarjetas delgadas (Lista compacta)";
+}
+
+function renderCompactCard(r, idx){
+  const formsCount = (r.formularios || []).length;
+  const chipSlice = (r.formularios || []).slice(0, 3);
+  const extraCount = formsCount - 3;
+  return `<div class="card asis-compact-card ${r.esNuevo && r.estado === "Pendiente" ? "nw" : ""}" data-open-carousel="${idx}">
+  <div class="asis-compact-row">
+    <div class="asis-compact-info">
+      <b class="exp">${esc(r.expediente)}</b>
+      ${r.esNuevo ? '<span class="tag lime">NUEVA</span>' : ""}
+      <span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span>
+      ${r.fechaVisita ? `<span class="tag vis-pill">📅 ${esc(r.fechaVisita)}</span>` : ""}
+    </div>
+    <div class="asis-compact-arrow">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </div>
+  ${formsCount ? `
+  <div class="asis-compact-chips">
+    ${chipSlice.map(f => `<span class="chip-sm">${esc(f)}</span>`).join("")}
+    ${extraCount > 0 ? `<span class="chip-sm extra">+${extraCount}</span>` : ""}
+  </div>` : ""}
+</div>`;
+}
+
+function renderFullCardHTML(r, idx, isModal = false){
+  return `<div class="card ${r.esNuevo && r.estado === "Pendiente" ? "nw" : ""}" ${!isModal ? `data-card-idx="${idx}"` : ""}>
+<div class="row ${!isModal ? 'card-tap-hint' : ''}" ${!isModal ? `data-open-carousel="${idx}"` : ''} title="${!isModal ? 'Toca para abrir carrusel interactivo' : ''}"><b class="exp">${esc(r.expediente)}</b>${r.esNuevo ? '<span class="tag lime">NUEVA</span>' : ""}<span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span>${!isModal ? '<span class="sp"></span><span style="font-size:11px;color:var(--mu);display:flex;align-items:center;gap:3px;font-weight:600">Abrir ➔</span>' : ''}</div>
+${forms(r)}
+${r.fechaVisita ? `<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>` : ""}${r.fechaLlegada ? `<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>` : ""}${r.notas ? `<p class="mu">📝 ${esc(r.notas)}</p>` : ""}
+<p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
+${chk(r)}${trk(r, r.estado === "Pendiente")}${obsH(r)}${r.estado === "Pendiente" ? `<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="${isModal ? 'modal-o-' : 'o-'}${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}" ${isModal ? 'data-is-modal="1"' : ''}>Enviar a la Dra.</button></div>` : `<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`;
+}
+
+function openAsisCarousel(idx){
+  if(!asisCarouselList || !asisCarouselList.length) return;
+  asisCarouselIdx = Math.max(0, Math.min(idx, asisCarouselList.length - 1));
+  const modal = document.getElementById("asisCarouselModal");
+  if(!modal) return;
+  modal.hidden = false;
+  requestAnimationFrame(() => {
+    modal.classList.add("open");
+  });
+  isCarouselOpen = true;
+  document.body.style.overflow = "hidden";
+  renderCarouselSlide();
+}
+
+function closeAsisCarousel(){
+  const modal = document.getElementById("asisCarouselModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  setTimeout(() => {
+    if(!modal.classList.contains("open")){
+      modal.hidden = true;
+    }
+  }, 220);
+  isCarouselOpen = false;
+  document.body.style.overflow = "";
+}
+
+function goToCarouselSlide(idx){
+  if(idx < 0 || idx >= asisCarouselList.length) return;
+  asisCarouselIdx = idx;
+  renderCarouselSlide(true);
+}
+
+function renderCarouselSlide(animated = false){
+  const r = asisCarouselList[asisCarouselIdx];
+  if(!r){ closeAsisCarousel(); return; }
+  
+  const titleEl = document.getElementById("asisCarouselTitle");
+  if(titleEl) titleEl.textContent = `Exp. ${r.expediente || ""}`;
+  
+  const counterEl = document.getElementById("asisCarouselCounter");
+  if(counterEl){
+    if(asisCarouselList.length > 1){
+      counterEl.hidden = false;
+      counterEl.textContent = `${asisCarouselIdx + 1} de ${asisCarouselList.length}`;
+    } else {
+      counterEl.hidden = true;
+    }
+  }
+  
+  const prevBtn = document.getElementById("asisCarouselPrev");
+  const nextBtn = document.getElementById("asisCarouselNext");
+  if(prevBtn) prevBtn.disabled = (asisCarouselIdx <= 0);
+  if(nextBtn) nextBtn.disabled = (asisCarouselIdx >= asisCarouselList.length - 1);
+  
+  const track = document.getElementById("asisCarouselTrack");
+  if(track){
+    track.innerHTML = renderFullCardHTML(r, asisCarouselIdx, true);
+    if(animated){
+      track.style.opacity = "0.7";
+      track.style.transform = "scale(0.98)";
+      track.style.transition = "opacity 0.18s ease, transform 0.18s ease";
+      requestAnimationFrame(() => {
+        track.style.opacity = "1";
+        track.style.transform = "scale(1)";
+      });
+    }
+  }
+}
+
+function updateCarouselCard(){
+  if(!isCarouselOpen) return;
+  if(asisCarouselIdx >= asisCarouselList.length){
+    asisCarouselIdx = Math.max(0, asisCarouselList.length - 1);
+  }
+  if(asisCarouselList.length === 0){
+    closeAsisCarousel();
+    return;
+  }
+  renderCarouselSlide(false);
+}
+
 // ---- Vista asistentes ----
 function render(){
   if(role!=="asis")return;
@@ -1401,34 +1530,133 @@ function render(){
   $("#stats").innerHTML=`<button data-tab="alertas"><b>${pend}</b><span>Pendientes</span></button><button data-tab="alertas"><b>${nue}</b><span>Nuevas</span></button><button data-tab="visitas"><b>${vis}</b><span>Visitas</span></button>`;
   let it=DB.slice().reverse().filter(r=>!q||(r.expediente+" "+r.formularios.join(" ")).toLowerCase().includes(q));
   it=tab==="avance"?it.filter(r=>/^(Pendiente|Completado)$/.test(r.estado)).sort((a,b)=>(a[avMode+"E"]==="Finalizado")-(b[avMode+"E"]==="Finalizado")):tab==="alertas"?it.filter(r=>r.estado==="Pendiente"):tab==="visitas"?it.filter(r=>r.fechaVisita).sort((a,b)=>a.fechaVisita.localeCompare(b.fechaVisita)):it.filter(r=>r.estado!=="Pendiente");
-  {const t=$("#avTabs"),qEl=$("#q"),heroEl=$("#vAsis .hero");if(t&&tab==="avance")t.hidden=false;if(qEl)qEl.style.display=(tab==="avance"||tab==="visitas")?"none":"";if(heroEl)heroEl.hidden=tab==="visitas"}
-  $("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?it.map(r=>`<div class="card ${r.esNuevo&&r.estado==="Pendiente"?"nw":""}">
-<div class="row"><b class="exp">${esc(r.expediente)}</b>${r.esNuevo?'<span class="tag lime">NUEVA</span>':""}<span class="tag ${ec(r.estadoParticipante)}">${esc(r.estadoParticipante)}</span></div>
-${forms(r)}
-${r.fechaVisita?`<div class="vis">📅 <input type="date" value="${esc(r.fechaVisita)}" data-a="d" data-id="${esc(r.id)}"><input type="time" value="${esc(r.horaVisita)}" data-a="t" data-id="${esc(r.id)}">${dtag(r.fechaVisita)}<button class="ghost" data-a="x" data-id="${esc(r.id)}">Quitar</button></div><div class="row" style="margin-top:8px"><a class="ghost" target="_blank" rel="noopener" href="${esc(gcal(r))}">＋ Google Calendar</a><button class="ghost" data-a="c" data-id="${esc(r.id)}">＋ Apple / Outlook</button></div>`:""}${r.fechaLlegada?`<p class="mu">Llegada: ${esc(r.fechaLlegada)}</p>`:""}${r.notas?`<p class="mu">📝 ${esc(r.notas)}</p>`:""}
-<p class="mu s">${esc(r.timestamp)} · ${ago(r.timestamp)} · ${esc(r.estado)}</p>
-${chk(r)}${trk(r,r.estado==="Pendiente")}${obsH(r)}${r.estado==="Pendiente"?`<div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="o-${esc(r.id)}" placeholder="Observación de datos faltantes (opcional)"><button class="ghost" data-a="o" data-id="${esc(r.id)}">Enviar a la Dra.</button></div>`:`<div style="margin-top:10px"><button class="ghost" data-a="r" data-id="${esc(r.id)}">Regresar a pendiente</button></div>`}</div>`).join("")
+  {
+    const t=$("#avTabs"), sRow=document.getElementById("searchRow")||$("#q"), heroEl=$("#vAsis .hero");
+    if(t&&tab==="avance") t.hidden=false;
+    if(sRow) sRow.style.display=(tab==="avance"||tab==="visitas")?"none":"";
+    if(heroEl) heroEl.hidden=tab==="visitas";
+  }
+  asisCarouselList=it;
+  updateViewModeUI();
+  $("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?(asisViewMode==="list"&&(tab==="alertas"||tab==="historial")?it.map((r,i)=>renderCompactCard(r,i)).join(""):it.map((r,i)=>renderFullCardHTML(r,i)).join(""))
   :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
   calAnim="";
 }
 $("#q").oninput=render;
 $("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
 $("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
-const up=async(r,o,m)=>{sig="";render();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
-$("#list").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||!/^[xroc]$/.test(b.dataset.a))return;const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;if(!r)return;
-if(a==="c")return dl(r);
-if(a==="x"){r.fechaVisita=r.horaVisita="";return up(r,{fechaVisita:"",horaVisita:""},"Fecha eliminada")}
-if(a==="r"){r.estado="Pendiente";r.bdE=r.rcE="En proceso";return up(r,{statusValue:"Pendiente",bdEstado:"En proceso",rcEstado:"En proceso"},"Regresado a pendientes")}
-const i=document.getElementById("o-"+r.id),t=i.value.trim();if(!t)return toast("Escribe la observación","err");
-const autor="Asistente";r.obs.push("[ahora] "+autor+": "+t);i.value="";sig="";render();const ok=await post({action:"addObs",id:r.id,texto:t,autor:autor});toast(ok?"Observación enviada a la Dra.":"Error de conexión",ok?"":"err")};
-$("#list").onchange=async e=>{const i=e.target,a=i.dataset.a,r=DB.find(x=>x.id===i.dataset.id);if(!r||!a)return;
-if(a==="d"){if(!i.value)return;r.fechaVisita=i.value;i.blur();return up(r,{fechaVisita:i.value},"Fecha actualizada")}
-if(a==="t"){r.horaVisita=i.value;i.blur();return up(r,{horaVisita:i.value},i.value?"Hora actualizada":"Hora quitada")}
-const k=i.dataset.k;
-if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
-if(a==="s"){const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
-r[k+"E"]=i.value;r[k+"R"]=n;if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";i.blur();
-up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado")}};
+
+const up=async(r,o,m)=>{sig="";render();if(isCarouselOpen)updateCarouselCard();const ok=await post({action:"updateStatus",id:r.id,...o});toast(ok?m:"Error de conexión",ok?"":"err")};
+
+async function handleCardAction(e, isModal = false){
+  const b=e.target.closest("[data-a]");
+  if(!b||!/^[xroc]$/.test(b.dataset.a))return;
+  const r=DB.find(x=>x.id===b.dataset.id),a=b.dataset.a;
+  if(!r)return;
+  if(a==="c")return dl(r);
+  if(a==="x"){r.fechaVisita=r.horaVisita="";return up(r,{fechaVisita:"",horaVisita:""},"Fecha eliminada")}
+  if(a==="r"){r.estado="Pendiente";r.bdE=r.rcE="En proceso";return up(r,{statusValue:"Pendiente",bdEstado:"En proceso",rcEstado:"En proceso"},"Regresado a pendientes")}
+  const i=document.getElementById((b.dataset.isModal?"modal-o-":"o-")+r.id)||document.getElementById("modal-o-"+r.id)||document.getElementById("o-"+r.id);
+  const t=i?i.value.trim():"";
+  if(!t)return toast("Escribe la observación","err");
+  const autor="Asistente";
+  r.obs.push("[ahora] "+autor+": "+t);
+  if(i)i.value="";
+  sig="";
+  render();
+  if(isCarouselOpen)updateCarouselCard();
+  const ok=await post({action:"addObs",id:r.id,texto:t,autor:autor});
+  toast(ok?"Observación enviada a la Dra.":"Error de conexión",ok?"":"err");
+}
+
+async function handleCardChange(e, isModal = false){
+  const i=e.target,a=i.dataset.a,r=DB.find(x=>x.id===i.dataset.id);
+  if(!r||!a)return;
+  if(a==="d"){if(!i.value)return;r.fechaVisita=i.value;i.blur();return up(r,{fechaVisita:i.value},"Fecha actualizada")}
+  if(a==="t"){r.horaVisita=i.value;i.blur();return up(r,{horaVisita:i.value},i.value?"Hora actualizada":"Hora quitada")}
+  const k=i.dataset.k;
+  if(a==="w"){r[k+"R"]=i.value.trim();return up(r,{[k+"Resp"]:r[k+"R"]},"Responsable guardado")}
+  if(a==="s"){
+    const n=r[k+"R"]||(ME&&ME.name)||"Equipo asistente";
+    r[k+"E"]=i.value;
+    r[k+"R"]=n;
+    if(r.bdE==="Finalizado"&&r.rcE==="Finalizado")r.estado="Completado";
+    i.blur();
+    up(r,{[k+"Estado"]:i.value,[k+"Resp"]:n},r.estado==="Completado"?"✓ Completado en Base de datos y RedCap":"Estado actualizado");
+  }
+}
+
+$("#list").onclick=(e)=>handleCardAction(e,false);
+$("#list").onchange=(e)=>handleCardChange(e,false);
+
+const cTrack=document.getElementById("asisCarouselTrack");
+if(cTrack){
+  cTrack.onclick=(e)=>handleCardAction(e,true);
+  cTrack.onchange=(e)=>handleCardChange(e,true);
+}
+
+const btnVM=document.getElementById("btnViewMode");
+if(btnVM){
+  btnVM.onclick=()=>{
+    asisViewMode=(asisViewMode==="list"?"grid":"list");
+    localStorage.setItem("ms_asis_view_mode",asisViewMode);
+    sig="";
+    updateViewModeUI();
+    render();
+  };
+  updateViewModeUI();
+}
+
+const cClose=document.getElementById("asisCarouselClose");
+if(cClose)cClose.onclick=closeAsisCarousel;
+
+const cBackdrop=document.getElementById("asisCarouselBackdrop");
+if(cBackdrop)cBackdrop.onclick=closeAsisCarousel;
+
+const cPrev=document.getElementById("asisCarouselPrev");
+if(cPrev)cPrev.onclick=()=>goToCarouselSlide(asisCarouselIdx-1);
+
+const cNext=document.getElementById("asisCarouselNext");
+if(cNext)cNext.onclick=()=>goToCarouselSlide(asisCarouselIdx+1);
+
+document.addEventListener("click",(e)=>{
+  const trigger=e.target.closest("[data-open-carousel]");
+  if(!trigger)return;
+  if(e.target.closest("input, select, textarea, button, a, label"))return;
+  const idx=parseInt(trigger.dataset.openCarousel,10);
+  if(!isNaN(idx)&&asisCarouselList[idx]){
+    openAsisCarousel(idx);
+  }
+});
+
+const cViewport=document.getElementById("asisCarouselViewport");
+if(cViewport){
+  let touchStartX=0,touchStartY=0;
+  cViewport.addEventListener("touchstart",(e)=>{
+    if(!e.touches||!e.touches[0])return;
+    touchStartX=e.touches[0].clientX;
+    touchStartY=e.touches[0].clientY;
+  },{passive:true});
+  cViewport.addEventListener("touchend",(e)=>{
+    if(!e.changedTouches||!e.changedTouches[0])return;
+    const dx=e.changedTouches[0].clientX-touchStartX;
+    const dy=e.changedTouches[0].clientY-touchStartY;
+    if(Math.abs(dx)>42&&Math.abs(dx)>Math.abs(dy)*1.3){
+      if(dx<0){
+        goToCarouselSlide(asisCarouselIdx+1);
+      }else{
+        goToCarouselSlide(asisCarouselIdx-1);
+      }
+    }
+  },{passive:true});
+}
+
+window.addEventListener("keydown",(e)=>{
+  if(!isCarouselOpen)return;
+  if(e.key==="Escape")closeAsisCarousel();
+  if(e.key==="ArrowLeft")goToCarouselSlide(asisCarouselIdx-1);
+  if(e.key==="ArrowRight")goToCarouselSlide(asisCarouselIdx+1);
+});
 
 // ---- Alertas de corrección ----
 const ALERT_FORMS=G.flatMap(g=>g[1]);
