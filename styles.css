@@ -2184,20 +2184,21 @@ section[hidden] {
   display: none !important;
 }
 
+
+
 /* ==========================================================================
-   DASHBOARD PANORÁMICO PARA ESCRITORIO / PC (>1024px)
-   Inspirado en la interfaz moderna estilo FinTech/SaaS con CSS Blur
+   DASHBOARD PANORÁMICO PARA ESCRITORIO / PC (>1024px) - OPTIMIZADO Y ULTRA-FLUIDO
    ========================================================================== */
 
-/* 1. Fondo Atmosférico con Resplandor Difuminado en PC */
+/* Fondo Atmosférico Ultra-Ligero (Hardware Accelerated Layer) */
 @media (min-width: 1024px) {
-  body {
-    background-color: var(--bg) !important;
-    background-image: 
-      radial-gradient(ellipse 65% 42% at 50% -5%, color-mix(in srgb, var(--pr) 22%, transparent), transparent 75%),
-      radial-gradient(ellipse 45% 35% at 90% 12%, color-mix(in srgb, #3B82F6 14%, transparent), transparent 70%),
-      radial-gradient(ellipse 45% 35% at 10% 85%, color-mix(in srgb, var(--soft) 50%, transparent), transparent 70%) !important;
-    background-attachment: fixed !important;
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(circle 900px at 50% -120px, color-mix(in srgb, var(--pr) 20%, transparent), transparent 70%);
   }
 
   /* Barra de Navegación Lateral Izquierda (Dock Flotante) */
@@ -2217,10 +2218,10 @@ section[hidden] {
     position: fixed !important;
     z-index: 50 !important;
     background: var(--glass) !important;
-    backdrop-filter: blur(28px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid color-mix(in srgb, #ffffff 45%, var(--bd)) !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
   }
 
   nav button, #nav button, #navDra button {
@@ -2237,7 +2238,7 @@ section[hidden] {
     color: var(--mu) !important;
     background: transparent !important;
     gap: 4px !important;
-    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
 
   nav button:hover, #nav button:hover, #navDra button:hover {
@@ -2279,30 +2280,8 @@ section[hidden] {
     padding: 14px 24px !important;
     border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
     background: var(--glass) !important;
-    backdrop-filter: blur(28px) saturate(190%) !important;
+    backdrop-filter: blur(20px) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
-  }
-
-  .desk-btn-header-csv {
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 8px 16px !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    border-radius: 99px !important;
-    border: 1px solid var(--bd) !important;
-    background: color-mix(in srgb, var(--soft) 60%, transparent) !important;
-    color: var(--tx) !important;
-    cursor: pointer !important;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-    margin-right: 8px !important;
-  }
-
-  .desk-btn-header-csv:hover {
-    border-color: var(--pr) !important;
-    color: var(--pr) !important;
-    background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
-    transform: translateY(-1px) !important;
   }
 
   /* Estructura Grid de 2 Columnas para PC */
@@ -2317,7 +2296,7 @@ section[hidden] {
     min-width: 0 !important;
   }
 
-  /* 2. Fila Superior de KPIs (Widgets de Métricas) */
+  /* Fila Superior de KPIs */
   .desk-kpi-row {
     display: grid !important;
     grid-template-columns: 1.35fr 1fr 1.05fr !important;
@@ -2330,8 +2309,6 @@ section[hidden] {
     padding: 22px !important;
     margin: 0 !important;
     background: var(--card) !important;
-    backdrop-filter: blur(28px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
     border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
     position: relative !important;
@@ -2340,7 +2317,7 @@ section[hidden] {
     justify-content: space-between !important;
   }
 
-  /* Widget 1: My Wallet (Expedientes Activos y Acciones Rápidas) */
+  /* Widget 1: My Wallet */
   .desk-kpi-main {
     min-height: 175px !important;
   }
@@ -2502,7 +2479,7 @@ section[hidden] {
     color: var(--mu) !important;
   }
 
-  /* Widget 3: Tarjeta Institucional (Estilo Tarjeta de Crédito Premium) */
+  /* Widget 3: Tarjeta Institucional */
   .desk-credit-card {
     background: linear-gradient(135deg, color-mix(in srgb, var(--pr) 85%, #090d16), color-mix(in srgb, var(--pr) 38%, #1e1b4b)) !important;
     color: #ffffff !important;
@@ -2569,61 +2546,43 @@ section[hidden] {
     font-weight: 800 !important;
     color: #ffffff !important;
   }
-  .desk-card-sync-pill {
-    display: flex !important;
-    align-items: center !important;
-    gap: 5px !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    background: rgba(255, 255, 255, 0.16) !important;
-    backdrop-filter: blur(8px) !important;
-    padding: 3px 8px !important;
-    border-radius: 99px !important;
-  }
-  .desk-card-sync-dot {
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 50% !important;
-    background: #4ade80 !important;
-    box-shadow: 0 0 6px #4ade80 !important;
-  }
 
-  /* 3. Panel Lateral Derecho (Agenda y Alertas en PC) */
+  /* 3. Panel Lateral Derecho (Distribución Balanceada) */
   .desk-sidebar-right {
     display: flex !important;
     flex-direction: column !important;
+    gap: 14px !important;
     position: sticky !important;
     top: 96px !important;
   }
 
   .desk-panel-card {
     border-radius: 24px !important;
-    padding: 20px !important;
+    padding: 16px 18px !important;
     margin: 0 !important;
     background: var(--card) !important;
-    backdrop-filter: blur(28px) saturate(190%) !important;
     border: 1px solid color-mix(in srgb, #ffffff 40%, var(--bd)) !important;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
   }
 
   .desk-panel-hdr {
     display: flex !important;
     justify-content: space-between !important;
     align-items: flex-start !important;
-    margin-bottom: 14px !important;
+    margin-bottom: 10px !important;
   }
 
   .desk-panel-title {
-    font-size: 15.5px !important;
+    font-size: 14.5px !important;
     font-weight: 800 !important;
     margin: 0 !important;
     color: var(--tx) !important;
   }
 
   .desk-panel-sub {
-    font-size: 11.5px !important;
+    font-size: 11px !important;
     color: var(--mu) !important;
-    margin: 2px 0 0 !important;
+    margin: 1px 0 0 !important;
   }
 
   .desk-panel-link {
@@ -2641,30 +2600,35 @@ section[hidden] {
     text-decoration: underline !important;
   }
 
+  .desk-visits-list {
+    max-height: 180px !important;
+    overflow-y: auto !important;
+  }
+
   .desk-visit-item {
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
-    padding: 10px 12px !important;
-    border-radius: 14px !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
     background: color-mix(in srgb, var(--soft) 50%, transparent) !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
     cursor: pointer !important;
     transition: background 0.18s, transform 0.15s !important;
   }
   .desk-visit-item:hover {
     background: color-mix(in srgb, var(--pr) 12%, transparent) !important;
-    transform: translateX(3px) !important;
+    transform: translateX(2px) !important;
   }
   .desk-visit-icon {
-    width: 34px !important;
-    height: 34px !important;
-    border-radius: 10px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
     background: color-mix(in srgb, var(--pr) 15%, transparent) !important;
     color: var(--pr) !important;
     display: grid !important;
     place-items: center !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     flex-shrink: 0 !important;
   }
   .desk-visit-info {
@@ -2673,7 +2637,7 @@ section[hidden] {
   }
   .desk-visit-info b {
     display: block !important;
-    font-size: 13px !important;
+    font-size: 12.5px !important;
     font-weight: 700 !important;
     color: var(--tx) !important;
     white-space: nowrap !important;
@@ -2682,16 +2646,20 @@ section[hidden] {
   }
   .desk-visit-info small {
     display: block !important;
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     color: var(--mu) !important;
-    margin-top: 2px !important;
+  }
+
+  .desk-alerts-list {
+    max-height: 220px !important;
+    overflow-y: auto !important;
   }
 
   .desk-alert-item {
-    padding: 10px 12px !important;
-    border-radius: 14px !important;
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
     background: color-mix(in srgb, var(--soft) 50%, transparent) !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
     cursor: pointer !important;
     transition: background 0.18s !important;
   }
@@ -2702,17 +2670,17 @@ section[hidden] {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    margin-bottom: 3px !important;
+    margin-bottom: 2px !important;
   }
   .desk-alert-top b {
-    font-size: 12.5px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     color: var(--tx) !important;
   }
   .desk-alert-desc {
-    font-size: 11.5px !important;
+    font-size: 11px !important;
     color: var(--mu) !important;
-    line-height: 1.35 !important;
+    line-height: 1.3 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: -webkit-box !important;
@@ -2722,48 +2690,68 @@ section[hidden] {
 
   .desk-empty-state {
     text-align: center !important;
-    font-size: 12px !important;
+    font-size: 11.5px !important;
     color: var(--mu) !important;
-    padding: 16px 8px !important;
+    padding: 12px 6px !important;
   }
 
-  /* Botón Destacado Exportar CSV */
+  /* Botones de Acción de Exportación (CSV y PDF) */
+  .desk-export-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
   .desk-btn-export {
     width: 100% !important;
-    margin-top: 16px !important;
-    padding: 14px !important;
-    border-radius: 18px !important;
-    font-size: 13.5px !important;
-    font-weight: 800 !important;
+    padding: 11px 8px !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
-    background: linear-gradient(135deg, var(--pr), color-mix(in srgb, var(--pr) 75%, #0f172a)) !important;
+    gap: 6px !important;
+    background: color-mix(in srgb, var(--pr) 92%, #000) !important;
     color: #ffffff !important;
     border: 0 !important;
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--pr) 30%, transparent) !important;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--pr) 25%, transparent) !important;
     cursor: pointer !important;
     transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
+  .desk-btn-export.pdf {
+    background: color-mix(in srgb, #dc2626 90%, #000) !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25) !important;
+  }
   .desk-btn-export:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--pr) 42%, transparent) !important;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--pr) 38%, transparent) !important;
+  }
+  .desk-btn-export.pdf:hover {
+    box-shadow: 0 8px 18px rgba(220, 38, 38, 0.38) !important;
   }
   .desk-btn-export:active {
     transform: scale(0.97) !important;
   }
 
-  /* Cuadrícula multi-columna para las tarjetas en PC */
-  #list {
+  /* Cuadrícula multi-columna estricta para tarjetas visibles */
+  #list:not([hidden]),
+  #asAlerts:not([hidden]),
+  #alertsList:not([hidden]),
+  #recent:not([hidden]),
+  #histAlerts:not([hidden]) {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)) !important;
     gap: 16px !important;
   }
-  #list .empty {
+  #list:not([hidden]) .empty,
+  #asAlerts:not([hidden]) .empty,
+  #alertsList:not([hidden]) .empty {
     grid-column: 1 / -1 !important;
   }
-  #list .card {
+  #list:not([hidden]) .card,
+  #asAlerts:not([hidden]) .card,
+  #alertsList:not([hidden]) .card {
     margin: 0 !important;
   }
 }
@@ -2771,7 +2759,7 @@ section[hidden] {
 /* Pantallas Extra Anchas (>1440px) */
 @media (min-width: 1440px) {
   .desk-dashboard-layout {
-    grid-template-columns: minmax(0, 1fr) 380px !important;
+    grid-template-columns: minmax(0, 1fr) 370px !important;
     gap: 28px !important;
   }
   .desk-kpi-row {
@@ -2785,5 +2773,28 @@ section[hidden] {
   .desk-sidebar-right,
   .desk-btn-header-csv {
     display: none !important;
+  }
+}
+
+/* Estilos de Impresión Limpios para Guardar en PDF */
+@media print {
+  nav, #nav, #navDra, header, .desk-kpi-row, .desk-sidebar-right, .btn-view-mode, #fabNew, #bMenu, .search-bar-row, #stats, .tabs2, #asisCarouselModal {
+    display: none !important;
+  }
+  body, .wrap {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    max-width: 100% !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 12px !important;
   }
 }

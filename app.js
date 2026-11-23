@@ -1404,11 +1404,23 @@ function exportDBtoCSV(){
   toast("Reporte CSV descargado con éxito");
 }
 
+function exportToPDF(){
+  toast("Abriendo vista de impresión para guardar en PDF…");
+  setTimeout(() => {
+    window.print();
+  }, 250);
+}
+
+let lastDeskSig = "";
 function renderDesktopDashboard(){
   if(window.innerWidth < 1024) return;
   const pend = DB.filter(r => r.estado === "Pendiente").length;
   const nue = DB.filter(r => r.estado === "Pendiente" && r.esNuevo).length;
   
+  const dSig = pend + "-" + nue + "-" + DB.length + "-" + (ALERTS ? ALERTS.length : 0);
+  if(dSig === lastDeskSig) return;
+  lastDeskSig = dSig;
+
   const pendEl = document.getElementById("deskKpiPend");
   if(pendEl) pendEl.textContent = pend;
   const newTagEl = document.getElementById("deskKpiNewTag");
@@ -1434,13 +1446,13 @@ function renderDesktopDashboard(){
   if(bRc) bRc.style.width = rcPct + "%";
   if(sRcD) sRcD.textContent = `${rcFin} de ${tot} finalizados`;
 
-  // Próximas visitas en panel derecho
+  // Próximas visitas en panel derecho (máximo 3 para equilibrio visual)
   const vListEl = document.getElementById("deskVisitsList");
   if(vListEl){
     const today = new Date().toISOString().slice(0, 10);
     const upcoming = DB.filter(r => r.fechaVisita && r.fechaVisita >= today)
                        .sort((a, b) => a.fechaVisita.localeCompare(b.fechaVisita))
-                       .slice(0, 5);
+                       .slice(0, 3);
     if(upcoming.length){
       vListEl.innerHTML = upcoming.map(r => `
         <div class="desk-visit-item" data-cal-ev="${esc(r.id)}" data-cal-kind="asis" title="Ver detalle de la visita">
@@ -1457,10 +1469,10 @@ function renderDesktopDashboard(){
     }
   }
 
-  // Alertas recientes en panel derecho
+  // Alertas recientes en panel derecho (máximo 3 para equilibrio visual)
   const aListEl = document.getElementById("deskAlertsList");
   if(aListEl){
-    const alertsSlice = (ALERTS || []).slice(-4).reverse();
+    const alertsSlice = (ALERTS || []).slice(-3).reverse();
     if(alertsSlice.length){
       aListEl.innerHTML = alertsSlice.map(a => `
         <div class="desk-alert-item" title="Ver alerta">
@@ -1477,10 +1489,11 @@ function renderDesktopDashboard(){
   }
 }
 
-
 function updateViewModeUI(){
   const btn = document.getElementById("btnViewMode");
   if(!btn) return;
+  const isExpView = (role === "asis" && (tab === "alertas" || (tab === "historial" && hsMode === "exp")));
+  btn.style.display = isExpView ? "flex" : "none";
   const isList = (asisViewMode === "list");
   btn.classList.toggle("is-list", isList);
   btn.title = isList ? "Cambiar a tarjetas completas (Cuadros)" : "Cambiar a tarjetas delgadas (Lista compacta)";
@@ -1644,7 +1657,11 @@ function render(){
   :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
   calAnim="";
 }
-$("#q").oninput=render;
+let qTimer = null;
+$("#q").oninput = () => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(render, 45);
+};
 $("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
 $("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
 
@@ -1778,6 +1795,8 @@ if(bLinkAl) bLinkAl.onclick = () => {
 
 const bDeskCsv = document.getElementById("btnDeskCSV");
 if(bDeskCsv) bDeskCsv.onclick = exportDBtoCSV;
+const bDeskPdf = document.getElementById("btnDeskPDF");
+if(bDeskPdf) bDeskPdf.onclick = exportToPDF;
 const bHeaderCsv = document.getElementById("btnDeskHeaderCSV");
 if(bHeaderCsv) bHeaderCsv.onclick = exportDBtoCSV;
 
