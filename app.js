@@ -518,7 +518,7 @@ function closeSubview() {
 
 // Botón de Volver en cabecera y lanzador de chat
 document.addEventListener("click", e => {
-  if (e.target.closest("#subviewBackBtn")) {
+  if (e.target.closest("#subviewBackBtn") || e.target.id === "subviewContainer") {
     closeSubview();
     return;
   }
@@ -535,6 +535,7 @@ document.addEventListener("click", e => {
 });
 
 // Soporte para botón físico/hardware Atrás del celular
+document.addEventListener("keydown", e => { if (e.key === "Escape" && document.body.classList.contains("in-subview")) closeSubview(); });
 window.addEventListener("popstate", e => {
   if (document.body.classList.contains("in-subview")) {
     closeSubview();
@@ -1436,36 +1437,31 @@ addEventListener("click",()=>{$("#menu").hidden=true});
 /* ===== MEJORA MÓVIL 4: Auto-ocultar barra al hacer scroll en celular ===== */
 {
   let lastScrollY = 0;
-  let navHideTimer = null;
   const isMobile = () => window.innerWidth < 820;
 
-  window.addEventListener("scroll", () => {
+  document.addEventListener("scroll", e => {
     if (!isMobile() || document.body.classList.contains("in-subview")) return;
-    const y = window.scrollY;
+    const isAg = e.target && e.target.classList && e.target.classList.contains("ag");
+    const y = isAg ? e.target.scrollTop : window.scrollY;
     const delta = y - lastScrollY;
 
-    if (delta > 12 && y > 80) {
-      // Scroll ABAJO rápido: ocultar barra
+    if (delta > 8 && y > 30) {
+      // Scroll ABAJO: ocultar barra para ganar 100% de pantalla
       document.body.classList.add("nav-hidden");
-    } else if (delta < -8) {
-      // Scroll ARRIBA: mostrar barra
+    } else if (delta < -6 || y <= 20) {
+      // Scroll ARRIBA o inicio: mostrar barra
       document.body.classList.remove("nav-hidden");
     }
 
     lastScrollY = y;
-  }, { passive: true });
+  }, true);
 
-  // Mostrar barra al tocar la pantalla (para cuando no hay scroll)
-  window.addEventListener("touchstart", () => {
-    if (navHideTimer) clearTimeout(navHideTimer);
-  }, { passive: true });
-
-  // Si está arriba del todo, siempre mostrar barra
-  window.addEventListener("scrollend", () => {
-    if (window.scrollY < 40) {
+  // Al tocar pestañas o botones superiores, asegurar que la barra sea visible
+  document.addEventListener("click", e => {
+    if (e.target.closest("header, .tabs2, #bMenu, [data-tab], [data-dratab]")) {
       document.body.classList.remove("nav-hidden");
     }
-  }, { passive: true });
+  });
 }
 
 /* ===== MEJORA MÓVIL 2: Tarjeta de progreso colapsable (tocar para expandir/colapsar) ===== */

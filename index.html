@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2.3">
 </head>
 <body>
 <div id="toast"></div>
@@ -159,17 +159,19 @@
 
 <!-- PANEL SUBVIEW INMERSIVO ESTILO NATIVO iOS (AUTO-OCULTA LA BARRA Y SOPORTA GESTO ATRÁS) -->
 <div id="subviewContainer" class="subview-panel" hidden>
-  <header class="subview-header">
-    <button type="button" class="subview-back-btn" id="subviewBackBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M15 18l-6-6 6-6"/></svg>
-      <span>Volver</span>
-    </button>
-    <div class="subview-title-wrap">
-      <h2 id="subviewTitle" class="subview-title">Detalle</h2>
-      <small id="subviewSubtitle" class="subview-subtitle"></small>
+  <div class="subview-card" id="subviewCard">
+    <div class="subview-header">
+      <button type="button" class="subview-back-btn" id="subviewBackBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>Volver</span>
+      </button>
+      <div class="subview-title-wrap">
+        <h2 id="subviewTitle" class="subview-title">Detalle</h2>
+        <small id="subviewSubtitle" class="subview-subtitle"></small>
+      </div>
     </div>
-  </header>
-  <div id="subviewBody" class="subview-body"></div>
+    <div id="subviewBody" class="subview-body"></div>
+  </div>
 </div>
 
 <nav id="nav" hidden>
@@ -190,8 +192,8 @@
 <button type="button" id="fabDra" aria-label="Nuevo reporte" title="Registrar reporte"><span data-ic="plus"></span></button>
 </div>
 <div id="printArea"></div>
-<script src="app.js"></script>
-<script src="forms.js"></script>
-<script src="settings.js"></script>
+<script src="app.js?v=2.3"></script>
+<script src="forms.js?v=2.3"></script>
+<script src="settings.js?v=2.3"></script>
 </body>
 </html>
