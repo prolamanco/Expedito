@@ -1354,3 +1354,69 @@ body.in-subview #fabDra {
     padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+
+/* ===== SISTEMA DE PANTALLAS ESQUELETO (SKELETON SHIMMER LOADER) ===== */
+.sk-shimmer {
+  background: linear-gradient(90deg, 
+    color-mix(in srgb, var(--soft) 70%, transparent) 25%, 
+    color-mix(in srgb, var(--sf) 90%, transparent) 50%, 
+    color-mix(in srgb, var(--soft) 70%, transparent) 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: skShim 1.5s ease-in-out infinite !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+@keyframes skShim {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.sk-card-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px !important;
+  border-radius: 24px !important;
+}
+
+.sk-bar {
+  border-radius: 99px;
+  height: 14px;
+}
+
+.sk-circle {
+  border-radius: 50% !important;
+}
+
+.sk-table-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.sk-table-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.sk-cell {
+  height: 26px;
+  border-radius: 6px;
+  flex: 1;
+}
+
+.sk-cell.header {
+  height: 32px;
+  border-radius: 8px;
+}
+
+.sk-cell.first-col {
+  flex: none;
+  width: 78px;
+  border-radius: 8px;
+}
