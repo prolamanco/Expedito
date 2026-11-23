@@ -1719,3 +1719,160 @@ input[type=text], input[type=password], input[type=date], input[type=search], te
   transform: scale(0.96) !important;
   transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
+
+
+/* ==========================================================================
+   SISTEMA DE CRISTAL DIFUMINADO ULTRA-PREMIUM (CSS BLUR / FROSTED LIQUID GLASS)
+   Efecto idéntico a Apple Maps / visionOS: Difuminado profundo con borde especular
+   ========================================================================== */
+
+:root {
+  --css-blur: blur(28px) saturate(190%);
+  --css-blur-heavy: blur(36px) saturate(200%);
+  --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  --glass-border: 1px solid color-mix(in srgb, #ffffff 28%, var(--bd));
+  --glass-bg: color-mix(in srgb, var(--sf) 62%, transparent);
+}
+
+:root[data-t=dark] {
+  --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.14);
+  --glass-bg: color-mix(in srgb, var(--sf) 52%, transparent);
+}
+
+/* 1. Fondo Ambiental con Aureolas Luminosas Vivas (para que el blur resalte al pasar por encima) */
+body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  background: 
+    radial-gradient(75% 55% at 5% 8%, color-mix(in srgb, var(--pr) 34%, transparent), transparent 70%),
+    radial-gradient(65% 50% at 95% 18%, color-mix(in srgb, var(--fu) 28%, transparent), transparent 65%),
+    radial-gradient(60% 50% at 50% 85%, color-mix(in srgb, var(--li) 26%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 85% 95%, color-mix(in srgb, var(--co) 24%, transparent), transparent 65%) !important;
+  filter: blur(45px) !important;
+  -webkit-filter: blur(45px) !important;
+  opacity: 0.95 !important;
+}
+
+/* 2. Tarjetas con Difuminado Líquido («CSS BLUR» como en la imagen de referencia) */
+.card, .cal-board, .cal-split, .cal-prog-card {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+  background: var(--glass-bg) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 16px 40px -10px rgba(0, 0, 0, 0.18) !important;
+}
+.card:hover {
+  background: color-mix(in srgb, var(--sf) 72%, transparent) !important;
+  box-shadow: var(--glass-specular), 0 20px 48px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Hero card preserva su vibrante degradado con brillo especular */
+.card.hero {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pr) 92%, #fff), var(--fu)) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4), 0 18px 42px -12px color-mix(in srgb, var(--pr) 55%, transparent) !important;
+}
+
+/* 3. Buscador Flotante Difuminado estilo «Pier 9, North Docks» de la imagen */
+#q {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+  background: var(--glass-bg) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 10px 28px -6px rgba(0, 0, 0, 0.14) !important;
+  border-radius: 999px !important;
+  padding: 13px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.2px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+#q:focus {
+  background: color-mix(in srgb, var(--sf) 82%, transparent) !important;
+  border-color: var(--pr) !important;
+  box-shadow: var(--glass-specular), 0 0 0 3.5px color-mix(in srgb, var(--pr) 28%, transparent), 0 14px 36px -8px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* 4. Menú Contextual Desplegable con Difuminado Profundo */
+#menu {
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  background: color-mix(in srgb, var(--sf) 82%, transparent) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 24px 60px -12px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* 5. Pestañas Segmentadas (.tabs2) con Vidrio Translúcido */
+.tabs2 {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+  background: color-mix(in srgb, var(--sf) 55%, transparent) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 8px 24px -6px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 6. Barra de Navegación Cápsula (nav) Flotante */
+nav {
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  background: color-mix(in srgb, var(--sf) 58%, transparent) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 20px 52px -12px rgba(0, 0, 0, 0.38) !important;
+}
+
+/* 7. Cabecera Fija (header) y Subview Header con Desenfoque */
+header {
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  background: color-mix(in srgb, var(--bg) 68%, transparent) !important;
+  border-bottom: var(--glass-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+.subview-header {
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  background: color-mix(in srgb, var(--sf) 78%, transparent) !important;
+  border-bottom: var(--glass-border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 8. Tarjeta Lanzadora de Chat (.chat-launcher-card) */
+.chat-launcher-card {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+  background: var(--glass-bg) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 12px 32px -8px rgba(0, 0, 0, 0.16) !important;
+}
+
+/* 9. Diálogos y Modales (.dlg-p, #alertForm) */
+.dlg-p, #alertForm:not([hidden]) {
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  background: color-mix(in srgb, var(--sf) 82%, transparent) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 32px 84px -16px rgba(0, 0, 0, 0.48) !important;
+}
+
+/* 10. Píldoras Speed Dial y Botones Circulares (.ib) */
+.ag-dial-pill, .ib {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+  background: var(--glass-bg) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--glass-specular), 0 8px 24px -6px rgba(0, 0, 0, 0.16) !important;
+}
+
+/* 11. Ventana Modal de Subview en Escritorio */
+@media (min-width: 820px) {
+  .subview-card {
+    backdrop-filter: var(--css-blur-heavy) !important;
+    -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+    background: color-mix(in srgb, var(--bg) 74%, transparent) !important;
+    border: var(--glass-border) !important;
+    box-shadow: var(--glass-specular), 0 32px 84px -16px rgba(0, 0, 0, 0.52) !important;
+  }
+}
