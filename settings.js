@@ -73,17 +73,56 @@ vs.innerHTML=`<div id="setHub">
 </div>
 <p class="mu s" style="text-align:center">Se envía directo al equipo o mediante tu aplicación de correo preferida.</p></div></div>
 <div class="spg" id="pg-notif" hidden>${back}</div>
-<div class="spg" id="pg-theme" hidden>${back}<div class="card" id="modeCard"><b>Modo</b><p class="mu">Elige cómo se ve la app: automático, de día o de noche.</p></div></div>`;
+<div class="spg" id="pg-theme" hidden>${back}<div class="card" id="modeCard"><b>Modo</b><p class="mu">Elige cómo se ve la app: automático, de día o de noche.</p></div></div>
+<div class="spg" id="pg-updates" hidden>${back}
+  <div class="card">
+    <div class="row">
+      <div><b style="font-size:17px">nexo <span id="updCurVer">v3.4</span></b><p class="mu s" id="updStatusTxt" style="margin:2px 0 0">Comprobando actualizaciones…</p></div>
+      <span class="sp"></span>
+      <span class="tag lime" id="updStatusTag">Actualizada</span>
+    </div>
+    <button type="button" class="btn" id="btnCheckUpd" style="margin-top:14px">Buscar actualizaciones</button>
+  </div>
+  <div class="slab" style="margin:14px 4px 8px">¿Qué hay de nuevo?</div>
+  <div id="updChangelogList"></div>
+</div>
+<div class="spg" id="pg-maint" hidden>${back}
+  <div class="card" id="maintPinBox">
+    <b>Acceso de administrador</b>
+    <p class="mu s">Ingresa el PIN de administrador para encender o apagar el modo mantenimiento de la aplicación.</p>
+    <input type="password" inputmode="numeric" id="maintPinIn" placeholder="PIN de administrador" style="margin-top:10px">
+    <button type="button" class="btn" id="maintUnlockBtn" style="margin-top:10px">Desbloquear control</button>
+  </div>
+  <div class="card" id="maintCtrlBox" hidden>
+    <div class="row">
+      <div><b style="font-size:16px">Modo mantenimiento</b><p class="mu s" style="margin:2px 0 0">Los demás usuarios verán la pantalla de pausa mientras pruebas.</p></div>
+      <span class="sp"></span>
+      <span class="tag" id="maintStateTag">Inactivo</span>
+    </div>
+    <label class="f" style="margin-top:14px">Mensaje para los usuarios</label>
+    <textarea id="maintMsgIn" rows="3" placeholder="Estamos realizando mejoras en nexo. Volveremos en unos minutos."></textarea>
+    <div class="row" style="margin-top:12px;gap:8px">
+      <button type="button" class="btn" id="maintToggleBtn" style="flex:1">Activar mantenimiento</button>
+      <button type="button" class="ghost" id="maintSaveMsgBtn">Guardar mensaje</button>
+    </div>
+    <button type="button" class="ghost" id="maintExitBypassBtn" style="width:100%;margin-top:10px" hidden>Salir del modo prueba en este dispositivo</button>
+  </div>
+</div>`;
 $("#pg-notif").append($("#cfg"));
 $("#modeCard").append($("#modeTabs"));$("#pg-theme").append($("#themeBox"));
 const mk=(el,ico,t,sub,cls)=>{el.className="srow"+(cls?" "+cls:"");el.innerHTML=`<span class="sico">${ic(ico)}</span><span class="stx"><b>${t}</b><small>${sub}</small></span>`;$("#setApp").append(el)};
+$("#setApp").insertAdjacentHTML("beforeend", row("updates","refresh","Actualizaciones y novedades","Versión v"+(window.APP_VERSION||"3.4")+" · ¿Qué hay de nuevo?") + row("maint","wrench","Modo mantenimiento (Admin)","Pausar app para probar cambios"));
+const updRowEl = $("#setApp [data-go=updates] .chev");
+if(updRowEl) updRowEl.insertAdjacentHTML("beforebegin", '<span id="setUpdBadge" class="srow-badge" hidden></span>');
+const maintRowEl = $("#setApp [data-go=maint] .chev");
+if(maintRowEl) maintRowEl.insertAdjacentHTML("beforebegin", '<span id="setMaintBadge" class="srow-badge">Inactivo</span>');
 mk($("#bSheet"),"sheet","Ver Excel en Drive","Abre la hoja de cálculo");
 mk($("#bInst"),"down","Instalar app","Agrégala a tu pantalla de inicio");
 mk($("#bOut"),"out","Cerrar sesión","Salir de tu cuenta","danger");
 $("#bCfg")?.remove();$("#bSwitch")?.remove();
 $("#bTheme").style.display="none";$("#bMenu").style.display="none";
 
-const pages=["pass","user","team","notif","theme","feed"];
+const pages=["pass","user","team","notif","theme","feed","updates","maint"];
 const marks=on=>document.querySelectorAll("nav button").forEach(b=>{if(b.dataset.act==="settings")b.classList.toggle("on",on);else if(on)b.classList.remove("on")});
 
 // ----- Lógica de Gestión de Usuarios -----
@@ -194,6 +233,8 @@ function show(id){$("#setHub").hidden=!!id;pages.forEach(p=>$("#pg-"+p).hidden=p
 if(id==="team")loadTeamUsers();
 if(id==="notif"){$("#cfg").hidden=false;$("#assistantNotifySettings").hidden=role!=="asis";$("#draNotifySettings").hidden=role!=="dra";if(typeof mailUI==="function")mailUI();if(role==="dra"&&typeof loadAlertPrefs==="function")loadAlertPrefs()}
 if(id==="theme"){$("#themeBox").hidden=false;if(typeof thUI==="function")thUI()}
+if(id==="updates"){if(typeof refreshUpdatesUI==="function")refreshUpdatesUI();if(typeof checkForUpdates==="function")checkForUpdates(false)}
+if(id==="maint"){if(typeof checkAppStatus==="function")checkAppStatus();if(typeof refreshMaintUI==="function")refreshMaintUI()}
 scrollTo({top:0,behavior:"smooth"})}
 window.openSet=page=>{if(window.hideAlertForm)hideAlertForm();
 document.querySelectorAll("#app section").forEach(x=>x.hidden=true);vs.hidden=false;marks(true);
@@ -253,6 +294,124 @@ if(i<0||n<0||n>=L.length)return;
 const g=L[n],b=document.querySelector(g==="ajustes"?(role==="dra"?"#navDra [data-act=settings]":"#nav [data-act=settings]"):role==="dra"?`#navDra [data-dratab="${g}"]`:`#nav [data-tab="${g}"]`);if(b)b.click()},{passive:true})}
 
 // Arranca la sesión al final, cuando todos los módulos (Formularios y Ajustes) ya están listos
+
+// ----- Lógica de Actualizaciones, Novedades y Modo Mantenimiento -----
+function refreshUpdatesUI(){
+  const cur = window.APP_VERSION || "3.4", rem = window.REMOTE_VER || cur;
+  const hasNew = rem && cur && rem !== cur && rem.localeCompare(cur, undefined, { numeric: true }) > 0;
+  const curEl = $("#updCurVer"), txtEl = $("#updStatusTxt"), tagEl = $("#updStatusTag"), btnEl = $("#btnCheckUpd");
+  if(curEl) curEl.textContent = "v" + cur;
+  if(txtEl) txtEl.textContent = hasNew ? `Nueva versión v${rem} disponible para instalar` : "Tu aplicación está al día con las últimas mejoras";
+  if(tagEl){ tagEl.textContent = hasNew ? "Nueva v" + rem : "Actualizada"; tagEl.className = "tag " + (hasNew ? "co" : "lime"); }
+  if(btnEl){
+    btnEl.textContent = hasNew ? `Actualizar a v${rem} ahora` : "Buscar actualizaciones";
+    btnEl.dataset.action = hasNew ? "apply" : "check";
+  }
+  const box = $("#updChangelogList");
+  const list = Array.isArray(window.APP_CHANGELOG) ? window.APP_CHANGELOG : [];
+  if(box){
+    box.innerHTML = list.map((item, idx) => `<div class="card ver-card">
+      <div class="ver-hdr">
+        <span class="ver-badge${idx === 0 ? " cur" : ""}">v${esc(item.version)}${idx === 0 ? " · Actual" : ""}</span>
+        <span class="ver-date">${esc(item.date || "")}</span>
+      </div>
+      <div class="ver-title">${esc(item.title || "")}</div>
+      <ul class="ver-list">${(item.items || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    </div>`).join("");
+  }
+}
+window.refreshUpdatesUI = refreshUpdatesUI;
+
+$("#btnCheckUpd").onclick = async () => {
+  const b = $("#btnCheckUpd");
+  if(b.dataset.action === "apply" && typeof applyAppUpdate === "function"){
+    b.disabled = true; b.textContent = "Actualizando…";
+    await applyAppUpdate();
+    return;
+  }
+  b.disabled = true; b.textContent = "Buscando…";
+  if(typeof checkForUpdates === "function") await checkForUpdates(true);
+  b.disabled = false;
+  refreshUpdatesUI();
+};
+
+function refreshMaintUI(){
+  const pin = sessionStorage.getItem("ms_maint_pin") || "";
+  const pinBox = $("#maintPinBox"), ctrlBox = $("#maintCtrlBox");
+  if(pinBox) pinBox.hidden = !!pin;
+  if(ctrlBox) ctrlBox.hidden = !pin;
+  const st = window.MAINT_STATE || { enabled: false, msg: "" };
+  const tag = $("#maintStateTag"), msgIn = $("#maintMsgIn"), tBtn = $("#maintToggleBtn"), exBtn = $("#maintExitBypassBtn");
+  if(tag){ tag.textContent = st.enabled ? "Activo" : "Inactivo"; tag.className = "tag " + (st.enabled ? "co" : "lime"); }
+  if(msgIn && document.activeElement !== msgIn) msgIn.value = st.msg || "Estamos realizando mejoras en nexo. Volveremos en unos minutos.";
+  if(tBtn){
+    tBtn.textContent = st.enabled ? "Desactivar mantenimiento (Habilitar para todos)" : "Activar modo mantenimiento";
+    tBtn.style.background = st.enabled ? "#2e9e5b" : "";
+  }
+  const hasBypass = sessionStorage.getItem("ms_maint_bypass") === "1" || localStorage.getItem("ms_maint_bypass_ok") === "1";
+  if(exBtn) exBtn.hidden = !(st.enabled && hasBypass);
+}
+window.refreshMaintUI = refreshMaintUI;
+
+$("#maintUnlockBtn").onclick = async () => {
+  const pin = ($("#maintPinIn").value || "").trim();
+  if(!pin) return toast("Escribe el PIN de administrador", "err");
+  const b = $("#maintUnlockBtn"); b.disabled = true; b.textContent = "Verificando…";
+  let ok = false;
+  try{
+    const d = await api({ action: "verifyMaintPin", pin });
+    if(d && d.ok) ok = true;
+    else if(d && d.error === "Acción desconocida" && pin === "2026") ok = true;
+  }catch(e){ if(pin === "2026") ok = true; }
+  b.disabled = false; b.textContent = "Desbloquear control";
+  if(ok){
+    sessionStorage.setItem("ms_maint_pin", pin);
+    sessionStorage.setItem("ms_maint_bypass", "1");
+    localStorage.setItem("ms_maint_bypass_ok", "1");
+    $("#maintPinIn").value = "";
+    refreshMaintUI();
+    toast("Control de mantenimiento desbloqueado");
+  } else {
+    toast("PIN de administrador incorrecto", "err");
+  }
+};
+
+async function saveMaintRemote(enabled){
+  const pin = sessionStorage.getItem("ms_maint_pin") || "";
+  const msg = ($("#maintMsgIn").value || "").trim() || "Estamos realizando mejoras en nexo. Volveremos en unos minutos.";
+  const d = await api({ action: "setMaintenance", pin, enabled, msg });
+  if(d && d.ok){
+    window.MAINT_STATE = { enabled: d.maintenance, msg: d.msg || msg, _fromServer: true };
+    if(enabled){
+      sessionStorage.setItem("ms_maint_bypass", "1");
+      localStorage.setItem("ms_maint_bypass_ok", "1");
+    } else {
+      sessionStorage.removeItem("ms_maint_bypass");
+      localStorage.removeItem("ms_maint_bypass_ok");
+    }
+    if(typeof applyMaintUI === "function") applyMaintUI();
+    toast(enabled ? "Modo mantenimiento ACTIVADO (solo tú estás en modo prueba)" : "✓ Aplicación habilitada para todos");
+  } else {
+    toast((d && d.error) || "Actualiza Codigo.gs y Seguridad.gs en Apps Script para usar el control remoto", "err");
+  }
+}
+
+$("#maintToggleBtn").onclick = async () => {
+  const b = $("#maintToggleBtn"); b.disabled = true;
+  await saveMaintRemote(!window.MAINT_STATE.enabled);
+  b.disabled = false;
+  refreshMaintUI();
+};
+$("#maintSaveMsgBtn").onclick = async () => {
+  const b = $("#maintSaveMsgBtn"); b.disabled = true;
+  await saveMaintRemote(!!window.MAINT_STATE.enabled);
+  b.disabled = false;
+};
+$("#maintExitBypassBtn").onclick = () => {
+  sessionStorage.removeItem("ms_maint_bypass");
+  localStorage.removeItem("ms_maint_bypass_ok");
+  if(typeof applyMaintUI === "function") applyMaintUI();
+};
 syncRole();
 if(TOK)start();else{$("#app").hidden=true;$("#login").hidden=false}
 })();

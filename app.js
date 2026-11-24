@@ -24,7 +24,7 @@ sheet:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16
 sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
 down:'<path d="M12 3v12M7 11l5 5 5-5M5 21h14"/>',swap:'<path d="M17 3l4 4-4 4M21 7H8M7 21l-4-4 4-4M3 17h13"/>',
 out:'<path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>',
-cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',chev:'<path d="M6 9l6 6 6-6"/>',plus:'<path d="M12 5v14M5 12h14"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',palette:'<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="15.5" cy="10" r="1"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/>'};
+cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',chev:'<path d="M6 9l6 6 6-6"/>',plus:'<path d="M12 5v14M5 12h14"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',palette:'<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="15.5" cy="10" r="1"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/>',refresh:'<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>',wrench:'<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>'};
 function ic(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>'}
 
 // ---- Efecto onda (ripple) al tocar cualquier botón interactivo ----
@@ -50,7 +50,181 @@ let dp;addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;$("#bI
 $("#bInst").onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$("#bInst").hidden=true};
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!(matchMedia("(display-mode: standalone)").matches||navigator.standalone)&&!localStorage.getItem("ms_ios"))$("#iosTip").hidden=false;
 $("#iosX").onclick=()=>{$("#iosTip").hidden=true;localStorage.setItem("ms_ios","1")};
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));
+// ---- Versionado, Actualizaciones (PWA) y Modo Mantenimiento ----
+const APP_VERSION = "3.4";
+const CHANGELOG_FALLBACK = [
+  { version: "3.4", date: "24 nov 2026", title: "Centro de Actualizaciones y Modo Mantenimiento", items: ["Nuevo aviso flotante discreto cuando hay una versión nueva disponible, con botón «Actualizar» sin perder tu trabajo.", "Nueva sección en Ajustes → «Actualizaciones y novedades» con historial de cambios (¿Qué hay de nuevo?) y botón manual para actualizar.", "Control remoto de Modo Mantenimiento desde Ajustes y Google Sheets, con acceso de prueba privado para el administrador.", "Service Worker optimizado para cargar siempre los últimos cambios cuando hay conexión."] },
+  { version: "3.3", date: "24 nov 2026", title: "Mayor Fluidez, Lista a Ancho Completo y Vista Investigadora", items: ["Lista compacta corregida a ancho completo en Alertas e Historial, con encabezados alineados en una sola fila.", "Animaciones y desplazamientos optimizados para responder al instante en PC y celular.", "Botones Exportar CSV y PDF visibles únicamente en Alertas, Avance e Historial.", "Ocultado el panel de acceso rápido de asistentes en la vista de la Dra. Lilliam."] },
+  { version: "3.2", date: "24 nov 2026", title: "Estabilidad en PC, Calendario y Carrusel de Alertas", items: ["Corregida la carga inmediata en pantallas grandes sin necesidad de redimensionar la ventana.", "Calendario de Visitas a ancho completo en escritorio y ocultado del buscador donde no corresponde.", "Soporte de vista Lista/Cuadrícula y búsqueda dentro de Historial → Alertas, con modal interactivo."] },
+  { version: "3.1", date: "24 nov 2026", title: "Exportación PDF y Limpieza de Tarjetas", items: ["Agregado el botón «Exportar en PDF» con formato de impresión limpio.", "Removida la tarjeta institucional superior para dar más protagonismo a los indicadores."] },
+  { version: "3.0", date: "23 nov 2026", title: "Dashboard Panorámico de Escritorio", items: ["Nuevo diseño de 3 zonas para PC con barra lateral fija, métricas superiores y panel derecho de Visitas y Alertas.", "Posición corregida del botón flotante «+»."] }
+];
+window.APP_VERSION = APP_VERSION;
+window.REMOTE_VER = APP_VERSION;
+window.APP_CHANGELOG = CHANGELOG_FALLBACK;
+window.MAINT_STATE = { enabled: false, msg: "Estamos realizando mejoras en nexo. Volveremos en unos minutos." };
+let updateDismissed = false, swWaiting = null;
+
+function cmpVer(a, b){
+  const pa = String(a||"0").replace(/[^0-9.]/g,"").split(".").map(Number);
+  const pb = String(b||"0").replace(/[^0-9.]/g,"").split(".").map(Number);
+  for(let i = 0; i < Math.max(pa.length, pb.length); i++){
+    const d = (pa[i]||0) - (pb[i]||0);
+    if(d !== 0) return d;
+  }
+  return 0;
+}
+
+function showUpdateBanner(ver){
+  if(updateDismissed) return;
+  const b = document.getElementById("updateBanner"), vTxt = document.getElementById("updateBannerVer");
+  if(vTxt) vTxt.textContent = ver ? `Versión v${ver} lista para aplicar` : "Mejoras listas para aplicar";
+  if(b) b.hidden = false;
+  const badge = document.getElementById("setUpdBadge");
+  if(badge){ badge.textContent = "Nueva v" + (ver || ""); badge.className = "srow-badge new"; badge.hidden = false; }
+}
+
+async function applyAppUpdate(){
+  toast("Aplicando actualización…");
+  try{
+    if(swWaiting) swWaiting.postMessage({ type: "SKIP_WAITING" });
+    if("caches" in window){
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    if("serviceWorker" in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.update().catch(()=>{})));
+    }
+  }catch(e){}
+  const u = new URL(location.href);
+  u.searchParams.set("_upd", Date.now());
+  location.replace(u.toString());
+}
+window.applyAppUpdate = applyAppUpdate;
+
+async function checkForUpdates(manual = false){
+  let foundNew = false;
+  try{
+    const res = await fetch("version.json?t=" + Date.now(), { cache: "no-store" });
+    if(res && res.ok){
+      const data = await res.json();
+      if(Array.isArray(data.changelog) && data.changelog.length) window.APP_CHANGELOG = data.changelog;
+      if(data.version){
+        window.REMOTE_VER = String(data.version);
+        if(cmpVer(window.REMOTE_VER, APP_VERSION) > 0){
+          foundNew = true;
+          updateDismissed = false;
+          showUpdateBanner(window.REMOTE_VER);
+        }
+      }
+      if(data.maintenance === true && !window.MAINT_STATE._fromServer){
+        window.MAINT_STATE = { enabled: true, msg: data.maintenanceMsg || window.MAINT_STATE.msg };
+        applyMaintUI();
+      }
+    }
+  }catch(e){}
+  if("serviceWorker" in navigator){
+    try{
+      const reg = await navigator.serviceWorker.getRegistration();
+      if(reg){
+        await reg.update().catch(()=>{});
+        if(reg.waiting){ swWaiting = reg.waiting; foundNew = true; showUpdateBanner(window.REMOTE_VER !== APP_VERSION ? window.REMOTE_VER : ""); }
+      }
+    }catch(e){}
+  }
+  if(manual){
+    if(foundNew) toast(`¡Nueva versión v${window.REMOTE_VER} disponible!`);
+    else toast(`✓ Tienes la versión más reciente (v${APP_VERSION})`);
+  }
+  if(typeof window.refreshUpdatesUI === "function") window.refreshUpdatesUI();
+  return foundNew;
+}
+window.checkForUpdates = checkForUpdates;
+
+function applyMaintUI(){
+  const scr = document.getElementById("maintScreen"), pill = document.getElementById("maintTestPill"), msgEl = document.getElementById("maintMsgText");
+  const isOn = !!window.MAINT_STATE.enabled;
+  const hasBypass = sessionStorage.getItem("ms_maint_bypass") === "1" || localStorage.getItem("ms_maint_bypass_ok") === "1";
+  if(msgEl) msgEl.textContent = window.MAINT_STATE.msg || "Estamos realizando mejoras en nexo. Volveremos en unos minutos.";
+  if(isOn && !hasBypass){
+    if(scr) scr.hidden = false;
+    if(pill) pill.hidden = true;
+  } else {
+    if(scr) scr.hidden = true;
+    if(pill) pill.hidden = !(isOn && hasBypass);
+  }
+  const mb = document.getElementById("setMaintBadge");
+  if(mb){
+    mb.textContent = isOn ? "Activo" : "Inactivo";
+    mb.className = "srow-badge" + (isOn ? " warn" : "");
+  }
+  if(typeof window.refreshMaintUI === "function") window.refreshMaintUI();
+}
+window.applyMaintUI = applyMaintUI;
+
+async function checkAppStatus(){
+  try{
+    const r = await fetch(API, { method: "POST", headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({ action: "getAppStatus" }), signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined });
+    const d = await r.json();
+    if(d && d.ok && typeof d.maintenance === "boolean"){
+      window.MAINT_STATE = { enabled: d.maintenance, msg: d.msg || window.MAINT_STATE.msg, _fromServer: true };
+      applyMaintUI();
+    }
+  }catch(e){}
+}
+window.checkAppStatus = checkAppStatus;
+
+{
+  const ubBtn = document.getElementById("updateBannerBtn"), ubCls = document.getElementById("updateBannerClose");
+  if(ubBtn) ubBtn.onclick = applyAppUpdate;
+  if(ubCls) ubCls.onclick = () => { updateDismissed = true; const b = document.getElementById("updateBanner"); if(b) b.hidden = true; };
+
+  const mrBtn = document.getElementById("maintRetryBtn"), maBtn = document.getElementById("maintAdminBtn"), mpBtn = document.getElementById("maintTestPill");
+  if(mrBtn) mrBtn.onclick = async () => { mrBtn.disabled = true; mrBtn.textContent = "Verificando…"; await checkAppStatus(); mrBtn.disabled = false; mrBtn.textContent = "Reintentar"; if(window.MAINT_STATE.enabled) toast("El mantenimiento sigue en curso", "err"); };
+  if(maBtn) maBtn.onclick = async () => {
+    const pin = prompt("Ingresa el PIN de administrador para entrar en modo prueba:");
+    if(pin === null) return;
+    let ok = false;
+    try{
+      const r = await fetch(API, { method: "POST", headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({ action: "verifyMaintPin", pin }) });
+      const d = await r.json();
+      if(d && d.ok) ok = true;
+      else if(d && d.error === "Acción desconocida" && pin.trim() === "2026") ok = true;
+    }catch(e){ if(pin.trim() === "2026") ok = true; }
+    if(ok){
+      sessionStorage.setItem("ms_maint_bypass", "1");
+      sessionStorage.setItem("ms_maint_pin", pin.trim());
+      localStorage.setItem("ms_maint_bypass_ok", "1");
+      applyMaintUI();
+      toast("Modo prueba activado");
+    } else {
+      toast("PIN incorrecto", "err");
+    }
+  };
+  if(mpBtn) mpBtn.onclick = () => { if(window.openSet) window.openSet("maint"); };
+}
+
+if("serviceWorker" in navigator){
+  addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").then(reg => {
+      if(reg.waiting){ swWaiting = reg.waiting; showUpdateBanner(); }
+      reg.addEventListener("updatefound", () => {
+        const nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener("statechange", () => {
+          if(nw.state === "installed" && navigator.serviceWorker.controller){
+            swWaiting = nw;
+            showUpdateBanner();
+          }
+        });
+      });
+      reg.update().catch(()=>{});
+    }).catch(()=>{});
+  });
+}
+setTimeout(() => { checkAppStatus(); checkForUpdates(false); }, 400);
+setInterval(() => checkForUpdates(false), 300000);
 
 // ---- Avisos ----
 function bell(){$("#bBell").innerHTML=ic(("Notification"in window&&Notification.permission==="granted")?"bell":"belloff")}
@@ -181,7 +355,7 @@ async function loadAlertPrefs(){try{const d=await api({action:"read",tipo:"prefe
 async function api(o){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...o,token:TOK}),signal:AbortSignal.timeout?AbortSignal.timeout(25000):undefined}),d=await r.json();if(d&&d.error==="auth"){logout(true);return null}return d}catch(e){return null}}
 async function post(o){const d=await api(o);return !!(d&&d.ok)}
 function logout(exp){if(!TOK&&!exp)return;try{if(!exp)api({action:"logout"})}catch(e){}["ms_tok","ms_me","ms_role"].forEach(k=>localStorage.removeItem(k));if(exp)toast("Tu sesión terminó. Inicia sesión de nuevo","err");setTimeout(()=>location.reload(),exp?900:300)}
-async function load(){let ok=true;
+async function load(){let ok=true;checkAppStatus();
 try{const d=await api({action:"read",tipo:""});if(!Array.isArray(d))throw 0;
 const prev=new Set(DB.map(x=>x.id));
 DB=d.map(w=>({id:w.ID,timestamp:w["Fecha Registro"],expediente:w.Expediente,esNuevo:w["Es Nuevo"]==="SÍ",estadoParticipante:w["Estado Participante"]||"Activo",fechaVisita:w["Fecha Visita"]||"",fechaLlegada:w["Fecha Llegada"]||"",formularios:(w.Formularios||"").split(", ").filter(Boolean),notas:w.Notas||"",estado:w.Estado||"Pendiente",horaVisita:w["Hora Visita"]||"",completos:w["Formularios Completos"]!=="NO",bdE:w["BD Estado"]||"Sin iniciar",bdR:w["BD Responsable"]||"",rcE:w["RedCap Estado"]||"Sin iniciar",rcR:w["RedCap Responsable"]||"",obs:String(w.Observaciones||"").split("\n").filter(Boolean)}));

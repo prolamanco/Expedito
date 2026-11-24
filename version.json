@@ -1,0 +1,58 @@
+{
+  "version": "3.4",
+  "date": "2026-11-24",
+  "maintenance": false,
+  "maintenanceMsg": "Estamos realizando mejoras en nexo. Volveremos en unos minutos.",
+  "changelog": [
+    {
+      "version": "3.4",
+      "date": "24 nov 2026",
+      "title": "Centro de Actualizaciones y Modo Mantenimiento",
+      "items": [
+        "Nuevo aviso flotante discreto cuando hay una versión nueva disponible, con botón «Actualizar» sin perder tu trabajo.",
+        "Nueva sección en Ajustes → «Actualizaciones y novedades» con historial de cambios (¿Qué hay de nuevo?) y botón manual para actualizar.",
+        "Control remoto de Modo Mantenimiento desde Ajustes y Google Sheets, con acceso de prueba privado para el administrador.",
+        "Service Worker optimizado para cargar siempre los últimos cambios cuando hay conexión."
+      ]
+    },
+    {
+      "version": "3.3",
+      "date": "24 nov 2026",
+      "title": "Mayor Fluidez, Lista a Ancho Completo y Vista Investigadora",
+      "items": [
+        "Lista compacta corregida a ancho completo en Alertas e Historial, con encabezados alineados en una sola fila.",
+        "Animaciones y desplazamientos optimizados para responder al instante en PC y celular.",
+        "Botones Exportar CSV y PDF visibles únicamente en Alertas, Avance e Historial.",
+        "Ocultado el panel de acceso rápido de asistentes en la vista de la Dra. Lilliam."
+      ]
+    },
+    {
+      "version": "3.2",
+      "date": "24 nov 2026",
+      "title": "Estabilidad en PC, Calendario y Carrusel de Alertas",
+      "items": [
+        "Corregida la carga inmediata en pantallas grandes sin necesidad de redimensionar la ventana.",
+        "Calendario de Visitas a ancho completo en escritorio y ocultado del buscador donde no corresponde.",
+        "Soporte de vista Lista/Cuadrícula y búsqueda dentro de Historial → Alertas, con modal interactivo."
+      ]
+    },
+    {
+      "version": "3.1",
+      "date": "24 nov 2026",
+      "title": "Exportación PDF y Limpieza de Tarjetas",
+      "items": [
+        "Agregado el botón «Exportar en PDF» con formato de impresión limpio.",
+        "Removida la tarjeta institucional superior para dar más protagonismo a los indicadores."
+      ]
+    },
+    {
+      "version": "3.0",
+      "date": "23 nov 2026",
+      "title": "Dashboard Panorámico de Escritorio",
+      "items": [
+        "Nuevo diseño de 3 zonas para PC con barra lateral fija, métricas superiores y panel derecho de Visitas y Alertas.",
+        "Posición corregida del botón flotante «+»."
+      ]
+    }
+  ]
+}

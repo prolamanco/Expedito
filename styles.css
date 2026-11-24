@@ -2836,3 +2836,247 @@ section[hidden] {
     margin-bottom: 12px !important;
   }
 }
+
+
+/* ==========================================================================
+   MODO MANTENIMIENTO, AVISO DE ACTUALIZACIÓN Y HISTORIAL DE VERSIONES
+   ========================================================================== */
+#maintScreen[hidden],
+#maintTestPill[hidden],
+#updateBanner[hidden] {
+  display: none !important;
+}
+
+.maint-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  background: color-mix(in srgb, var(--bg) 82%, transparent) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+}
+.maint-card {
+  width: min(100%, 420px) !important;
+  text-align: center !important;
+  padding: 32px 24px !important;
+  border-radius: 30px !important;
+  margin: 0 !important;
+  box-shadow: var(--glass-specular), 0 28px 70px -16px rgba(0, 0, 0, 0.25) !important;
+}
+.maint-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 14px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  background: color-mix(in srgb, var(--pr) 14%, transparent);
+}
+.maint-card h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.maint-card p {
+  margin: 0 0 22px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.maint-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.maint-test-pill {
+  position: fixed !important;
+  top: calc(10px + env(safe-area-inset-top)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 95 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 7px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--co) 45%, #fff) !important;
+  background: color-mix(in srgb, var(--co) 92%, #000) !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22) !important;
+  white-space: nowrap !important;
+}
+.maint-test-pill b {
+  background: rgba(255, 255, 255, 0.22);
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+}
+
+/* Aviso pequeño de actualización: en móvil encima de la isla de opciones, en PC abajo centrado */
+.update-banner {
+  position: fixed !important;
+  z-index: 96 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 10px 8px 14px !important;
+  border-radius: 999px !important;
+  border: var(--glass-border) !important;
+  background: color-mix(in srgb, var(--sf) 92%, transparent) !important;
+  backdrop-filter: var(--css-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--css-blur-heavy) !important;
+  box-shadow: var(--glass-specular), 0 14px 36px -8px rgba(0, 0, 0, 0.25) !important;
+  animation: toastIn 0.35s var(--spring) both !important;
+}
+@media (max-width: 1023px) {
+  .update-banner {
+    bottom: calc(12px + env(safe-area-inset-bottom) + var(--navH, 62px) + 12px) !important;
+    left: 14px !important;
+    right: 78px !important;
+    max-width: 420px !important;
+    margin: 0 auto !important;
+  }
+}
+@media (min-width: 1024px) {
+  .update-banner {
+    bottom: 24px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    width: auto !important;
+    max-width: 460px !important;
+  }
+}
+.upd-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  flex: none;
+}
+.upd-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.upd-txt b {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upd-txt small {
+  font-size: 11px;
+  color: var(--mu);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upd-btn {
+  border: 0;
+  background: var(--pr);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  flex: none;
+  transition: transform 0.14s ease, opacity 0.15s ease;
+}
+.upd-btn:active { transform: scale(0.94); }
+.upd-close {
+  border: 0;
+  background: color-mix(in srgb, var(--soft) 80%, transparent);
+  color: var(--mu);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  flex: none;
+}
+
+/* Historial de versiones en Ajustes */
+.ver-card {
+  padding: 16px 18px !important;
+  margin-bottom: 12px !important;
+}
+.ver-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ver-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--pr);
+  background: color-mix(in srgb, var(--pr) 13%, transparent);
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.ver-badge.cur {
+  background: var(--pr);
+  color: #ffffff;
+}
+.ver-date {
+  font-size: 11.5px;
+  color: var(--mu);
+  font-weight: 600;
+}
+.ver-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 4px 0 8px;
+  color: var(--tx);
+}
+.ver-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--tx);
+  opacity: 0.9;
+  line-height: 1.45;
+}
+.srow-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--pr) 14%, transparent);
+  color: var(--pr);
+  margin-right: 4px;
+}
+.srow-badge.new {
+  background: #22c55e;
+  color: #ffffff;
+}
+.srow-badge.warn {
+  background: var(--co);
+  color: #ffffff;
+}

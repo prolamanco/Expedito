@@ -9,10 +9,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=3.3">
+<link rel="stylesheet" href="styles.css?v=3.4">
 </head>
 <body>
 <div id="toast"></div>
+
+<!-- PANTALLA DE MODO MANTENIMIENTO -->
+<div id="maintScreen" class="maint-overlay" hidden>
+  <div class="card maint-card">
+    <div class="maint-icon">🛠️</div>
+    <h2>Estamos en mantenimiento</h2>
+    <p id="maintMsgText" class="mu">Estamos realizando mejoras en nexo. Volveremos en unos minutos.</p>
+    <div class="maint-actions">
+      <button type="button" class="btn" id="maintRetryBtn">Reintentar</button>
+      <button type="button" class="l-link" id="maintAdminBtn">Acceso de prueba (Admin)</button>
+    </div>
+  </div>
+</div>
+
+<!-- PÍLDORA ACTIVA DE MODO PRUEBA EN MANTENIMIENTO -->
+<button type="button" id="maintTestPill" class="maint-test-pill" hidden title="Gestionar modo mantenimiento">
+  <span>🛠️</span>
+  <span>Mantenimiento activo (modo prueba)</span>
+  <b>Gestionar ›</b>
+</button>
+
+<!-- AVISO FLOTANTE DISCRETO DE NUEVA VERSIÓN -->
+<div id="updateBanner" class="update-banner" hidden role="status" aria-live="polite">
+  <span class="upd-dot"></span>
+  <div class="upd-txt">
+    <b>Nueva versión disponible</b>
+    <small id="updateBannerVer">Mejoras listas para aplicar</small>
+  </div>
+  <button type="button" class="upd-btn" id="updateBannerBtn">Actualizar</button>
+  <button type="button" class="upd-close" id="updateBannerClose" aria-label="Cerrar">✕</button>
+</div>
 
 <section id="login">
   <form class="card" id="fLogin">
@@ -341,8 +372,8 @@
 <button type="button" id="fabDra" aria-label="Nuevo reporte" title="Registrar reporte"><span data-ic="plus"></span></button>
 </div>
 <div id="printArea"></div>
-<script src="app.js?v=3.3"></script>
+<script src="app.js?v=3.4"></script>
 <script src="forms.js?v=2.4"></script>
-<script src="settings.js?v=3.3"></script>
+<script src="settings.js?v=3.4"></script>
 </body>
 </html>
