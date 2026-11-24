@@ -1898,8 +1898,12 @@ section[hidden] {
    ========================================================================== */
 
 /* 1. Barra de Búsqueda con Botón Conmutador */
+.search-bar-row[hidden],
+.btn-view-mode[hidden] {
+  display: none !important;
+}
 .search-bar-row {
-  display: flex !important;
+  display: flex;
   align-items: center !important;
   gap: 8px !important;
   margin-bottom: 12px !important;
@@ -1919,7 +1923,7 @@ section[hidden] {
   -webkit-backdrop-filter: var(--css-blur) !important;
   box-shadow: var(--glass-specular), 0 4px 14px -4px rgba(0, 0, 0, 0.1) !important;
   color: var(--tx) !important;
-  display: grid !important;
+  display: grid;
   place-items: center !important;
   cursor: pointer !important;
   flex: none !important;
@@ -2102,7 +2106,7 @@ section[hidden] {
   border: 0 !important;
   background: var(--soft) !important;
   color: var(--tx) !important;
-  display: grid !important;
+  display: grid;
   place-items: center !important;
   cursor: pointer !important;
   flex: none !important;
@@ -2149,7 +2153,7 @@ section[hidden] {
   border: var(--glass-border) !important;
   background: var(--glass-bg) !important;
   color: var(--tx) !important;
-  display: grid !important;
+  display: grid;
   place-items: center !important;
   cursor: pointer !important;
   transition: transform 0.15s, opacity 0.2s, background 0.2s !important;
@@ -2296,10 +2300,10 @@ section[hidden] {
     min-width: 0 !important;
   }
 
-  /* Fila Superior de KPIs */
+  /* Fila Superior de KPIs (2 columnas balanceadas) */
   .desk-kpi-row {
     display: grid !important;
-    grid-template-columns: 1.35fr 1fr 1.05fr !important;
+    grid-template-columns: 1.25fr 1fr !important;
     gap: 18px !important;
     margin-bottom: 24px !important;
   }
@@ -2734,8 +2738,8 @@ section[hidden] {
     transform: scale(0.97) !important;
   }
 
-  /* Cuadrícula multi-columna estricta para tarjetas visibles */
-  #list:not([hidden]),
+  /* Cuadrícula multi-columna estricta SOLO para vistas de tarjetas (no calendario ni tabla de avances) */
+  #list.is-cards:not([hidden]),
   #asAlerts:not([hidden]),
   #alertsList:not([hidden]),
   #recent:not([hidden]),
@@ -2744,12 +2748,12 @@ section[hidden] {
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)) !important;
     gap: 16px !important;
   }
-  #list:not([hidden]) .empty,
+  #list.is-cards:not([hidden]) .empty,
   #asAlerts:not([hidden]) .empty,
   #alertsList:not([hidden]) .empty {
     grid-column: 1 / -1 !important;
   }
-  #list:not([hidden]) .card,
+  #list.is-cards:not([hidden]) .card,
   #asAlerts:not([hidden]) .card,
   #alertsList:not([hidden]) .card {
     margin: 0 !important;
@@ -2778,18 +2782,30 @@ section[hidden] {
 
 /* Estilos de Impresión Limpios para Guardar en PDF */
 @media print {
-  nav, #nav, #navDra, header, .desk-kpi-row, .desk-sidebar-right, .btn-view-mode, #fabNew, #bMenu, .search-bar-row, #stats, .tabs2, #asisCarouselModal {
+  nav, #nav, #navDra, header, .desk-kpi-row, .desk-sidebar-right, .btn-view-mode, #fabNew, #fabDra, #bMenu, .search-bar-row, #stats, .tabs2, #asisCarouselModal {
     display: none !important;
   }
-  body, .wrap {
+  body::before {
+    display: none !important;
+  }
+  body, .wrap, .desk-dashboard-layout, .desk-main-stage {
+    display: block !important;
     background: #ffffff !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 10px !important;
     max-width: 100% !important;
+    overflow: visible !important;
+  }
+  #list:not([hidden]), #asAlerts:not([hidden]), #alertsList:not([hidden]), #recent:not([hidden]), #histAlerts:not([hidden]) {
+    display: block !important;
+    overflow: visible !important;
   }
   .card {
     box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
     border: 1px solid #d1d5db !important;
     background: #ffffff !important;
     color: #000000 !important;

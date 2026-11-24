@@ -126,7 +126,7 @@ async function start(){
   if(window.closeSet)window.closeSet();
   bell();view();
   await load();
-  sig="";render();renderRecent();renderAlerts();renderAvDra(1);
+  sig="";render();renderRecent();renderAlerts();renderAvDra(1);if(typeof renderDesktopDashboard==="function")renderDesktopDashboard();
   if(!timer)timer=setInterval(load,30000);
 }
 function view(){
@@ -185,7 +185,7 @@ const prev=new Set(DB.map(x=>x.id));
 DB=d.map(w=>({id:w.ID,timestamp:w["Fecha Registro"],expediente:w.Expediente,esNuevo:w["Es Nuevo"]==="SÍ",estadoParticipante:w["Estado Participante"]||"Activo",fechaVisita:w["Fecha Visita"]||"",fechaLlegada:w["Fecha Llegada"]||"",formularios:(w.Formularios||"").split(", ").filter(Boolean),notas:w.Notas||"",estado:w.Estado||"Pendiente",horaVisita:w["Hora Visita"]||"",completos:w["Formularios Completos"]!=="NO",bdE:w["BD Estado"]||"Sin iniciar",bdR:w["BD Responsable"]||"",rcE:w["RedCap Estado"]||"Sin iniciar",rcR:w["RedCap Responsable"]||"",obs:String(w.Observaciones||"").split("\n").filter(Boolean)}));
 const n=DB.filter(r=>r.estado==="Pendiente"&&!prev.has(r.id)).length;
 if(loaded&&n&&role==="asis")notify(n);loaded=true}catch(e){ok=false}
-$("#dot").className="dot"+(ok?"":" off");render();renderRecent();await Promise.all([loadAlerts(),loadAv()])}
+$("#dot").className="dot"+(ok?"":" off");render();renderRecent();if(typeof renderDesktopDashboard==="function")renderDesktopDashboard();await Promise.all([loadAlerts(),loadAv()])}
 
 // ---- Vista Lilliam ----
 $("#forms").innerHTML=G.map((g,i)=>`<details class="card grp"><summary><b>${g[0]}</b><span class="gc" id="gc${i}">0/${g[1].length}</span><span class="sp"></span><button type="button" class="ghost" data-all="${i}">Seleccionar todo</button><span class="chev">${ic("chev")}</span></summary><div class="gb">${g[1].map(f=>`<label class="opt"><input type="checkbox" name="fm" data-g="${i}" value="${f}"><span>${f}</span></label>`).join("")}</div></details>`).join("");
@@ -1399,16 +1399,17 @@ function exportDBtoCSV(){
   const a = document.createElement("a");
   a.href = url;
   a.download = `nexo-expedientes-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 2000);
   toast("Reporte CSV descargado con éxito");
 }
 
 function exportToPDF(){
-  toast("Abriendo vista de impresión para guardar en PDF…");
-  setTimeout(() => {
-    window.print();
-  }, 250);
+  window.print();
 }
 
 let lastDeskSig = "";
@@ -1418,7 +1419,8 @@ function renderDesktopDashboard(){
   const nue = DB.filter(r => r.estado === "Pendiente" && r.esNuevo).length;
   
   const dSig = pend + "-" + nue + "-" + DB.length + "-" + (ALERTS ? ALERTS.length : 0);
-  if(dSig === lastDeskSig) return;
+  const vChk = document.getElementById("deskVisitsList");
+  if(dSig === lastDeskSig && vChk && !vChk.textContent.includes("Cargando")) return;
   lastDeskSig = dSig;
 
   const pendEl = document.getElementById("deskKpiPend");
@@ -1493,7 +1495,8 @@ function updateViewModeUI(){
   const btn = document.getElementById("btnViewMode");
   if(!btn) return;
   const isExpView = (role === "asis" && (tab === "alertas" || (tab === "historial" && hsMode === "exp")));
-  btn.style.display = isExpView ? "flex" : "none";
+  btn.hidden = !isExpView;
+  btn.style.display = isExpView ? "grid" : "none";
   const isList = (asisViewMode === "list");
   btn.classList.toggle("is-list", isList);
   btn.title = isList ? "Cambiar a tarjetas completas (Cuadros)" : "Cambiar a tarjetas delgadas (Lista compacta)";
@@ -1648,14 +1651,16 @@ function render(){
   {
     const t=$("#avTabs"), sRow=document.getElementById("searchRow")||$("#q"), heroEl=$("#vAsis .hero");
     if(t&&tab==="avance") t.hidden=false;
-    if(sRow) sRow.style.display=(tab==="avance"||tab==="visitas")?"none":"";
+    if(sRow) sRow.hidden=(tab==="avance"||tab==="visitas"||(tab==="historial"&&hsMode==="al"));
     if(heroEl) heroEl.hidden=tab==="visitas";
   }
   asisCarouselList=it;
   updateViewModeUI();
+  $("#list").classList.toggle("is-cards", tab==="alertas"||(tab==="historial"&&hsMode==="exp"));
   $("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?(asisViewMode==="list"&&(tab==="alertas"||tab==="historial")?it.map((r,i)=>renderCompactCard(r,i)).join(""):it.map((r,i)=>renderFullCardHTML(r,i)).join(""))
   :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
   calAnim="";
+  if(typeof renderDesktopDashboard==="function") renderDesktopDashboard();
 }
 let qTimer = null;
 $("#q").oninput = () => {
