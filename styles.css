@@ -174,7 +174,7 @@ nav button{min-height:58px}nav button.on{box-shadow:0 2px 8px color-mix(in srgb,
 @supports(transition-timing-function:linear(0,1)){:root{--spring:linear(0,.009,.035 2.1%,.141,.281 6.7%,.723 12.9%,.938 16.7%,1.017,1.077,1.121,1.149 24.3%,1.159,1.163,1.161,1.154 29.9%,1.129 32.8%,1.051 39.6%,1.017 43.1%,.991,.977 51%,.974 53.8%,.975 57.1%,.997 69.8%,1.003 76.9%,1)}}
 body{font-family:"Plus Jakarta Sans",-apple-system,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;letter-spacing:-.011em}
 label.f{text-transform:none;letter-spacing:0;font-size:13px}
-.card{border-radius:26px;padding:20px;margin-bottom:16px;border-color:color-mix(in srgb,var(--bd) 65%,transparent);box-shadow:0 1px 1px #1d0f2406,0 14px 32px -14px #1d0f2430;animation:up .42s var(--ios) both;transition:transform .35s var(--spring),box-shadow .35s var(--ios),background-color .35s,border-color .35s}
+.card{border-radius:26px;padding:20px;margin-bottom:16px;border-color:color-mix(in srgb,var(--bd) 65%,transparent);box-shadow:0 1px 1px #1d0f2406,0 14px 32px -14px #1d0f2430;animation:up .18s cubic-bezier(.22,1,.36,1) both;transition:transform .16s cubic-bezier(.22,1,.36,1),background-color .14s ease,border-color .14s ease}
 .card.nw{animation:up .42s var(--ios) both,glow 2.2s ease-in-out 3}
 .hero{border-radius:28px;padding:22px}.hero h2{font-size:26px;font-weight:800;letter-spacing:-.03em}
 .exp{letter-spacing:-.03em;font-weight:800}
@@ -188,7 +188,7 @@ nav button.on svg [pathLength]{stroke-dasharray:1;stroke-dashoffset:1;animation:
 nav button.fab b svg{transition:transform .6s var(--spring)}nav button.fab.on b svg{transform:rotate(135deg)}
 nav button.fab.on svg [pathLength]{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
 nav button.ring b{animation:ring 1.1s var(--ios);transform-origin:50% 12%}
-.btn,.ib,.ghost,.acts button,nav button,.stats button,.opt,.sw,.seg span,.tabs2 button,.mi,.srow,.fcard{transition:transform .5s var(--spring),background .3s var(--ios),box-shadow .3s var(--ios),color .3s,border-color .3s}
+.btn,.ib,.ghost,.acts button,nav button,.stats button,.opt,.sw,.seg span,.tabs2 button,.mi,.srow,.fcard{transition:transform .16s cubic-bezier(.22,1,.36,1),background .15s ease,color .15s ease,border-color .15s ease}
 .btn:active,.ib:active,.ghost:active,.acts button:active,nav button:active,.stats button:active,.opt:active,.sw:active,.tabs2 button:active,.srow:active,.fcard:active{transform:scale(.94);transition-duration:.1s}
 .chev{transition:transform .6s var(--spring)}.bar i{transition:width .9s var(--ios)}.entering .bar i{animation:grow 1s var(--ios) both;transform-origin:left}
 #menu:not([hidden]){animation:menuIn .5s var(--spring);transform-origin:top right}
@@ -1728,47 +1728,53 @@ input[type=text], input[type=password], input[type=date], input[type=search], te
    ========================================================================== */
 
 :root {
-  --css-blur: blur(28px) saturate(190%);
-  --css-blur-heavy: blur(36px) saturate(200%);
+  --css-blur: blur(12px) saturate(145%);
+  --css-blur-heavy: blur(18px) saturate(160%);
   --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   --glass-border: 1px solid color-mix(in srgb, #ffffff 28%, var(--bd));
-  --glass-bg: color-mix(in srgb, var(--sf) 62%, transparent);
+  --glass-bg: color-mix(in srgb, var(--sf) 68%, transparent);
 }
 
 :root[data-t=dark] {
   --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   --glass-border: 1px solid rgba(255, 255, 255, 0.14);
-  --glass-bg: color-mix(in srgb, var(--sf) 52%, transparent);
+  --glass-bg: color-mix(in srgb, var(--sf) 58%, transparent);
 }
 
-/* 1. Fondo Ambiental con Aureolas Luminosas Vivas (para que el blur resalte al pasar por encima) */
+/* 1. Fondo Ambiental con Aureolas Luminosas Vivas (acelerado en GPU sin costo de desenfoque en vivo) */
 body::before {
   content: "" !important;
   position: fixed !important;
   inset: 0 !important;
   z-index: -1 !important;
   pointer-events: none !important;
+  transform: translateZ(0) !important;
   background: 
-    radial-gradient(75% 55% at 5% 8%, color-mix(in srgb, var(--pr) 34%, transparent), transparent 70%),
-    radial-gradient(65% 50% at 95% 18%, color-mix(in srgb, var(--fu) 28%, transparent), transparent 65%),
-    radial-gradient(60% 50% at 50% 85%, color-mix(in srgb, var(--li) 26%, transparent), transparent 70%),
-    radial-gradient(55% 45% at 85% 95%, color-mix(in srgb, var(--co) 24%, transparent), transparent 65%) !important;
-  filter: blur(45px) !important;
-  -webkit-filter: blur(45px) !important;
+    radial-gradient(75% 55% at 5% 8%, color-mix(in srgb, var(--pr) 30%, transparent), transparent 70%),
+    radial-gradient(65% 50% at 95% 18%, color-mix(in srgb, var(--fu) 24%, transparent), transparent 65%),
+    radial-gradient(60% 50% at 50% 85%, color-mix(in srgb, var(--li) 22%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 85% 95%, color-mix(in srgb, var(--co) 20%, transparent), transparent 65%) !important;
   opacity: 0.95 !important;
 }
 
-/* 2. Tarjetas con Difuminado Líquido («CSS BLUR» como en la imagen de referencia) */
+/* 2. Tarjetas con estilo translúcido optimizado (blur en contenedores principales, ultra-fluido en listas) */
 .card, .cal-board, .cal-split, .cal-prog-card {
-  backdrop-filter: var(--css-blur) !important;
-  -webkit-backdrop-filter: var(--css-blur) !important;
   background: var(--glass-bg) !important;
   border: var(--glass-border) !important;
-  box-shadow: var(--glass-specular), 0 16px 40px -10px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: var(--glass-specular), 0 12px 30px -10px rgba(0, 0, 0, 0.14) !important;
+}
+.desk-kpi-card, .desk-panel-card, .cal-board, .cal-split, .cal-prog-card {
+  backdrop-filter: var(--css-blur) !important;
+  -webkit-backdrop-filter: var(--css-blur) !important;
+}
+#list .card, #asAlerts .card, #alertsList .card, #recent .card, #histAlerts .card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: color-mix(in srgb, var(--sf) 84%, transparent) !important;
+  animation: none !important;
 }
 .card:hover {
-  background: color-mix(in srgb, var(--sf) 72%, transparent) !important;
-  box-shadow: var(--glass-specular), 0 20px 48px -12px rgba(0, 0, 0, 0.25) !important;
+  background: color-mix(in srgb, var(--sf) 90%, transparent) !important;
 }
 
 /* Hero card preserva su vibrante degradado con brillo especular */
@@ -1953,11 +1959,12 @@ section[hidden] {
 
 /* 2. Tarjetas Más Delgadas (Modo Compacto) */
 .asis-compact-card {
-  padding: 12px 14px !important;
+  width: 100% !important;
+  padding: 12px 16px !important;
   margin-bottom: 8px !important;
   border-radius: 20px !important;
   cursor: pointer !important;
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, box-shadow 0.2s !important;
+  transition: transform 0.14s ease-out, background-color 0.14s ease !important;
 }
 .asis-compact-card:active {
   transform: scale(0.98) !important;
@@ -2738,7 +2745,13 @@ section[hidden] {
     transform: scale(0.97) !important;
   }
 
-  /* Cuadrícula multi-columna (modo Cuadros) y Lista vertical compacta (modo Lista) */
+  .desk-kpi-row[hidden],
+  .desk-export-actions[hidden],
+  .desk-sidebar-right[hidden] {
+    display: none !important;
+  }
+
+  /* Cuadrícula multi-columna (modo Cuadros) y Lista vertical compacta (modo Lista a ancho completo) */
   #list.is-cards:not([hidden]):not(.is-list-mode),
   #asAlerts:not([hidden]):not(.is-list-mode),
   #alertsList:not([hidden]),
@@ -2747,12 +2760,15 @@ section[hidden] {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)) !important;
     gap: 16px !important;
+    align-items: start !important;
   }
   #list.is-cards.is-list-mode:not([hidden]),
   #asAlerts.is-list-mode:not([hidden]) {
     display: flex !important;
     flex-direction: column !important;
-    gap: 8px !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
   }
   #list.is-cards:not([hidden]) .empty,
   #asAlerts:not([hidden]) .empty,
@@ -2788,7 +2804,7 @@ section[hidden] {
 
 /* Estilos de Impresión Limpios para Guardar en PDF */
 @media print {
-  nav, #nav, #navDra, header, .desk-kpi-row, .desk-sidebar-right, .btn-view-mode, #fabNew, #fabDra, #bMenu, .search-bar-row, #stats, .tabs2, #asisCarouselModal {
+  nav, #nav, #navDra, header, .desk-kpi-row, .desk-sidebar-right, .btn-view-mode, #fabNew, #fabDra, #bMenu, .search-bar-row, #stats, .tabs2, #asisCarouselModal, .ag-fab-pencil, .ag-active-pill, .ag-dial-items, .ag-dial-backdrop, .chat-launcher-card {
     display: none !important;
   }
   body::before {
@@ -2803,7 +2819,7 @@ section[hidden] {
     max-width: 100% !important;
     overflow: visible !important;
   }
-  #list:not([hidden]), #asAlerts:not([hidden]), #alertsList:not([hidden]), #recent:not([hidden]), #histAlerts:not([hidden]) {
+  .ag, .ag-stage, #list:not([hidden]), #asAlerts:not([hidden]), #alertsList:not([hidden]), #recent:not([hidden]), #histAlerts:not([hidden]) {
     display: block !important;
     overflow: visible !important;
   }

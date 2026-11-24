@@ -155,6 +155,7 @@ function view(){
     if($("#histAlerts"))$("#histAlerts").innerHTML=skAlerts(3);
     if(role==="dra"&&$("#avDra"))$("#avDra").innerHTML=skAvances();
   }
+  if(typeof updateDesktopChrome==="function")updateDesktopChrome();
   render();renderRecent();loadAlerts();
   if(role==="dra"){loadAlertPrefs();applyDraTab()}
 } 
@@ -166,7 +167,7 @@ document.querySelectorAll("[data-dratab]").forEach(b=>b.classList.toggle("on",b.
 if($("#fabDra"))$("#fabDra").classList.toggle("on",draTab==="reportes");
 $("#vDra").hidden=draTab!=="reportes";$("#vAlertas").hidden=draTab!=="alertas";$("#vHist").hidden=draTab!=="historial";$("#vAvance").hidden=draTab!=="avance";if($("#vCalDra"))$("#vCalDra").hidden=draTab!=="visitas";$("#alertForm").hidden=true;$("#alT").hidden=false;$("#alertsList").hidden=false;
 if(draTab==="alertas"){$("#alH").textContent="Alertas de corrección";$("#alP").textContent="Solicitudes de los asistentes por atender.";$("#alT").textContent="Pendientes de corregir"}
-histUI();window.scrollTo({top:0,behavior:"smooth"})}
+histUI();if(typeof updateDesktopChrome==="function")updateDesktopChrome();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll("[data-dratab]").forEach(b=>b.onclick=()=>{draTab=b.dataset.dratab;applyDraTab();renderAlerts();loadAlerts()});
 if($("#fabDra"))$("#fabDra").onclick=()=>{if(window.closeSet)window.closeSet();draTab="reportes";applyDraTab()};
 
@@ -576,7 +577,7 @@ window.addEventListener("popstate", e => {
 function renderGeneralProgressRing(pc, T, bdn){
   const c = 238.76;
   const off = Math.max(0, (c * (1 - (pc || 0) / 100)).toFixed(1));
-  return `<div class="cal-prog-card">
+  const mobCls=window.innerWidth<820?" compact compact-init":"";return `<div class="cal-prog-card${mobCls}">
     <div class="cal-prog-ring-wrap">
       <svg class="prog-ring" viewBox="0 0 100 100">
         <circle class="prog-ring-bg" cx="50" cy="50" r="38"></circle>
@@ -616,7 +617,7 @@ function renderProgressRing(pct, complete, total, incomplete, inProgress, title,
   const c = 238.76;
   const off = Math.max(0, (c * (1 - (pct || 0) / 100)).toFixed(1));
   const sub = subText || "COMPLETOS";
-  return `<div class="cal-prog-card">
+  const mobCls=window.innerWidth<820?" compact compact-init":"";return `<div class="cal-prog-card${mobCls}">
     <div class="cal-prog-ring-wrap">
       <svg class="prog-ring" viewBox="0 0 100 100">
         <circle class="prog-ring-bg" cx="50" cy="50" r="38"></circle>
@@ -1410,7 +1411,18 @@ function exportToPDF(){
   window.print();
 }
 
+function updateDesktopChrome(){
+  const kpiRow = document.getElementById("deskKpiRow");
+  const expBox = document.querySelector(".desk-export-actions");
+  const vSetEl = document.getElementById("vSet");
+  const inSet = !!(vSetEl && !vSetEl.hidden);
+  if(kpiRow) kpiRow.hidden = (role !== "asis" || inSet);
+  if(expBox) expBox.hidden = !(role === "asis" && !inSet && (tab === "alertas" || tab === "avance" || tab === "historial"));
+}
+window.updateDesktopChrome = updateDesktopChrome;
+
 function renderDesktopDashboard(){
+  updateDesktopChrome();
   if(window.innerWidth < 1024) return;
   const pend = DB.filter(r => r.estado === "Pendiente").length;
   const nue = DB.filter(r => r.estado === "Pendiente" && r.esNuevo).length;
@@ -1505,13 +1517,11 @@ function renderAlertFullCardHTML(a, isModal = false){
 
 function renderAlertCompactCard(a, idx){
   return `<div class="card asis-compact-card ${a.estado==="Corregida"?"done":""}" data-open-alert-carousel="${idx}">
-  <div class="asis-compact-top">
-    <div class="asis-compact-exp-group">
-      <b class="asis-compact-exp">${esc(a.expediente)}</b>
+  <div class="asis-compact-row">
+    <div class="asis-compact-info">
+      <b class="exp">${esc(a.expediente)}</b>
       <span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span>
-    </div>
-    <div class="asis-compact-meta">
-      <span>${esc(a.creador || "")}</span>
+      ${a.creador ? `<span class="mu s">${esc(a.creador)}</span>` : ""}
     </div>
     <div class="asis-compact-arrow">
       <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg>
@@ -1519,7 +1529,7 @@ function renderAlertCompactCard(a, idx){
   </div>
   <div class="asis-compact-chips">
     <span class="chip-sm">${esc(a.formularios || "Alerta")}</span>
-    ${a.pregunta ? `<span class="chip-sm extra">${esc(String(a.pregunta).slice(0, 36))}${String(a.pregunta).length>36?"…":""}</span>` : ""}
+    ${a.pregunta ? `<span class="chip-sm extra">${esc(String(a.pregunta).slice(0, 48))}${String(a.pregunta).length>48?"…":""}</span>` : ""}
   </div>
 </div>`;
 }
@@ -1661,6 +1671,7 @@ function updateCarouselCard(){
 // ---- Vista asistentes ----
 function render(){
   if(role!=="asis")return;
+  if(typeof updateDesktopChrome==="function")updateDesktopChrome();
   $("#vAlertas").hidden=tab!=="nueva";
   if(tab==="nueva"){
     $("#alH").textContent="Crear alerta de corrección";
@@ -1796,6 +1807,7 @@ document.addEventListener("click",(e)=>{
   const alItem=e.target.closest("[data-desk-go-al]");
   if(alItem){
     if(window.closeSet)closeSet();
+    if(role==="dra"){draTab="alertas";applyDraTab();loadAlerts();return;}
     hideAlertForm();
     tab="historial";hsMode="al";
     document.querySelectorAll("[data-hs]").forEach(x=>x.classList.toggle("on",x.dataset.hs==="al"));
@@ -1863,10 +1875,15 @@ if(bGoSch) bGoSch.onclick = () => {
   if(qInput){ qInput.focus(); qInput.scrollIntoView({ behavior: "smooth", block: "center" }); }
 };
 const bLinkVis = document.getElementById("deskLinkVisitas");
-if(bLinkVis) bLinkVis.onclick = () => { if(window.closeSet) closeSet(); hideAlertForm(); tab = "visitas"; sig = ""; render(); };
+if(bLinkVis) bLinkVis.onclick = () => {
+  if(window.closeSet) closeSet();
+  if(role === "dra"){ draTab = "visitas"; applyDraTab(); return; }
+  hideAlertForm(); tab = "visitas"; sig = ""; render();
+};
 const bLinkAl = document.getElementById("deskLinkAlerts");
 if(bLinkAl) bLinkAl.onclick = () => {
   if(window.closeSet) closeSet();
+  if(role === "dra"){ draTab = "alertas"; applyDraTab(); loadAlerts(); return; }
   hideAlertForm();
   tab = "historial"; hsMode = "al";
   document.querySelectorAll("[data-hs]").forEach(x=>x.classList.toggle("on",x.dataset.hs==="al"));
@@ -1988,13 +2005,4 @@ document.addEventListener("click", e => {
   card.classList.toggle("compact");
 });
 
-// Inicializar anillos de progreso como compactos en móvil
-{
-  const obs = new MutationObserver(() => {
-    if (window.innerWidth >= 820) return;
-    document.querySelectorAll(".cal-prog-card:not(.compact-init)").forEach(c => {
-      c.classList.add("compact", "compact-init");
-    });
-  });
-  obs.observe(document.body, { childList: true, subtree: true });
-}
+

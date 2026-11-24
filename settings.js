@@ -197,8 +197,8 @@ if(id==="theme"){$("#themeBox").hidden=false;if(typeof thUI==="function")thUI()}
 scrollTo({top:0,behavior:"smooth"})}
 window.openSet=page=>{if(window.hideAlertForm)hideAlertForm();
 document.querySelectorAll("#app section").forEach(x=>x.hidden=true);vs.hidden=false;marks(true);
-$("#bSheet").hidden=role!=="asis";if($("#rowTeam"))$("#rowTeam").hidden=role!=="dra";$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";show(page||null)};
-window.closeSet=()=>{if(vs.hidden)return;vs.hidden=true;marks(false);if(role==="asis")$("#vAsis").hidden=false};
+$("#bSheet").hidden=role!=="asis";if($("#rowTeam"))$("#rowTeam").hidden=role!=="dra";$("#meTxt").textContent=ME?`${ME.name} · ${ME.user}`:"";show(page||null);if(typeof updateDesktopChrome==="function")updateDesktopChrome()};
+window.closeSet=()=>{if(vs.hidden)return;vs.hidden=true;marks(false);if(role==="asis")$("#vAsis").hidden=false;if(typeof updateDesktopChrome==="function")updateDesktopChrome()};
 vs.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)return show(g.dataset.go);if(e.target.closest(".sback"))show(null)});
 document.querySelectorAll("nav [data-act=settings]").forEach(b=>b.addEventListener("click",()=>openSet()));
 $("#navDra").addEventListener("click",e=>{if(e.target.closest("[data-dratab]"))closeSet()},true);
