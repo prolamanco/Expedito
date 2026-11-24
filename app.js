@@ -10,6 +10,7 @@ const G=[["1ª visita",["Cuestionario #1 (1visita)","Antropometría y bioimpedan
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let role=localStorage.getItem("ms_role"),DB=[],ALERTS=[],ALERT_PREFS={enabled:false,email:""},tab="alertas",draTab="reportes",loaded=false,sig="",sigRecent="",sigAlert="",sigAvDra="",sigCalDra="",timer=null;
+let lastDeskSig="",asisViewMode=localStorage.getItem("ms_asis_view_mode")||"list",asisCarouselList=[],asisAlertList=[],asisCarouselIdx=0,isCarouselOpen=false,asisCarouselKind="exp";
 let TOK=localStorage.getItem("ms_tok")||"",ME=null;try{ME=JSON.parse(localStorage.getItem("ms_me")||"null")}catch(e){}
 
 function toast(m,t){const d=document.createElement("div");if(t==="err")d.className="err";d.textContent=m;$("#toast").appendChild(d);setTimeout(()=>d.remove(),4000)}
@@ -870,8 +871,8 @@ document.addEventListener("click",async e=>{
 // ---- Movimiento estilo iOS y estabilidad en la primera carga ----
 {const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;let lastT=null,lastN=0,busy=false;
 const order=()=>[...document.querySelectorAll(role==="dra"?"[data-dratab]":"#nav [data-tab]")].map(b=>b.dataset.dratab||b.dataset.tab);
-function vt(fn,cur){const L=order(),dir=L.indexOf(cur)>=L.indexOf(lastT)?"fwd":"back",go=lastT!==null&&cur!==lastT&&document.startViewTransition&&!reduce;lastT=cur;if(!go){fn();return}
-document.documentElement.dataset.dir=dir;document.body.classList.add("entering");setTimeout(()=>document.body.classList.remove("entering"),1100);document.startViewTransition(fn)}
+function vt(fn,cur){const L=order(),dir=L.indexOf(cur)>=L.indexOf(lastT)?"fwd":"back",go=lastT!==null&&cur!==lastT&&window.innerWidth<1024&&document.startViewTransition&&!reduce;lastT=cur;if(!go){fn();return}
+document.documentElement.dataset.dir=dir;document.body.classList.add("entering");setTimeout(()=>document.body.classList.remove("entering"),1100);try{const t=document.startViewTransition(fn);if(t&&t.finished)t.finished.catch(()=>{});if(t&&t.ready)t.ready.catch(()=>{});}catch(e){fn()}}
 function ring(){const n=+(($("#cnt")||{}).textContent||"").replace(/\D/g,"")||0,b=document.querySelector("#nav [data-tab=alertas]");if(b&&n>lastN){b.classList.remove("ring");void b.offsetWidth;b.classList.add("ring")}lastN=n}
 const R=render,A=applyDraTab,Ld=load;
 function skCards(count=3){let h="";for(let i=0;i<count;i++){h+=`<div class="card sk-card-item"><div class="row"><div class="sk-shimmer sk-bar" style="width:110px;height:24px"></div><span class="sp"></span><div class="sk-shimmer sk-bar" style="width:70px;height:20px"></div></div><div class="sk-shimmer sk-bar" style="width:65%;height:14px;margin-top:4px"></div><div class="sk-shimmer sk-bar" style="width:90%;height:14px;margin-bottom:4px"></div><div class="row" style="gap:8px;margin-top:2px"><div class="sk-shimmer sk-bar" style="width:80px;height:32px;border-radius:12px"></div><div class="sk-shimmer sk-bar" style="width:80px;height:32px;border-radius:12px"></div></div></div>`}return h}
@@ -909,7 +910,7 @@ const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábad
 const DIAS_C=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
 const isoToday=()=>{const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}}-${z(d.getDate())}`.replace("}}","}")};
 function todayStr(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
-let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim=""; if(typeof renderDesktopDashboard==="function")renderDesktopDashboard();
+let calY=new Date().getFullYear(),calM=new Date().getMonth(),calSel=todayStr(),calCompact=true,calAnim="";
 
 function fmt12(hm){
   if(!hm)return"Todo el día";
@@ -1371,10 +1372,7 @@ const cell=e.target.closest("[data-cdate]");
 });
 
 // ---- Vista asistentes y Modo de Visualización (Tarjetas delgadas / Carrusel) ----
-let asisViewMode = localStorage.getItem("ms_asis_view_mode") || "list";
-let asisCarouselList = [];
-let asisCarouselIdx = 0;
-let isCarouselOpen = false;
+
 
 function exportDBtoCSV(){
   if(!DB || !DB.length) return toast("No hay expedientes para exportar", "err");
@@ -1412,7 +1410,6 @@ function exportToPDF(){
   window.print();
 }
 
-let lastDeskSig = "";
 function renderDesktopDashboard(){
   if(window.innerWidth < 1024) return;
   const pend = DB.filter(r => r.estado === "Pendiente").length;
@@ -1477,7 +1474,7 @@ function renderDesktopDashboard(){
     const alertsSlice = (ALERTS || []).slice(-3).reverse();
     if(alertsSlice.length){
       aListEl.innerHTML = alertsSlice.map(a => `
-        <div class="desk-alert-item" title="Ver alerta">
+        <div class="desk-alert-item" data-desk-go-al="1" title="Ver alertas en Historial">
           <div class="desk-alert-top">
             <b>Exp. ${esc(a.expediente)}</b>
             <span class="tag ${a.estado === "Corregida" ? "lime" : "co"}">${esc(a.estado)}</span>
@@ -1494,12 +1491,37 @@ function renderDesktopDashboard(){
 function updateViewModeUI(){
   const btn = document.getElementById("btnViewMode");
   if(!btn) return;
-  const isExpView = (role === "asis" && (tab === "alertas" || (tab === "historial" && hsMode === "exp")));
+  const isExpView = (role === "asis" && (tab === "alertas" || tab === "historial"));
   btn.hidden = !isExpView;
   btn.style.display = isExpView ? "grid" : "none";
   const isList = (asisViewMode === "list");
   btn.classList.toggle("is-list", isList);
   btn.title = isList ? "Cambiar a tarjetas completas (Cuadros)" : "Cambiar a tarjetas delgadas (Lista compacta)";
+}
+
+function renderAlertFullCardHTML(a, isModal = false){
+  return `<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`;
+}
+
+function renderAlertCompactCard(a, idx){
+  return `<div class="card asis-compact-card ${a.estado==="Corregida"?"done":""}" data-open-alert-carousel="${idx}">
+  <div class="asis-compact-top">
+    <div class="asis-compact-exp-group">
+      <b class="asis-compact-exp">${esc(a.expediente)}</b>
+      <span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span>
+    </div>
+    <div class="asis-compact-meta">
+      <span>${esc(a.creador || "")}</span>
+    </div>
+    <div class="asis-compact-arrow">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </div>
+  <div class="asis-compact-chips">
+    <span class="chip-sm">${esc(a.formularios || "Alerta")}</span>
+    ${a.pregunta ? `<span class="chip-sm extra">${esc(String(a.pregunta).slice(0, 36))}${String(a.pregunta).length>36?"…":""}</span>` : ""}
+  </div>
+</div>`;
 }
 
 function renderCompactCard(r, idx){
@@ -1537,7 +1559,23 @@ ${chk(r)}${trk(r, r.estado === "Pendiente")}${obsH(r)}${r.estado === "Pendiente"
 
 function openAsisCarousel(idx){
   if(!asisCarouselList || !asisCarouselList.length) return;
+  asisCarouselKind = "exp";
   asisCarouselIdx = Math.max(0, Math.min(idx, asisCarouselList.length - 1));
+  const modal = document.getElementById("asisCarouselModal");
+  if(!modal) return;
+  modal.hidden = false;
+  requestAnimationFrame(() => {
+    modal.classList.add("open");
+  });
+  isCarouselOpen = true;
+  document.body.style.overflow = "hidden";
+  renderCarouselSlide();
+}
+
+function openAlertCarousel(idx){
+  if(!asisAlertList || !asisAlertList.length) return;
+  asisCarouselKind = "al";
+  asisCarouselIdx = Math.max(0, Math.min(idx, asisAlertList.length - 1));
   const modal = document.getElementById("asisCarouselModal");
   if(!modal) return;
   modal.hidden = false;
@@ -1563,23 +1601,25 @@ function closeAsisCarousel(){
 }
 
 function goToCarouselSlide(idx){
-  if(idx < 0 || idx >= asisCarouselList.length) return;
+  const list = asisCarouselKind === "al" ? asisAlertList : asisCarouselList;
+  if(idx < 0 || idx >= list.length) return;
   asisCarouselIdx = idx;
   renderCarouselSlide(true);
 }
 
 function renderCarouselSlide(animated = false){
-  const r = asisCarouselList[asisCarouselIdx];
-  if(!r){ closeAsisCarousel(); return; }
+  const list = asisCarouselKind === "al" ? asisAlertList : asisCarouselList;
+  const item = list[asisCarouselIdx];
+  if(!item){ closeAsisCarousel(); return; }
   
   const titleEl = document.getElementById("asisCarouselTitle");
-  if(titleEl) titleEl.textContent = `Exp. ${r.expediente || ""}`;
+  if(titleEl) titleEl.textContent = asisCarouselKind === "al" ? `Alerta · ${item.expediente || ""}` : `Exp. ${item.expediente || ""}`;
   
   const counterEl = document.getElementById("asisCarouselCounter");
   if(counterEl){
-    if(asisCarouselList.length > 1){
+    if(list.length > 1){
       counterEl.hidden = false;
-      counterEl.textContent = `${asisCarouselIdx + 1} de ${asisCarouselList.length}`;
+      counterEl.textContent = `${asisCarouselIdx + 1} de ${list.length}`;
     } else {
       counterEl.hidden = true;
     }
@@ -1588,11 +1628,11 @@ function renderCarouselSlide(animated = false){
   const prevBtn = document.getElementById("asisCarouselPrev");
   const nextBtn = document.getElementById("asisCarouselNext");
   if(prevBtn) prevBtn.disabled = (asisCarouselIdx <= 0);
-  if(nextBtn) nextBtn.disabled = (asisCarouselIdx >= asisCarouselList.length - 1);
+  if(nextBtn) nextBtn.disabled = (asisCarouselIdx >= list.length - 1);
   
   const track = document.getElementById("asisCarouselTrack");
   if(track){
-    track.innerHTML = renderFullCardHTML(r, asisCarouselIdx, true);
+    track.innerHTML = asisCarouselKind === "al" ? renderAlertFullCardHTML(item, true) : renderFullCardHTML(item, asisCarouselIdx, true);
     if(animated){
       track.style.opacity = "0.7";
       track.style.transform = "scale(0.98)";
@@ -1607,10 +1647,11 @@ function renderCarouselSlide(animated = false){
 
 function updateCarouselCard(){
   if(!isCarouselOpen) return;
-  if(asisCarouselIdx >= asisCarouselList.length){
-    asisCarouselIdx = Math.max(0, asisCarouselList.length - 1);
+  const list = asisCarouselKind === "al" ? asisAlertList : asisCarouselList;
+  if(asisCarouselIdx >= list.length){
+    asisCarouselIdx = Math.max(0, list.length - 1);
   }
-  if(asisCarouselList.length === 0){
+  if(list.length === 0){
     closeAsisCarousel();
     return;
   }
@@ -1651,21 +1692,27 @@ function render(){
   {
     const t=$("#avTabs"), sRow=document.getElementById("searchRow")||$("#q"), heroEl=$("#vAsis .hero");
     if(t&&tab==="avance") t.hidden=false;
-    if(sRow) sRow.hidden=(tab==="avance"||tab==="visitas"||(tab==="historial"&&hsMode==="al"));
+    if(sRow) sRow.hidden=(tab==="avance"||tab==="visitas");
     if(heroEl) heroEl.hidden=tab==="visitas";
   }
   asisCarouselList=it;
   updateViewModeUI();
-  $("#list").classList.toggle("is-cards", tab==="alertas"||(tab==="historial"&&hsMode==="exp"));
+  const isCards = (tab==="alertas"||(tab==="historial"&&hsMode==="exp"));
+  $("#list").classList.toggle("is-cards", isCards);
+  $("#list").classList.toggle("is-list-mode", isCards && asisViewMode==="list");
   $("#list").innerHTML=tab==="avance"?avPage(1,it):tab==="visitas"?buildCalHTML(q):it.length?(asisViewMode==="list"&&(tab==="alertas"||tab==="historial")?it.map((r,i)=>renderCompactCard(r,i)).join(""):it.map((r,i)=>renderFullCardHTML(r,i)).join(""))
   :`<div class="empty">${tab==="alertas"?"🎉 No hay alertas pendientes":"Nada por aquí"}</div>`;
   calAnim="";
+  if(tab==="historial") renderAlerts();
   if(typeof renderDesktopDashboard==="function") renderDesktopDashboard();
 }
 let qTimer = null;
 $("#q").oninput = () => {
   clearTimeout(qTimer);
-  qTimer = setTimeout(render, 45);
+  qTimer = setTimeout(() => {
+    render();
+    if(role==="asis" && tab==="historial") renderAlerts();
+  }, 45);
 };
 $("#stats").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t){tab=t;sig="";render()}};
 $("#nav").onclick=e=>{const t=e.target.closest("button")?.dataset.tab;if(t==="ajustes")return;if(t&&t!=="nueva"&&window.closeSet)closeSet();if(t==="nueva"){const f=$("#alertForm");f.classList.remove("out");f.hidden=false;f.scrollTop=0;return}if(t){tab=t;sig="";hideAlertForm();render();loadAlerts()}};
@@ -1725,8 +1772,10 @@ if(btnVM){
     asisViewMode=(asisViewMode==="list"?"grid":"list");
     localStorage.setItem("ms_asis_view_mode",asisViewMode);
     sig="";
+    sigAlert="";
     updateViewModeUI();
     render();
+    if(role==="asis"&&tab==="historial")renderAlerts();
   };
   updateViewModeUI();
 }
@@ -1744,6 +1793,24 @@ const cNext=document.getElementById("asisCarouselNext");
 if(cNext)cNext.onclick=()=>goToCarouselSlide(asisCarouselIdx+1);
 
 document.addEventListener("click",(e)=>{
+  const alItem=e.target.closest("[data-desk-go-al]");
+  if(alItem){
+    if(window.closeSet)closeSet();
+    hideAlertForm();
+    tab="historial";hsMode="al";
+    document.querySelectorAll("[data-hs]").forEach(x=>x.classList.toggle("on",x.dataset.hs==="al"));
+    sig="";sigAlert="";render();loadAlerts();
+    return;
+  }
+  const triggerAl=e.target.closest("[data-open-alert-carousel]");
+  if(triggerAl){
+    if(e.target.closest("input, select, textarea, button, a, label"))return;
+    const idx=parseInt(triggerAl.dataset.openAlertCarousel,10);
+    if(!isNaN(idx)&&asisAlertList[idx]){
+      openAlertCarousel(idx);
+    }
+    return;
+  }
   const trigger=e.target.closest("[data-open-carousel]");
   if(!trigger)return;
   if(e.target.closest("input, select, textarea, button, a, label"))return;
@@ -1779,23 +1846,31 @@ if(cViewport){
 // Acciones rápidas y botones del Dashboard en Escritorio
 const bNewAl = document.getElementById("deskActNewAlert");
 if(bNewAl) bNewAl.onclick = () => {
+  if(window.closeSet) closeSet();
   const f = $("#alertForm");
   if(f){ f.classList.remove("out"); f.hidden = false; f.scrollTop = 0; }
 };
 const bGoVis = document.getElementById("deskActVisitas");
-if(bGoVis) bGoVis.onclick = () => { tab = "visitas"; sig = ""; render(); };
+if(bGoVis) bGoVis.onclick = () => { if(window.closeSet) closeSet(); hideAlertForm(); tab = "visitas"; sig = ""; render(); };
 const bGoAv = document.getElementById("deskActAvance");
-if(bGoAv) bGoAv.onclick = () => { tab = "avance"; sig = ""; render(); };
+if(bGoAv) bGoAv.onclick = () => { if(window.closeSet) closeSet(); hideAlertForm(); tab = "avance"; sig = ""; render(); };
 const bGoSch = document.getElementById("deskActSearch");
 if(bGoSch) bGoSch.onclick = () => {
+  if(window.closeSet) closeSet();
+  hideAlertForm();
+  if(tab === "visitas" || tab === "avance" || tab === "nueva"){ tab = "alertas"; sig = ""; render(); }
   const qInput = document.getElementById("q");
   if(qInput){ qInput.focus(); qInput.scrollIntoView({ behavior: "smooth", block: "center" }); }
 };
 const bLinkVis = document.getElementById("deskLinkVisitas");
-if(bLinkVis) bLinkVis.onclick = () => { tab = "visitas"; sig = ""; render(); };
+if(bLinkVis) bLinkVis.onclick = () => { if(window.closeSet) closeSet(); hideAlertForm(); tab = "visitas"; sig = ""; render(); };
 const bLinkAl = document.getElementById("deskLinkAlerts");
 if(bLinkAl) bLinkAl.onclick = () => {
-  tab = "historial"; hsMode = "al"; sig = ""; render();
+  if(window.closeSet) closeSet();
+  hideAlertForm();
+  tab = "historial"; hsMode = "al";
+  document.querySelectorAll("[data-hs]").forEach(x=>x.classList.toggle("on",x.dataset.hs==="al"));
+  sig = ""; sigAlert = ""; render(); loadAlerts();
 };
 
 const bDeskCsv = document.getElementById("btnDeskCSV");
@@ -1825,10 +1900,51 @@ $("#alertForm").addEventListener("reset",()=>setTimeout(()=>$("#alertForms").onc
 let alertsLoaded=false;
 async function loadAlerts(){try{const d=await api({action:"read",tipo:"alertas"});if(Array.isArray(d))ALERTS=d;alertsLoaded=true;renderAlerts();if(typeof renderDesktopDashboard==="function")renderDesktopDashboard()}catch(e){}}
 
-function renderAlerts(){if(role!=="dra"&&role!=="asis")return;const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");if(!host)return;if(!alertsLoaded&&!ALERTS.length){host.innerHTML=skAlerts(3);return;}let list=ALERTS.slice().reverse();if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));const s=JSON.stringify(list)+"|"+role+"|"+draTab+"|"+tab+"|"+hsMode;if(s===sigAlert&&host.innerHTML)return;sigAlert=s;host.innerHTML=list.length?list.map(a=>`<div class="card alert-card ${a.estado==="Corregida"?"done":""}"><div class="row"><b class="exp">${esc(a.expediente)}</b><span class="sp"></span><span class="tag ${a.estado==="Corregida"?"lime":"co"}">${esc(a.estado)}</span></div><p class="mu s">Creada: ${esc(a.fecha)} · Por: <b>${esc(a.creador)}</b></p><p><b>Formulario:</b> ${esc(a.formularios)}</p><p><b>Pregunta por revisar:</b> ${esc(a.pregunta)}</p><p><b>Observaciones:</b> ${esc(a.observaciones)}</p>${a.respuesta?`<p><b>Respuesta de la Dra.:</b> ${esc(a.respuesta)}</p><p class="mu s">Corregida: ${esc(a.fechaResolucion||"")}</p>`:""}<div class="row" style="margin-top:10px">${role==="dra"&&a.estado!=="Corregida"?`<button class="ghost" data-alert-resolve="${esc(a.id)}">Marcar corregida</button>`:""}<span class="sp"></span><button class="ghost" data-alert-delete="${esc(a.id)}">Eliminar</button></div></div>`).join(""):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';}
+function renderAlerts(){
+  if(role!=="dra"&&role!=="asis")return;
+  const host=role==="dra"&&draTab==="historial"?$("#histAlerts"):role==="asis"?$("#asAlerts"):$("#alertsList");
+  if(!host)return;
+  if(!alertsLoaded&&!ALERTS.length){host.innerHTML=skAlerts(3);return;}
+  let list=ALERTS.slice().reverse();
+  if(role==="dra")list=list.filter(a=>(a.estado==="Corregida")===(draTab==="historial"));
+  const q=(role==="asis"&&tab==="historial"&&$("#q"))?$("#q").value.toLowerCase().trim():"";
+  if(q){
+    list=list.filter(a=>(a.expediente+" "+a.formularios+" "+a.pregunta+" "+a.observaciones+" "+a.creador).toLowerCase().includes(q));
+  }
+  const s=JSON.stringify(list)+"|"+role+"|"+draTab+"|"+tab+"|"+hsMode+"|"+asisViewMode+"|"+q;
+  if(s===sigAlert&&host.innerHTML)return;
+  sigAlert=s;
+  asisAlertList=list;
+  if(role==="asis") host.classList.toggle("is-list-mode", asisViewMode==="list");
+  host.innerHTML=list.length?(role==="asis"&&asisViewMode==="list"?list.map((a,i)=>renderAlertCompactCard(a,i)).join(""):list.map(a=>renderAlertFullCardHTML(a,false)).join("")):'<div class="empty">'+(role==="dra"&&draTab==="alertas"?"🎉 No hay alertas pendientes":"Todavía no hay alertas.")+'</div>';
+  if(isCarouselOpen && asisCarouselKind==="al") updateCarouselCard();
+}
 $("#cancelAlert").onclick=()=>hideAlertForm();
 $("#alertForm").onsubmit=async e=>{e.preventDefault();const forms=[...document.querySelectorAll("[name=af]:checked")].map(x=>x.value),email=$("#aCreatorEmail").value.trim().toLowerCase()||(role==="dra"?(localStorage.getItem("ms_dra_email")||$("#draEmail").value.trim().toLowerCase()):localStorage.getItem("ms_mail"))||"";if(!forms.length)return toast("Selecciona un formulario","err");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return toast("Escriba un correo válido para recibir la notificación","err");$("#aCreatorEmail").value=email;const data={action:"createAlert",id:"ALT-"+Date.now(),expediente:$("#aExp").value.trim().toUpperCase(),formularios:forms,pregunta:$("#aQuestion").value.trim(),observaciones:$("#aNotes").value.trim(),creador:$("#aCreator").value.trim(),email:email};if(!data.expediente||!data.pregunta||!data.observaciones||!data.creador)return toast("Complete todos los campos","err");const b=$("#sendAlert");b.disabled=true;b.textContent="Enviando…";await post(data);await new Promise(r=>setTimeout(r,800));await loadAlerts();const ok=ALERTS.some(a=>a.id===data.id);toast(ok?"Alerta enviada a la Dra. Lilliam":"No se pudo confirmar. Revise la conexión",ok?"":"err");if(ok){$("#alertForm").reset();hideAlertForm()}b.disabled=false;b.textContent="Enviar alerta"};
-$("#alertsList").onclick=async e=>{const r=e.target.closest("[data-alert-resolve],[data-alert-delete]");if(!r)return;const id=r.dataset.alertResolve||r.dataset.alertDelete;if(r.dataset.alertResolve){const respuesta=prompt("Anote brevemente qué se corrigió (opcional):")||"La Dra. Lilliam marcó la alerta como corregida.";await post({action:"resolveAlert",id,respuesta});toast("Alerta marcada como corregida; se notificará al asistente")}else{if(!confirm("¿Eliminar esta alerta del historial? Esta acción no se puede deshacer."))return;await post({action:"deleteAlert",id});toast("Alerta eliminada del historial")}await new Promise(r=>setTimeout(r,500));await loadAlerts()};
+async function handleAlertActionClick(e){
+  const r=e.target.closest("[data-alert-resolve],[data-alert-delete]");
+  if(!r)return;
+  const id=r.dataset.alertResolve||r.dataset.alertDelete;
+  if(r.dataset.alertResolve){
+    const respuesta=prompt("Anote brevemente qué se corrigió (opcional):")||"La Dra. Lilliam marcó la alerta como corregida.";
+    await post({action:"resolveAlert",id,respuesta});
+    toast("Alerta marcada como corregida; se notificará al asistente");
+  }else{
+    if(!confirm("¿Eliminar esta alerta del historial? Esta acción no se puede deshacer."))return;
+    await post({action:"deleteAlert",id});
+    toast("Alerta eliminada del historial");
+  }
+  await new Promise(res=>setTimeout(res,500));
+  await loadAlerts();
+}
+["#alertsList","#asAlerts","#histAlerts"].forEach(sel=>{const el=$(sel);if(el)el.onclick=handleAlertActionClick});
+if(cTrack){
+  const prevTrackClick=cTrack.onclick;
+  cTrack.onclick=(e)=>{
+    if(e.target.closest("[data-alert-resolve],[data-alert-delete]")){handleAlertActionClick(e);return;}
+    if(prevTrackClick)prevTrackClick(e);
+  };
+}
 
 document.querySelectorAll("[data-ic]").forEach(e=>e.insertAdjacentHTML("afterbegin",ic(e.dataset.ic)));
 $("#bMenu").onclick=e=>{e.stopPropagation();$("#menu").hidden=!$("#menu").hidden};
